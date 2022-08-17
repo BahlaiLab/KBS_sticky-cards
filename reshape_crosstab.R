@@ -121,3 +121,27 @@ indexed.forest2020.list$REP<-NULL
 write.csv(indexed.msce2020.list, file="msce2020_cleaned.csv", row.names=FALSE)
 write.csv(indexed.forest2020.list, file="forest2020_cleaned.csv", row.names=FALSE)
 
+
+LTER <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_all.csv")
+summary(LTER)
+
+library (lubridate)
+
+LTER$newdate<-mdy(LTER$DATE)
+LTER$DOY<-yday(LTER$newdate)
+LTER$week<-isoweek(LTER$newdate)
+
+summary(LTER)
+
+write.csv(LTER, file="2021_LTER_all_cleaned.csv", row.names=FALSE)
+
+Bahlai <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Insect%20ID%202021_sticky%20card%20.csv")
+summary(Bahlai)
+
+Bahlai$newdate<-mdy(Bahlai$DATE)
+Bahlai$DOY<-yday(Bahlai$newdate)
+Bahlai$week<-isoweek(Bahlai$newdate)
+
+summary(Bahlai)
+
+write.csv(Bahlai, file="Insect ID 2021_sticky card_cleaned.csv", row.names=FALSE)
