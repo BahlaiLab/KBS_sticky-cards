@@ -118,6 +118,6 @@ indexed.forest2020.list$REP<-NULL
 
 #export to CSV for loading into the big database
 
-write.csv(indexed.msce2020.list, file="msce2021_cleaned.csv", row.names=FALSE)
-write.csv(indexed.forest2020.list, file="forest2021_cleaned.csv", row.names=FALSE)
+write.csv(indexed.msce2020.list, file="msce2020_cleaned.csv", row.names=FALSE)
+write.csv(indexed.forest2020.list, file="forest2020_cleaned.csv", row.names=FALSE)
 
