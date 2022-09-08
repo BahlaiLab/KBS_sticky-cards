@@ -62,7 +62,7 @@ for(i in 1:length(KBS$ABIPN)){
 #use something like this to combine all cumulative counts into a data file
 ##datacombined<-cbind(data, cumABIPN)
 
-
+#testing the loop
 thing<-c()
   for(i in 1:length(KBS$is.collected)){
     if (KBS$is.collected[i]=="yes"){
