@@ -51,7 +51,7 @@ str(Bahlai)
 #starting with ABIPN
 cumABIPN<-c()
 for(i in 1:length(KBS$ABIPN)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$ABIPN[i]
   }else{
     bugcount<-KBS$ABIPN[i]+ KBS$ABIPN[i-1]
@@ -62,10 +62,23 @@ for(i in 1:length(KBS$ABIPN)){
 #use something like this to combine all cumulative counts into a data file
 ##datacombined<-cbind(data, cumABIPN)
 
+
+thing<-c()
+  for(i in 1:length(KBS$is.collected)){
+    if (KBS$is.collected[i]=="yes"){
+      bugcount<-"true"
+    }else{
+      bugcount<-"false"
+    }
+    thing<-c(thing, bugcount)
+  }
+test<-cbind(KBS, thing)
+
+
 #BURSI
 cumBURSI<-c()
 for(i in 1:length(KBS$BURSI)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$BURSI[i]
   }else{
     bugcount<-KBS$BURSI[i]+ KBS$BURSI[i-1]
@@ -76,18 +89,19 @@ for(i in 1:length(KBS$BURSI)){
 #C7
 cumC7<-c()
 for(i in 1:length(KBS$C7)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$C7[i]
   }else{
     bugcount<-KBS$C7[i]+ KBS$C7[i-1]
   }
   cumC7<-c(cumC7, bugcount)
 }
+datacombined<-cbind(data, cumC7)
 
 #CMAC
 cumCMAC<-c()
 for(i in 1:length(KBS$CMAC)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$CMAC[i]
   }else{
     bugcount<-KBS$CMAC[i]+ KBS$CMAC[i-1]
@@ -98,7 +112,7 @@ for(i in 1:length(KBS$CMAC)){
 #CSTIG
 cumCSTIG<-c()
 for(i in 1:length(KBS$CSTIG)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$CSTIG[i]
   }else{
     bugcount<-KBS$CSTIG[i]+ KBS$CSTIG[i-1]
@@ -109,7 +123,7 @@ for(i in 1:length(KBS$CSTIG)){
 #CTRIF
 cumCTRIF<-c()
 for(i in 1:length(KBS$CTRIF)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$CTRIF[i]
   }else{
     bugcount<-KBS$CTRIF[i]+ KBS$CTRIF[i-1]
@@ -120,7 +134,7 @@ for(i in 1:length(KBS$CTRIF)){
 #CYCSP
 cumCYCSP<-c()
 for(i in 1:length(KBS$CYCSP)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$CYCSP[i]
   }else{
     bugcount<-KBS$CYCSP[i]+ KBS$CYCSP[i-1]
@@ -131,7 +145,7 @@ for(i in 1:length(KBS$CYCSP)){
 #H13
 cumH13<-c()
 for(i in 1:length(KBS$H13)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$H13[i]
   }else{
     bugcount<-KBS$H13[i]+ KBS$H13[i-1]
@@ -142,7 +156,7 @@ for(i in 1:length(KBS$H13)){
 #HAXY
 cumHAXY<-c()
 for(i in 1:length(KBS$HAXY)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$HAXY[i]
   }else{
     bugcount<-KBS$HAXY[i]+ KBS$HAXY[i-1]
@@ -153,7 +167,7 @@ for(i in 1:length(KBS$HAXY)){
 #HCONV
 cumHCONV<-c()
 for(i in 1:length(KBS$HCONV)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$HCONV[i]
   }else{
     bugcount<-KBS$HCONV[i]+ KBS$HCONV[i-1]
@@ -164,7 +178,7 @@ for(i in 1:length(KBS$HCONV)){
 #HGLAC
 cumHGLAC<-c()
 for(i in 1:length(KBS$HGLAC)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$HGLAC[i]
   }else{
     bugcount<-KBS$HGLAC[i]+ KBS$HGLAC[i-1]
@@ -175,7 +189,7 @@ for(i in 1:length(KBS$HGLAC)){
 #HPARN
 cumHPARN<-c()
 for(i in 1:length(KBS$HPARN)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$HPARN[i]
   }else{
     bugcount<-KBS$HPARN[i]+ KBS$HPARN[i-1]
@@ -186,7 +200,7 @@ for(i in 1:length(KBS$HPARN)){
 #HVAR
 cumHVAR<-c()
 for(i in 1:length(KBS$HVAR)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$HVAR[i]
   }else{
     bugcount<-KBS$HVAR[i]+ KBS$HVAR[i-1]
@@ -197,7 +211,7 @@ for(i in 1:length(KBS$HVAR)){
 #PQUA
 cumPQUA<-c()
 for(i in 1:length(KBS$PQUA)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$PQUA[i]
   }else{
     bugcount<-KBS$PQUA[i]+ KBS$PQUA[i-1]
@@ -208,7 +222,7 @@ for(i in 1:length(KBS$PQUA)){
 #CANTHARID
 cumCANTHARID<-c()
 for(i in 1:length(KBS$CANTHARID)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$CANTHARID[i]
   }else{
     bugcount<-KBS$CANTHARID[i]+ KBS$CANTHARID[i-1]
@@ -219,7 +233,7 @@ for(i in 1:length(KBS$CANTHARID)){
 #LAMPY
 cumLAMPY<-c()
 for(i in 1:length(KBS$LAMPY)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$LAMPY[i]
   }else{
     bugcount<-KBS$LAMPY[i]+ KBS$LAMPY[i-1]
@@ -230,7 +244,7 @@ for(i in 1:length(KBS$LAMPY)){
 #LCW
 cumLCW<-c()
 for(i in 1:length(KBS$LCW)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$LCW[i]
   }else{
     bugcount<-KBS$LCW[i]+ KBS$LCW[i-1]
@@ -241,7 +255,7 @@ for(i in 1:length(KBS$LCW)){
 #MECOP
 cumMECOP<-c()
 for(i in 1:length(KBS$MECOP)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$MECOP[i]
   }else{
     bugcount<-KBS$MECOP[i]+ KBS$MECOP[i-1]
@@ -252,7 +266,7 @@ for(i in 1:length(KBS$MECOP)){
 #X20SPOT
 cumX20SPOT<-c()
 for(i in 1:length(KBS$X20SPOT)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$X20SPOT[i]
   }else{
     bugcount<-KBS$X20SPOT[i]+ KBS$X20SPOT[i-1]
@@ -263,7 +277,7 @@ for(i in 1:length(KBS$X20SPOT)){
 #OTHER
 cumOTHER<-c()
 for(i in 1:length(KBS$OTHER)){
-  if (KBS$is.collected=="no"){
+  if (KBS$is.collected[i]=="no"){
     bugcount<-KBS$OTHER[i]
   }else{
     bugcount<-KBS$OTHER[i]+ KBS$OTHER[i-1]
@@ -276,5 +290,8 @@ KBS_cum<-cbind(KBS, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF,
                cumCYCSP, cumH13, cumHAXY, cumHCONV, cumHGLAC, cumHPARN, cumHVAR, 
                cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT, cumOTHER)
 
-#print dataframe into cvs file
+#print data into cvs file
 write.csv(KBS_cum, file="2021_LTER_cumulative.csv", row.names=FALSE)
+
+#after deleting non-cumulative counts, add the data file back in 
+KBS_cum <- read.csv ("", na.strings = NULL)
