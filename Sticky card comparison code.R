@@ -31,9 +31,16 @@ stressplot(NMDS)
 
 #bring in data set of all KBS field data with week already attached 
 KBS <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_all.csv", na.strings = NULL)
+#change Rep and Station to characters
+KBS$REP <- as.character(KBS$REP)
+KBS$STATION <- as.character(KBS$STATION)
 str(KBS)
 #bring in data set with all insects we IDed in the Bahlai lab
 Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Insect%20ID%202021_sticky%20card.csv", na.strings = NULL)
+#change Rep and Station to characters
+Bahlai$REP <- as.character(Bahlai$REP)
+Bahlai$STATION <- as.character(Bahlai$STATION)
+str(Bahlai)
 
 #combining two counting periods for each individual sticky card into one line
 #at KBS sticky cards were out for 2 weeks
