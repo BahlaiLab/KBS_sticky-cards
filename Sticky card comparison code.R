@@ -270,3 +270,11 @@ for(i in 1:length(KBS$OTHER)){
   }
   cumOTHER<-c(cumOTHER, bugcount)
 }
+
+#put cumulative counts into dataframe
+KBS_cum<-cbind(KBS, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF, 
+               cumCYCSP, cumH13, cumHAXY, cumHCONV, cumHGLAC, cumHPARN, cumHVAR, 
+               cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT, cumOTHER)
+
+#print dataframe into cvs file
+write.csv(KBS_cum, file="2021_LTER_cumulative.csv", row.names=FALSE)
