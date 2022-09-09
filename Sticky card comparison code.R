@@ -1,40 +1,15 @@
-#bring in data sets from github
+#bring in data set of all KBS field data with week and DOY already attached 
+#note this data had the june 10th data from treatments 1 and 4 removed because those cards only have one entry
+#this data will come back after the accumulation loop
+KBS <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_without%20june%2010th%20treat%201%20and%204.csv", na.strings = NULL)
 
-new <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/New_Insect%20ID%20-%20sticky%20card%20comparison%20-%20as%20of%203.22.22.csv",na.strings = NULL)
-old <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Old_Insect%20ID%20-%20sticky%20card%20comparison%20-%20as%20of%203.22.22.csv",na.strings = NULL)
-
-#taxa <- read.csv("")
-
-#combine data tables 
-library (plyr)
-insects <- rbind.fill (new, old)
-#change Rep and Station to characters
-insects$Rep <- as.character(insects$Rep)
-insects$Station <- as.character(insects$Station)
-summary(insects)
-
-####
-#NMDS of insect community between card types
-library (vegan)
-
-#Create matrix of environmental variables
-env.matrix<-insects[c(1:5)]
-#create matrix of community variables
-com.matrix<-insects[c(6:10)]
-
-#ordination by NMDS
-NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=FALSE, trymax=100)
-stressplot(NMDS)
-#stress=
-
-####
-
-#bring in data set of all KBS field data with week already attached 
-KBS <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_all.csv", na.strings = NULL)
 #change Rep and Station to characters
 KBS$REP <- as.character(KBS$REP)
 KBS$STATION <- as.character(KBS$STATION)
+#change order of data set
+KBS<-KBS[order(KBS$TREAT, KBS$REP, KBS$STATION, KBS$DOY),]
 str(KBS)
+
 #bring in data set with all insects we IDed in the Bahlai lab
 Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Insect%20ID%202021_sticky%20card.csv", na.strings = NULL)
 #change Rep and Station to characters
@@ -59,20 +34,17 @@ for(i in 1:length(KBS$ABIPN)){
   cumABIPN<-c(cumABIPN, bugcount)
 }
 
-#use something like this to combine all cumulative counts into a data file
-##datacombined<-cbind(data, cumABIPN)
-
 #testing the loop
-thing<-c()
-  for(i in 1:length(KBS$is.collected)){
-    if (KBS$is.collected[i]=="yes"){
-      bugcount<-"true"
-    }else{
-      bugcount<-"false"
-    }
-    thing<-c(thing, bugcount)
-  }
-test<-cbind(KBS, thing)
+#thing<-c()
+ # for(i in 1:length(KBS$is.collected)){
+  #  if (KBS$is.collected[i]=="yes"){
+   #   bugcount<-"true"
+    #}else{
+     # bugcount<-"false"
+    #}
+    #thing<-c(thing, bugcount)
+  #}
+#test<-cbind(KBS, thing)
 
 
 #BURSI
@@ -96,7 +68,6 @@ for(i in 1:length(KBS$C7)){
   }
   cumC7<-c(cumC7, bugcount)
 }
-datacombined<-cbind(data, cumC7)
 
 #CMAC
 cumCMAC<-c()
@@ -290,8 +261,46 @@ KBS_cum<-cbind(KBS, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF,
                cumCYCSP, cumH13, cumHAXY, cumHCONV, cumHGLAC, cumHPARN, cumHVAR, 
                cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT, cumOTHER)
 
-#print data into cvs file
-write.csv(KBS_cum, file="2021_LTER_cumulative.csv", row.names=FALSE)
+#just want "yes" lines because those show cumulative amounts
+KBS_cum_final <- KBS_cum[which(KBS_cum$is.collected=="yes"),] 
 
-#after deleting non-cumulative counts, add the data file back in 
-KBS_cum <- read.csv ("", na.strings = NULL)
+#print data into cvs file
+write.csv(KBS_cum_final, file="2021_LTER_cumulative.csv", row.names=FALSE)
+
+#after deleting non-cumulative counts, and adding in the data collected in the Bahlai lab, add the data file back in 
+insects <- read.csv ("", na.strings = NULL)
+
+
+
+
+
+#bring in data sets from github
+
+new <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/New_Insect%20ID%20-%20sticky%20card%20comparison%20-%20as%20of%203.22.22.csv",na.strings = NULL)
+old <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Old_Insect%20ID%20-%20sticky%20card%20comparison%20-%20as%20of%203.22.22.csv",na.strings = NULL)
+
+#taxa <- read.csv("")
+
+#combine data tables 
+library (plyr)
+insects <- rbind.fill (new, old)
+#change Rep and Station to characters
+insects$Rep <- as.character(insects$Rep)
+insects$Station <- as.character(insects$Station)
+summary(insects)
+
+####
+#NMDS of insect community between card types
+library (vegan)
+
+#Create matrix of environmental variables
+env.matrix<-insects[c(1:5)]
+#create matrix of community variables
+com.matrix<-insects[c(6:10)]
+
+#ordination by NMDS
+NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=FALSE, trymax=100)
+stressplot(NMDS)
+#stress=
+
+####
