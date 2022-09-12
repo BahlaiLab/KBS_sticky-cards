@@ -10,13 +10,6 @@ KBS$STATION <- as.character(KBS$STATION)
 KBS<-KBS[order(KBS$TREAT, KBS$REP, KBS$STATION, KBS$DOY),]
 str(KBS)
 
-#bring in data set with all insects we IDed in the Bahlai lab
-Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Insect%20ID%202021_sticky%20card.csv", na.strings = NULL)
-#change Rep and Station to characters
-Bahlai$REP <- as.character(Bahlai$REP)
-Bahlai$STATION <- as.character(Bahlai$STATION)
-str(Bahlai)
-
 #combining two counting periods for each individual sticky card into one line
 #at KBS sticky cards were out for 2 weeks
 #at the end of week 1, lady beetles and other focal specimens would be counted and removed from cards
@@ -33,19 +26,6 @@ for(i in 1:length(KBS$ABIPN)){
   }
   cumABIPN<-c(cumABIPN, bugcount)
 }
-
-#testing the loop
-#thing<-c()
- # for(i in 1:length(KBS$is.collected)){
-  #  if (KBS$is.collected[i]=="yes"){
-   #   bugcount<-"true"
-    #}else{
-     # bugcount<-"false"
-    #}
-    #thing<-c(thing, bugcount)
-  #}
-#test<-cbind(KBS, thing)
-
 
 #BURSI
 cumBURSI<-c()
@@ -264,10 +244,33 @@ KBS_cum<-cbind(KBS, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF,
 #just want "yes" lines because those show cumulative amounts
 KBS_cum_final <- KBS_cum[which(KBS_cum$is.collected=="yes"),] 
 
-#print data into cvs file
+#print data into csv file
 write.csv(KBS_cum_final, file="2021_LTER_cumulative.csv", row.names=FALSE)
 
-#after deleting non-cumulative counts, and adding in the data collected in the Bahlai lab, add the data file back in 
+#after deleting non-cumulative counts, and adding in the data from treatments 1 and 4 from june 10th, 
+#add the cumulative count data file back in to reorder again for matching
+KBS_cum_final_2.0 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_cumulative%202.0.csv", na.strings = NULL)
+#reorder
+KBS_cum_final_2.0<-KBS_cum_final_2.0[order(KBS_cum_final_2.0$TREAT, KBS_cum_final_2.0$REP, KBS_cum_final_2.0$STATION, KBS_cum_final_2.0$DOY),]
+str(KBS_cum_final_2.0)
+
+#print data into csv file
+write.csv(KBS_cum_final_2.0, file="2021_LTER_cumulative 3.0.csv", row.names=FALSE)
+
+#bring in data set with all insects we IDed in the Bahlai lab
+Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Insect%20ID%202021_sticky%20card.csv", na.strings = NULL)
+#change Rep and Station to characters
+Bahlai$REP <- as.character(Bahlai$REP)
+Bahlai$STATION <- as.character(Bahlai$STATION)
+#change order of data set
+Bahlai<-Bahlai[order(Bahlai$TREAT, Bahlai$REP, Bahlai$STATION, Bahlai$DOY),]
+str(Bahlai)
+
+#print into csv file
+write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
+
+#bring in final data file of everything combined
+#LTER (2021_LTER_cumulative 3.0) + Bahlai (2021_Bahlai_reordered)
 insects <- read.csv ("", na.strings = NULL)
 
 
