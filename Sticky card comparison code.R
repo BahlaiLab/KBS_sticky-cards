@@ -258,10 +258,8 @@ str(KBS_cum_final_2.0)
 write.csv(KBS_cum_final_2.0, file="2021_LTER_cumulative 3.0.csv", row.names=FALSE)
 
 #bring in data set with all insects we IDed in the Bahlai lab
-Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Insect%20ID%202021_sticky%20card.csv", na.strings = NULL)
-#change Rep and Station to characters
-Bahlai$REP <- as.character(Bahlai$REP)
-Bahlai$STATION <- as.character(Bahlai$STATION)
+Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_Bahlai%20-%20with%20corrections.csv", na.strings = NULL)
+
 #change order of data set
 Bahlai<-Bahlai[order(Bahlai$TREAT, Bahlai$REP, Bahlai$STATION, Bahlai$DOY),]
 str(Bahlai)
@@ -283,8 +281,8 @@ insects$STATION <- as.factor(insects$STATION)
 str(insects)
 summary(insects)
 
-
 ####
+
 #NMDS of insect community between card types
 library (vegan)
 
@@ -294,9 +292,14 @@ env.matrix<-insects[c(1:7)]
 com.matrix<-insects[c(8:32)]
 
 #ordination by NMDS
+### ERROR
 NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100)
 stressplot(NMDS)
 #stress=
+
+#NMDS visualization
+
+
 
 #subset by card type
 new <- insects[which(insects$CARD=="New"),] 
@@ -313,16 +316,16 @@ old$abundance <- insects.abun
 insects.rowsums <- rowSums(old[,8:32]>0)
 old$richness <- insects.rowsums
 
-mean(new$abundance) #43.44
-sd(new$abundance)/sqrt(10) #17.55
+mean(new$abundance) #43.41
+sd(new$abundance)/sqrt(10) #17.56
 
-mean(new$richness) #3.55
+mean(new$richness) #3.53
 sd(new$richness)/sqrt(10) #0.48
 
-mean(old$abundance) #36.93
-sd(old$abundance)/sqrt(10) #13.65
+mean(old$abundance) #36.85
+sd(old$abundance)/sqrt(10) #13.64
 
-mean(old$richness) #3.54
+mean(old$richness) #3.55
 sd(old$richness)/sqrt(10) #0.49
 
 ###
@@ -360,8 +363,10 @@ library(sjPlot)
 library (jtools)
 library(interactions)
 
+#WORK ON THIS -- need to change model to fix normality
+
 #order richness
-#AIC 5269
+#AIC 5275
 richness.model<-lm(richness ~ CARD + week + TREAT:REP, data=insects)
 summary(richness.model)
 Anova (richness.model)
@@ -375,7 +380,7 @@ with(insects, ad.test(richness)) #Anderson-darling test for normality (good for 
 #p-value < 2.2e-16
 
 with(insects, bartlett.test(richness ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
-#p-value = 0.7391
+#p-value = 0.3607
 
 plot(richness.model) # check distribution of residuals
 
@@ -384,9 +389,9 @@ qqnorm(resid(richness.model))
 qqline(resid(richness.model))
 
 plot(simulateResiduals(richness.model)) # another way to check for normailty and homogeneity of variance
-#KS test: p = 0.07576
-#dispersion test: p = 0.256 
-#outlier test: p = 0.66498
+#KS test: p = SIG
+#dispersion test: p = 
+#outlier test: p = 
 #no significant problems detected 
 
 densityPlot(rstudent(richness.model)) # check density estimate of the distribution of residuals
