@@ -271,39 +271,198 @@ write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
 
 #bring in final data file of everything combined
 #LTER (2021_LTER_cumulative 3.0) + Bahlai (2021_Bahlai_reordered)
-insects <- read.csv ("", na.strings = NULL)
-
-
-
-
-
-#bring in data sets from github
-
-new <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/New_Insect%20ID%20-%20sticky%20card%20comparison%20-%20as%20of%203.22.22.csv",na.strings = NULL)
-old <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Old_Insect%20ID%20-%20sticky%20card%20comparison%20-%20as%20of%203.22.22.csv",na.strings = NULL)
-
-#taxa <- read.csv("")
-
-#combine data tables 
-library (plyr)
-insects <- rbind.fill (new, old)
-#change Rep and Station to characters
-insects$Rep <- as.character(insects$Rep)
-insects$Station <- as.character(insects$Station)
+insects <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTERandBahlai.csv", na.strings = NULL)
+#change DOY and week to characters
+insects$DOY <- as.character(insects$DOY)
+insects$week <- as.character(insects$week)
+#change CARD, TREAT, REP, and STATION to factor
+insects$CARD <- as.factor(insects$CARD)
+insects$TREAT <- as.factor(insects$TREAT)
+insects$REP <- as.factor(insects$REP)
+insects$STATION <- as.factor(insects$STATION)
+str(insects)
 summary(insects)
+
 
 ####
 #NMDS of insect community between card types
 library (vegan)
 
 #Create matrix of environmental variables
-env.matrix<-insects[c(1:5)]
+env.matrix<-insects[c(1:7)]
 #create matrix of community variables
-com.matrix<-insects[c(6:10)]
+com.matrix<-insects[c(8:32)]
 
 #ordination by NMDS
-NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=FALSE, trymax=100)
+NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100)
 stressplot(NMDS)
 #stress=
 
-####
+#subset by card type
+new <- insects[which(insects$CARD=="New"),] 
+old <- insects[which(insects$CARD=="Old"),] 
+
+#calculate mean and SE richness and abundance of each card
+insects.abun <- rowSums(new[,8:32])
+new$abundance <- insects.abun
+insects.rowsums <- rowSums(new[,8:32]>0)
+new$richness <- insects.rowsums
+
+insects.abun <- rowSums(old[,8:32])
+old$abundance <- insects.abun
+insects.rowsums <- rowSums(old[,8:32]>0)
+old$richness <- insects.rowsums
+
+mean(new$abundance) #43.44
+sd(new$abundance)/sqrt(10) #17.55
+
+mean(new$richness) #3.55
+sd(new$richness)/sqrt(10) #0.48
+
+mean(old$abundance) #36.93
+sd(old$abundance)/sqrt(10) #13.65
+
+mean(old$richness) #3.54
+sd(old$richness)/sqrt(10) #0.49
+
+###
+
+#To obtain richness counts
+insects.rowsums <- rowSums(insects[,8:32]>0)
+insects$richness <- insects.rowsums
+
+#To obtain abundance counts
+insects.abun <- rowSums(insects[,8:32])
+insects$abundance <- insects.abun
+
+#calculate Shannon diversity
+diversity <-diversity(insects[,8:32])
+insects$diversity <-diversity
+
+#calculate Evenness
+evenness <-diversity/log(specnumber(insects[,8:32]))
+insects$evenness <- evenness
+
+###
+
+#Mixed effects models
+library(lme4)
+library(lmerTest) #to obtain p values
+library (emmeans) #for pairwise comparisons
+library (multcompView) #to view letters
+library (car) #Anova (needed because of negative binomial)
+citation("car")
+library (nortest)
+library(bbmle)
+library(DHARMa)
+library(ggplot2)
+library(sjPlot)
+library (jtools)
+library(interactions)
+
+#order richness
+#AIC 5269
+richness.model<-lm(richness ~ CARD + week + TREAT:REP, data=insects)
+summary(richness.model)
+Anova (richness.model)
+AIC(richness.model)
+#results: cards not sig diff
+
+#check assumptions
+dotchart(insects$richness, main = "richness", group = insects$CARD) # way to visualize outliers
+
+with(insects, ad.test(richness)) #Anderson-darling test for normality (good for small sample sizes), low p-value means assumption is violated
+#p-value < 2.2e-16
+
+with(insects, bartlett.test(richness ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
+#p-value = 0.7391
+
+plot(richness.model) # check distribution of residuals
+
+# check normality with these figures, are there outliers at either end
+qqnorm(resid(richness.model))
+qqline(resid(richness.model))
+
+plot(simulateResiduals(richness.model)) # another way to check for normailty and homogeneity of variance
+#KS test: p = 0.07576
+#dispersion test: p = 0.256 
+#outlier test: p = 0.66498
+#no significant problems detected 
+
+densityPlot(rstudent(richness.model)) # check density estimate of the distribution of residuals
+
+# check for outliers influencing the data
+outlierTest(richness.model)
+influenceIndexPlot(richness.model, vars = c("Cook"), id = list(n = 3))
+
+#
+
+#WORK ON THIS -- need to change model to fix normality
+
+#order abundance
+##AIC 15754
+abundance.model<-lm(abundance ~ CARD + week + TREAT:REP, data=insects)
+#abundance.model<-glmer(abundance ~ CARD + week + (1 | TREAT:REP), data=insects, family = negative.binomial (4))
+summary(abundance.model)
+Anova(abundance.model)
+AIC(abundance.model)
+#results: cards are sig diff (p = 0.0027)
+
+#check assumptions
+dotchart(insects$abundnce, main = "abundance", group = insects$CARD) # way to visualize outliers
+
+with(insects, ad.test(abundance)) #Anderson-darling test for normality (good for small sample sizes), low p-value means assumption is violated
+#p-value < 2.2e-16
+
+with(insects, bartlett.test(abundance ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
+#p-value = 5.785e-12
+
+plot(abundance.model) # check distribution of residuals
+
+# check normality with these figures, are there outliers at either end
+qqnorm(resid(abundance.model))
+qqline(resid(abundance.model))
+
+plot(simulateResiduals(abundance.model)) # another way to check for normailty and homogeneity of variance
+#KS test: p = 
+#dispersion test: p = 
+#outlier test: p =
+#no significant problems detected 
+
+densityPlot(rstudent(abundance.model)) # check density estimate of the distribution of residuals
+
+# check for outliers influencing the data
+outlierTest(abundance.model)
+influenceIndexPlot(abundance.model, vars = c("Cook"), id = list(n = 3))
+
+#
+
+#STOPPED HERE ^
+
+#order diversity
+##AIC 132
+#Date is not significant
+diversity.model_order<-lmer(diversity ~ Trap + Date + (1 | Site:Replicate), data=insects_order)
+summary(diversity.model_order)
+Anova(diversity.model_order)
+AIC(diversity.model_order)
+#pairwise comparison 
+div.emm_order<-emmeans(diversity.model_order,pairwise~Trap)
+div.emm_order
+#results: no sig diff jar-pitfall (0.4395), jar-sticky (0.8075), pitfall-sticky (0.0859); sig between rest
+div.cld_order<-multcomp::cld(div.emm_order, alpha = 0.05, Letters = LETTERS)
+div.cld_order
+
+#order evenness
+##AIC -184
+evenness.model_order<-lmer(evenness ~ Trap + Date + (1 | Site:Replicate), data=insects_order)
+summary(evenness.model_order)
+Anova(evenness.model_order)
+AIC(evenness.model_order)
+#pairwise comparison 
+even.emm_order<-emmeans(evenness.model_order,pairwise~Trap)
+even.emm_order
+#results: no sig diff between jar-pitfall (0.1060), jar-ramp (0.8689),jar-sticky (0.1062), ramp-sticky (0.4298); sig btw rest
+even.cld_order<-multcomp::cld(even.emm_order, alpha = 0.05, Letters = LETTERS)
+even.cld_order
+
