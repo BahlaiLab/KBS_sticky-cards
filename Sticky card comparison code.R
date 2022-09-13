@@ -267,6 +267,10 @@ str(Bahlai)
 #print into csv file
 write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
 
+
+###
+
+
 #bring in final data file of everything combined
 #LTER (2021_LTER_cumulative 3.0) + Bahlai (2021_Bahlai_reordered)
 insects <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTERandBahlai.csv", na.strings = NULL)
@@ -281,7 +285,9 @@ insects$STATION <- as.factor(insects$STATION)
 str(insects)
 summary(insects)
 
-####
+#"insects" is final cleaned data set -- begin data analyses
+
+###
 
 #NMDS of insect community between card types
 library (vegan)
