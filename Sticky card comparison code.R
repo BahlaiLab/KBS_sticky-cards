@@ -293,19 +293,54 @@ summary(insects)
 library (vegan)
 
 #Create matrix of environmental variables
-env.matrix<-insects[c(1:7)]
+env.matrix<-insects[c(3:7)]
 #create matrix of community variables
 com.matrix<-insects[c(8:32)]
 
 #ordination by NMDS
-### ERROR
-NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100)
+
+#have to get rid of any rows (samples) that have only zeros
+library(dplyr)
+#com.matrix <- com.matrix %>% 
+ # filter_all(any_vars(. != 0))
+
+#NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100)
+NMDS
 stressplot(NMDS)
-#stress=
+#stress=.25 -- no convergence
 
 #NMDS visualization
+#DOES NOT WORK
+plot(NMDS, disp='sites', type="n")
+title(main="", adj = 0.01, line = -2, cex.main=2.5)
+#add ellipsoids with ordiellipse
+ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old")
+ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New") 
+#display ground trap data as solid shapes - pitfall=circle, ramp trap=square, jar=triangle, flying trap as triangle outline
+points(NMDS, display="sites", select=which(env.matrix$Trap=="pitfall"),pch=19, col="#E69F00")
+points(NMDS, display="sites", select=which(env.matrix$Trap=="jar"), pch=17, col="#009E73")
+#add legend
+legend(1.0,1.51, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=.7, legend=c("Old cards", "New cards"))
+#add insect taxa as text
+#ordilabel(NMDS, display="species", select =which (include_func==TRUE & crawling_func == TRUE), cex=0.6, col="black", fill="white")
+#ordilabel(NMDS, display="species", select =which (include_func==TRUE & flying_func == TRUE), cex=0.6, col="white", fill="black")
+#ordilabel(NMDS, display="species", select =which (include_func==TRUE & intermediate_func == TRUE), cex=0.6, col="black", fill="gray")
 
+#bootstrapping and testing for differences between the groups (cards)
+fit<-adonis(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
+fit
+#P-value = 
 
+#check assumption of homogeneity of multivariate dispersion 
+#P-value greater than 0.05 means assumption has been met
+distances_data<-vegdist(com.matrix)
+anova(betadisper(distances_data, env.matrix$CARD))
+#P-value = ??? -- cannot assume homogeneity of multivariate dispersion
+
+library(pairwiseAdonis)
+pairwise.adonis(com.matrix, env.matrix$CARD)
+
+#
 
 #subset by card type
 new <- insects[which(insects$CARD=="New"),] 
@@ -477,3 +512,94 @@ even.emm_order
 even.cld_order<-multcomp::cld(even.emm_order, alpha = 0.05, Letters = LETTERS)
 even.cld_order
 
+
+
+
+
+
+#species accumulation
+library (BiodiversityR)
+library(ggplot2)
+
+#individual curves for each trap (card) type
+new.com.matrix<-new[c(8:32)]
+new_curve<-accumresult(new.com.matrix, method = "exact", permutations = 1000)
+
+old.com.matrix<-old[c(8:32)]
+old_curve<-accumresult(old.com.matrix, method = "exact", permutations = 1000)
+
+#first-order jackknife estimates are based on the number of singletons
+#second-order jackknife estimates are based on the number of singletons and doubletons
+
+#calculates species richness for each sample
+specnumber(com.matrix) #ranges from 1 to 8?
+
+#calculates species richness by treatment (CARD)
+specnumber(com.matrix, groups = insects$CARD) #new=21; sticky=21
+
+#total richness and jackknife
+rich <- diversityresult(com.matrix, y=NULL, index = "richness")
+rich # 21
+j1 <- diversityresult(com.matrix, y=NULL, index = "jack1")
+j1 # 21
+#100%
+j2 <- diversityresult(com.matrix, y=NULL, index = "jack2")
+j2 # 21
+#100%
+
+#new jackknife; richness = 21
+j1.new <- diversityresult(new.com.matrix, y=NULL, index = "jack1")
+j1.new # 21.998366
+#95%
+j2.new <- diversityresult(new.com.matrix, y=NULL, index = "jack2")
+j2.new # 22.995098
+#91%
+
+#old jackknife; richness = 21
+j1.old <- diversityresult(old.com.matrix, y=NULL, index = "jack1")
+j1.old # 21
+#100%
+j2.old <- diversityresult(old.com.matrix, y=NULL, index = "jack2")
+j2.old # 20.003267
+#104% --> 100%
+
+#BiodiversityR::accumcomp
+Accum.1_functional <- accumcomp(com.matrix, y=env.matrix, factor='CARD', 
+                                method='random', conditioned=FALSE, plotit=FALSE)
+Accum.1_functional
+
+#BiodiversityR::accumcomp.long
+accum.long1_functional <- accumcomp.long(Accum.1_functional, ci=NA, label.freq=5)
+head(accum.long1_functional)
+
+#plot
+#empty canvas
+BioR.theme <- theme(
+  panel.background = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.line = element_line("gray25"),
+  text = element_text(size = 12),
+  axis.text = element_text(size = 10, colour = "gray25"),
+  axis.title = element_text(size = 14, colour = "gray25"),
+  legend.title = element_text(size = 14),
+  legend.text = element_text(size = 14),
+  legend.key = element_blank())
+
+accum <- ggplot(data=accum.long1_functional, aes(x = Sites, y = Richness, ymax = UPR, ymin = LWR)) + 
+  scale_x_continuous(expand=c(0, 1), sec.axis = dup_axis(labels=NULL, name=NULL)) +
+  scale_y_continuous(sec.axis = dup_axis(labels=NULL, name=NULL)) +
+  scale_color_manual(values=c("#009E73","#E69F00"))+
+  scale_shape_manual(values=c(19,17))+
+  geom_line(aes(colour=Grouping), size=0.1) +
+  geom_ribbon(aes(colour=Grouping, fill=after_scale(alpha(colour, 0.3))), 
+              show.legend=FALSE, linetype = 0) + 
+  geom_point(data=subset(accum.long1_functional, labelit==TRUE), 
+             aes(colour=Grouping, shape=Grouping), size=3) +
+  BioR.theme +
+  labs(x = "", y = "Richness", colour = "CARD", shape = "CARD")
+accum
+
+pdf("accumulation curve.pdf", height=6, width=8) #height and width in inches
+accum
+dev.off()
