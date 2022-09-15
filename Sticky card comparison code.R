@@ -274,8 +274,7 @@ write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
 #bring in final data file of everything combined
 #LTER (2021_LTER_cumulative 3.0) + Bahlai (2021_Bahlai_reordered)
 insects <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTERandBahlai.csv", na.strings = NULL)
-#change DOY and week to characters
-insects$DOY <- as.character(insects$DOY)
+#change week to characters
 insects$week <- as.character(insects$week)
 #change CARD, TREAT, REP, and STATION to factor
 insects$CARD <- as.factor(insects$CARD)
@@ -293,24 +292,26 @@ summary(insects)
 library (vegan)
 
 #Create matrix of environmental variables
-env.matrix<-insects[c(3:7)]
+env.matrix<-insects[c(1:5)]
 #create matrix of community variables
-com.matrix<-insects[c(8:32)]
+com.matrix<-insects[c(6:30)]
 
 #ordination by NMDS
 
 #have to get rid of any rows (samples) that have only zeros
 library(dplyr)
 #com.matrix <- com.matrix %>% 
- # filter_all(any_vars(. != 0))
+  #filter_all(any_vars(. != 0))
 
-#NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100)
+#NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=20)
 NMDS
-stressplot(NMDS)
 #stress=.25 -- no convergence
 
 #NMDS visualization
 #DOES NOT WORK
+#when ordiellipse lines are run we get this: 
+  #Error in pts[take, , drop = FALSE] : 
+  #(subscript) logical subscript too long
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
@@ -330,15 +331,23 @@ legend(1.0,1.51, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=.7, l
 fit<-adonis(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
 fit
 #P-value = 
+##get this error:
+  #Error in G * t(hat) : non-conformable arrays
 
 #check assumption of homogeneity of multivariate dispersion 
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARD))
 #P-value = ??? -- cannot assume homogeneity of multivariate dispersion
+##get this error:
+  #Error in h(simpleError(msg, call)) : 
+  #error in evaluating the argument 'object' in selecting a method for function 'anova': (subscript) logical subscript too long
 
 library(pairwiseAdonis)
 pairwise.adonis(com.matrix, env.matrix$CARD)
+##get this error:
+  #Error in vegdist(x[factors %in% c(co[1, elem], co[2, elem]), ], method = sim.method) : 
+#missing values are not allowed with argument 'na.rm = FALSE'
 
 #
 
@@ -347,20 +356,20 @@ new <- insects[which(insects$CARD=="New"),]
 old <- insects[which(insects$CARD=="Old"),] 
 
 #calculate mean and SE richness and abundance of each card
-insects.abun <- rowSums(new[,8:32])
+insects.abun <- rowSums(new[,6:30])
 new$abundance <- insects.abun
-insects.rowsums <- rowSums(new[,8:32]>0)
+insects.rowsums <- rowSums(new[,6:30]>0)
 new$richness <- insects.rowsums
 
-insects.abun <- rowSums(old[,8:32])
+insects.abun <- rowSums(old[,6:30])
 old$abundance <- insects.abun
-insects.rowsums <- rowSums(old[,8:32]>0)
+insects.rowsums <- rowSums(old[,6:30]>0)
 old$richness <- insects.rowsums
 
 mean(new$abundance) #43.41
 sd(new$abundance)/sqrt(10) #17.56
 
-mean(new$richness) #3.53
+mean(new$richness) #3.52
 sd(new$richness)/sqrt(10) #0.48
 
 mean(old$abundance) #36.85
@@ -372,19 +381,19 @@ sd(old$richness)/sqrt(10) #0.49
 ###
 
 #To obtain richness counts
-insects.rowsums <- rowSums(insects[,8:32]>0)
+insects.rowsums <- rowSums(insects[,6:30]>0)
 insects$richness <- insects.rowsums
 
 #To obtain abundance counts
-insects.abun <- rowSums(insects[,8:32])
+insects.abun <- rowSums(insects[,6:30])
 insects$abundance <- insects.abun
 
 #calculate Shannon diversity
-diversity <-diversity(insects[,8:32])
+diversity <-diversity(insects[,6:30])
 insects$diversity <-diversity
 
 #calculate Evenness
-evenness <-diversity/log(specnumber(insects[,8:32]))
+evenness <-diversity/log(specnumber(insects[,6:30]))
 insects$evenness <- evenness
 
 ###
@@ -394,7 +403,7 @@ library(lme4)
 library(lmerTest) #to obtain p values
 library (emmeans) #for pairwise comparisons
 library (multcompView) #to view letters
-library (car) #Anova (needed because of negative binomial)
+library (car) #Anova (needed because of negative binomial)  ##if we don't use neg binomial switch to "anova"
 citation("car")
 library (nortest)
 library(bbmle)
@@ -406,7 +415,7 @@ library(interactions)
 
 #WORK ON THIS -- need to change model to fix normality
 
-#order richness
+#richness
 #AIC 5275
 richness.model<-lm(richness ~ CARD + week + TREAT:REP, data=insects)
 summary(richness.model)
@@ -429,7 +438,7 @@ plot(richness.model) # check distribution of residuals
 qqnorm(resid(richness.model))
 qqline(resid(richness.model))
 
-plot(simulateResiduals(richness.model)) # another way to check for normailty and homogeneity of variance
+plot(simulateResiduals(richness.model)) # another way to check for normality and homogeneity of variance
 #KS test: p = SIG
 #dispersion test: p = 
 #outlier test: p = 
@@ -445,23 +454,25 @@ influenceIndexPlot(richness.model, vars = c("Cook"), id = list(n = 3))
 
 #WORK ON THIS -- need to change model to fix normality
 
-#order abundance
-##AIC 15754
+#abundance
+##AIC 15721
 abundance.model<-lm(abundance ~ CARD + week + TREAT:REP, data=insects)
+#abundance.model<-lmer(abundance ~ CARD + (1|week) + TREAT:REP, data=insects)
 #abundance.model<-glmer(abundance ~ CARD + week + (1 | TREAT:REP), data=insects, family = negative.binomial (4))
 summary(abundance.model)
 Anova(abundance.model)
 AIC(abundance.model)
-#results: cards are sig diff (p = 0.0027)
+#results: cards are sig diff (p = 0.0019 aka 0.001)
 
 #check assumptions
-dotchart(insects$abundnce, main = "abundance", group = insects$CARD) # way to visualize outliers
+dotchart(insects$abundance, main = "abundance", group = insects$CARD) # way to visualize outliers
+##most are clustered towards zero
 
 with(insects, ad.test(abundance)) #Anderson-darling test for normality (good for small sample sizes), low p-value means assumption is violated
 #p-value < 2.2e-16
 
 with(insects, bartlett.test(abundance ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
-#p-value = 5.785e-12
+#p-value = 4.955e-12
 
 plot(abundance.model) # check distribution of residuals
 
@@ -469,10 +480,10 @@ plot(abundance.model) # check distribution of residuals
 qqnorm(resid(abundance.model))
 qqline(resid(abundance.model))
 
-plot(simulateResiduals(abundance.model)) # another way to check for normailty and homogeneity of variance
-#KS test: p = 
+plot(simulateResiduals(abundance.model)) # another way to check for normality and homogeneity of variance
+#KS test: p = SIG
 #dispersion test: p = 
-#outlier test: p =
+#outlier test: p = SIG
 #no significant problems detected 
 
 densityPlot(rstudent(abundance.model)) # check density estimate of the distribution of residuals
@@ -481,41 +492,83 @@ densityPlot(rstudent(abundance.model)) # check density estimate of the distribut
 outlierTest(abundance.model)
 influenceIndexPlot(abundance.model, vars = c("Cook"), id = list(n = 3))
 
+##lots of outliers
+
 #
 
-#STOPPED HERE ^
+#diversity
+##AIC 823
+diversity.model<-lm(diversity ~ CARD + week + TREAT:REP, data=insects)
+summary(diversity.model)
+Anova(diversity.model)
+AIC(diversity.model)
+#results: cards are sig diff (p=0.0037 aka 0.001)
 
-#order diversity
-##AIC 132
-#Date is not significant
-diversity.model_order<-lmer(diversity ~ Trap + Date + (1 | Site:Replicate), data=insects_order)
-summary(diversity.model_order)
-Anova(diversity.model_order)
-AIC(diversity.model_order)
-#pairwise comparison 
-div.emm_order<-emmeans(diversity.model_order,pairwise~Trap)
-div.emm_order
-#results: no sig diff jar-pitfall (0.4395), jar-sticky (0.8075), pitfall-sticky (0.0859); sig between rest
-div.cld_order<-multcomp::cld(div.emm_order, alpha = 0.05, Letters = LETTERS)
-div.cld_order
+#check assumptions
+dotchart(insects$diversity, main = "diversity", group = insects$CARD) # way to visualize outliers
+
+with(insects, ad.test(diversity)) #Anderson-darling test for normality (good for small sample sizes), low p-value means assumption is violated
+#p-value < 2.2e-16
+
+with(insects, bartlett.test(diversity ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
+#p-value = 0.4299
+
+plot(diversity.model) # check distribution of residuals
+
+# check normality with these figures, are there outliers at either end
+qqnorm(resid(diversity.model))
+qqline(resid(diversity.model))
+
+plot(simulateResiduals(diversity.model)) # another way to check for normality and homogeneity of variance
+#KS test: p = 0.26014
+#dispersion test: p = 0.264 
+#outlier test: p = 0.56348
+#no significant problems detected 
+
+densityPlot(rstudent(diversity.model)) # check density estimate of the distribution of residuals
+
+# check for outliers influencing the data
+outlierTest(diversity.model)
+influenceIndexPlot(diversity.model, vars = c("Cook"), id = list(n = 3))
+
+#
 
 #order evenness
-##AIC -184
-evenness.model_order<-lmer(evenness ~ Trap + Date + (1 | Site:Replicate), data=insects_order)
-summary(evenness.model_order)
-Anova(evenness.model_order)
-AIC(evenness.model_order)
-#pairwise comparison 
-even.emm_order<-emmeans(evenness.model_order,pairwise~Trap)
-even.emm_order
-#results: no sig diff between jar-pitfall (0.1060), jar-ramp (0.8689),jar-sticky (0.1062), ramp-sticky (0.4298); sig btw rest
-even.cld_order<-multcomp::cld(even.emm_order, alpha = 0.05, Letters = LETTERS)
-even.cld_order
+##AIC 
+evenness.model<-lm(evenness ~ CARD + week + TREAT:REP, data=insects)
+summary(evenness.model)
+Anova(evenness.model)
+AIC(evenness.model)
+#results: card is sig diff (p=4.81e-6 aka <0.001)
 
+#check assumptions
+dotchart(insects$evenness, main = "evenness", group = insects$CARD) # way to visualize outliers
 
+with(insects, ad.test(evenness)) #Anderson-darling test for normality (good for small sample sizes), low p-value means assumption is violated
+#p-value = 8.535e-14
 
+with(insects, bartlett.test(evenness ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
+#p-value = 0.7777
 
+plot(evenness.model) # check distribution of residuals
 
+# check normality with these figures, are there outliers at either end
+qqnorm(resid(evenness.model))
+qqline(resid(evenness.model))
+
+plot(simulateResiduals(evenness.model)) # another way to check for normailty and homogeneity of variance
+#KS test: p = SIG
+#dispersion test: p = 
+#outlier test: p =
+#no significant problems detected 
+
+densityPlot(rstudent(evenness.model)) # check density estimate of the distribution of residuals
+
+# check for outliers influencing the data
+outlierTest(evenness.model)
+influenceIndexPlot(evenness.model, vars = c("Cook"), id = list(n = 3))
+
+###
 
 #species accumulation
 library (BiodiversityR)
