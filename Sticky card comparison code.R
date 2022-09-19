@@ -279,10 +279,12 @@ combined$REP <- as.factor(combined$REP)
 combined$STATION <- as.factor(combined$STATION)
 str(combined)
 summary(combined)
+#remove rows with NAs (missing data from either LTER or Bahlai)
+combined.na <- na.omit(combined)
 
 #Melt into long format to pool across reps
 library (reshape2)
-combined.long <- melt(combined, id.vars = c("week", "TREAT", "REP", "STATION", "CARD"), 
+combined.long <- melt(combined.na, id.vars = c("week", "TREAT", "REP", "STATION", "CARD"), 
                       variable.name = "SPID", value.name = "SumOfADULTS")
 
 library(dplyr)
@@ -322,26 +324,22 @@ ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf
 points(NMDS, display="sites", select=which(env.matrix$CARD=="Old"),pch=19, col="#E69F00")
 points(NMDS, display="sites", select=which(env.matrix$CARD=="New"), pch=17, col="#009E73")
 #add legend
-legend(1.0,1.51, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
-#add insect taxa as text
-#ordilabel(NMDS, display="species", select =which (include_func==TRUE & crawling_func == TRUE), cex=0.6, col="black", fill="white")
-#ordilabel(NMDS, display="species", select =which (include_func==TRUE & flying_func == TRUE), cex=0.6, col="white", fill="black")
-#ordilabel(NMDS, display="species", select =which (include_func==TRUE & intermediate_func == TRUE), cex=0.6, col="black", fill="gray")
+legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
 
 #bootstrapping and testing for differences between the groups (cards)
 fit<-adonis(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
 fit
-#P-value = 0.277 -- no sig diff between card types
+#P-value = 0.246 -- no sig diff between card types
 
 #check assumption of homogeneity of multivariate dispersion 
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARD))
-#P-value = 0.7034 -- cannot assume homogeneity of multivariate dispersion
+#P-value = 0.6973 -- cannot assume homogeneity of multivariate dispersion
 
 library(pairwiseAdonis)
 pairwise.adonis(com.matrix, env.matrix$CARD)
-#P-value = 0.264
+#P-value = 0.274
 
 #
 
@@ -350,9 +348,9 @@ new <- insects[which(insects$CARD=="New"),]
 old <- insects[which(insects$CARD=="Old"),] 
 
 #calculate mean and SE richness and abundance of each card
-insects.abun <- rowSums(new[,6:30])
+insects.abun <- rowSums(new[,5:29])
 new$abundance <- insects.abun
-insects.rowsums <- rowSums(new[,6:30]>0)
+insects.rowsums <- rowSums(new[,5:29]>0)
 new$richness <- insects.rowsums
 
 insects.abun <- rowSums(old[,6:30])
