@@ -347,17 +347,30 @@ pairwise.adonis(com.matrix, env.matrix$CARD)
 new <- insects[which(insects$CARD=="New"),] 
 old <- insects[which(insects$CARD=="Old"),] 
 
-#calculate mean and SE richness and abundance of each card
+#calculate mean and SE richness and abundance of each card pooled by rep
 insects.abun <- rowSums(new[,5:29])
 new$abundance <- insects.abun
 insects.rowsums <- rowSums(new[,5:29]>0)
 new$richness <- insects.rowsums
 
-insects.abun <- rowSums(old[,6:30])
+insects.abun <- rowSums(old[,5:29])
 old$abundance <- insects.abun
-insects.rowsums <- rowSums(old[,6:30]>0)
+insects.rowsums <- rowSums(old[,5:29]>0)
 old$richness <- insects.rowsums
 
+mean(new$abundance) #220.84
+sd(new$abundance)/sqrt(10) #67.86
+
+mean(new$richness) #6.65
+sd(new$richness)/sqrt(10) #0.68
+
+mean(old$abundance) #187.85
+sd(old$abundance)/sqrt(10) #57.00
+
+mean(old$richness) #6.64
+sd(old$richness)/sqrt(10) #0.73
+
+#counts from each individual card -- calculated before cards were pooled across reps
 mean(new$abundance) #43.41
 sd(new$abundance)/sqrt(10) #17.56
 
@@ -373,19 +386,19 @@ sd(old$richness)/sqrt(10) #0.49
 ###
 
 #To obtain richness counts
-insects.rowsums <- rowSums(insects[,6:30]>0)
+insects.rowsums <- rowSums(insects[,5:29]>0)
 insects$richness <- insects.rowsums
 
 #To obtain abundance counts
-insects.abun <- rowSums(insects[,6:30])
+insects.abun <- rowSums(insects[,5:29])
 insects$abundance <- insects.abun
 
 #calculate Shannon diversity
-diversity <-diversity(insects[,6:30])
+diversity <-diversity(insects[,5:29])
 insects$diversity <-diversity
 
 #calculate Evenness
-evenness <-diversity/log(specnumber(insects[,6:30]))
+evenness <-diversity/log(specnumber(insects[,5:29]))
 insects$evenness <- evenness
 
 ###
@@ -393,8 +406,6 @@ insects$evenness <- evenness
 #Mixed effects models
 library(lme4)
 library(lmerTest) #to obtain p values
-library (emmeans) #for pairwise comparisons
-library (multcompView) #to view letters
 library (car) #Anova (needed because of negative binomial)  ##if we don't use neg binomial switch to "anova"
 citation("car")
 library (nortest)
@@ -409,10 +420,13 @@ library(interactions)
 
 #richness
 #AIC 5275
-richness.model<-lm(richness ~ CARD + week + TREAT:REP, data=insects)
+richness.model<-lm(richness ~ CARD + week + TREAT:STATION, data=insects)
 summary(richness.model)
 Anova (richness.model)
 AIC(richness.model)
+#pairwise comparison 
+rich.emm<-emmeans(richness.model,pairwise~CARD)
+rich.emm
 #results: cards not sig diff
 
 #check assumptions
@@ -448,7 +462,7 @@ influenceIndexPlot(richness.model, vars = c("Cook"), id = list(n = 3))
 
 #abundance
 ##AIC 15721
-abundance.model<-lm(abundance ~ CARD + week + TREAT:REP, data=insects)
+abundance.model<-lm(abundance ~ CARD + week + TREAT:STATION, data=insects)
 #abundance.model<-lmer(abundance ~ CARD + (1|week) + TREAT:REP, data=insects)
 #abundance.model<-glmer(abundance ~ CARD + week + (1 | TREAT:REP), data=insects, family = negative.binomial (4))
 summary(abundance.model)
@@ -642,9 +656,9 @@ accum <- ggplot(data=accum.long1_functional, aes(x = Sites, y = Richness, ymax =
   geom_point(data=subset(accum.long1_functional, labelit==TRUE), 
              aes(colour=Grouping, shape=Grouping), size=3) +
   BioR.theme +
-  labs(x = "", y = "Richness", colour = "CARD", shape = "CARD")
+  labs(x = "Samples", y = "Richness", colour = "CARD", shape = "CARD")
 accum
 
-pdf("accumulation curve.pdf", height=6, width=8) #height and width in inches
+pdf("accumulation curve with pooled data.pdf", height=6, width=8) #height and width in inches
 accum
 dev.off()
