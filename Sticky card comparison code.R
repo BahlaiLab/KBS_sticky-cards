@@ -289,16 +289,13 @@ library(dplyr)
 insects_rep<-aggregate(data=combined.long, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN = sum)
 insects_rep_N<-aggregate(data=combined.long, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN=length)
 #change variable name to reflect that it's number of traps
-insects_rep_N<-rename(insects_N, TRAPS=SumOfADULTS)
+insects_rep_N<-rename(insects_rep_N, TRAPS=SumOfADULTS)
 #merge trap data into insects_rep data frame
-insects<-merge(insects_rep, insects_rep_N)
+insects_merged<-merge(insects_rep, insects_rep_N)
 
-#pool across reps
-com.matrix <-dcast(insects, week+TREAT+STATION+SPID~SPID,
+#pool across reps and put back into wide format
+insects <-dcast(insects_merged, week+TREAT+STATION+CARD~SPID,
                       value.var ="SumOfADULTS",  sum)
-
-#because we have some rep by week combinations with zero observations, we must remove them prior to analysis
-com.matrix.1<-com.matrix[rowSums(com.matrix[4:12])>2,]
 
 ###
 
@@ -306,36 +303,26 @@ com.matrix.1<-com.matrix[rowSums(com.matrix[4:12])>2,]
 library (vegan)
 
 #Create matrix of environmental variables
-env.matrix<-insects[c(1:5)]
+env.matrix<-insects[c(1:4)]
 #create matrix of community variables
-com.matrix<-insects[c(6:30)]
+com.matrix<-insects[c(5:29)]
 
 #ordination by NMDS
-
-#have to get rid of any rows (samples) that have only zeros
-library(dplyr)
-#com.matrix <- com.matrix %>% 
-  #filter_all(any_vars(. != 0))
-
-#NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=20)
+NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100) #stress=.24 -- no convergence
+NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=FALSE, trymax=100) #stress=.06 -- no convergence
 NMDS
-#stress=.25 -- no convergence
 
 #NMDS visualization
-#DOES NOT WORK
-#when ordiellipse lines are run we get this: 
-  #Error in pts[take, , drop = FALSE] : 
-  #(subscript) logical subscript too long
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
 ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old")
 ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New") 
 #display ground trap data as solid shapes - pitfall=circle, ramp trap=square, jar=triangle, flying trap as triangle outline
-points(NMDS, display="sites", select=which(env.matrix$Trap=="pitfall"),pch=19, col="#E69F00")
-points(NMDS, display="sites", select=which(env.matrix$Trap=="jar"), pch=17, col="#009E73")
+points(NMDS, display="sites", select=which(env.matrix$CARD=="Old"),pch=19, col="#E69F00")
+points(NMDS, display="sites", select=which(env.matrix$CARD=="New"), pch=17, col="#009E73")
 #add legend
-legend(1.0,1.51, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=.7, legend=c("Old cards", "New cards"))
+legend(1.0,1.51, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
 #add insect taxa as text
 #ordilabel(NMDS, display="species", select =which (include_func==TRUE & crawling_func == TRUE), cex=0.6, col="black", fill="white")
 #ordilabel(NMDS, display="species", select =which (include_func==TRUE & flying_func == TRUE), cex=0.6, col="white", fill="black")
@@ -344,24 +331,17 @@ legend(1.0,1.51, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=.7, l
 #bootstrapping and testing for differences between the groups (cards)
 fit<-adonis(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
 fit
-#P-value = 
-##get this error:
-  #Error in G * t(hat) : non-conformable arrays
+#P-value = 0.277 -- no sig diff between card types
 
 #check assumption of homogeneity of multivariate dispersion 
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARD))
-#P-value = ??? -- cannot assume homogeneity of multivariate dispersion
-##get this error:
-  #Error in h(simpleError(msg, call)) : 
-  #error in evaluating the argument 'object' in selecting a method for function 'anova': (subscript) logical subscript too long
+#P-value = 0.7034 -- cannot assume homogeneity of multivariate dispersion
 
 library(pairwiseAdonis)
 pairwise.adonis(com.matrix, env.matrix$CARD)
-##get this error:
-  #Error in vegdist(x[factors %in% c(co[1, elem], co[2, elem]), ], method = sim.method) : 
-#missing values are not allowed with argument 'na.rm = FALSE'
+#P-value = 0.264
 
 #
 
