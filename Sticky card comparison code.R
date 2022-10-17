@@ -430,6 +430,7 @@ library(emmeans)
 #richness
 #AIC 1179
 richness.model<-lm(richness ~ CARD + week + TREAT + STATION, data=insects)
+#richness.model<-lmer(richness ~ CARD + week + (1 | TREAT:STATION), data=insects)
 summary(richness.model)
 Anova (richness.model)
 AIC(richness.model)
@@ -470,8 +471,7 @@ influenceIndexPlot(richness.model, vars = c("Cook"), id = list(n = 3))
 #abundance
 ##AIC 3846
 abundance.model<-lm(abundance ~ CARD + week + TREAT + STATION, data=insects)  #does not meet normality assumptions
-#abundance.model<-lmer(abundance ~ CARD + (1|week) + TREAT:STATION, data=insects)
-#abundance.model<-glmer(abundance ~ CARD + week + (1 | TREAT:STATION), data=insects, family = negative.binomial (4))
+#abundance.model<-glmer(abundance ~ CARD + week + (1 | TREAT:STATION), data=insects, family = negative.binomial (4)) #meets normality assumptions
 summary(abundance.model)
 Anova(abundance.model)
 AIC(abundance.model)
@@ -513,13 +513,14 @@ influenceIndexPlot(abundance.model, vars = c("Cook"), id = list(n = 3))
 #diversity
 ##AIC 37
 diversity.model<-lm(diversity ~ CARD + week + TREAT + STATION, data=insects)
+#diversity.model<-lmer(diversity ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff btw cards #AIC = 116
 summary(diversity.model)
 Anova(diversity.model)
 AIC(diversity.model)
 #pairwise comparison 
 div.emm<-emmeans(diversity.model,pairwise~CARD)
 div.emm
-#results: no sig diff btw cards (p = 0.0496)
+#results: sig diff btw cards (p = 0.0496)
 
 #check assumptions
 dotchart(insects$diversity, main = "diversity", group = insects$CARD) # way to visualize outliers
@@ -553,6 +554,7 @@ influenceIndexPlot(diversity.model, vars = c("Cook"), id = list(n = 3))
 #evenness
 ##AIC -387
 evenness.model<-lm(evenness ~ CARD + week + TREAT + STATION, data=insects)
+#evenness.model<-lmer(evenness ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff between cards #AIC = -267
 summary(evenness.model)
 Anova(evenness.model)
 AIC(evenness.model)
