@@ -289,23 +289,21 @@ library (reshape2)
 combined.long <- melt(combined.na, id.vars = c("week", "TREAT", "REP", "STATION", "CARD"), 
                       variable.name = "SPID", value.name = "SumOfADULTS")
 
-#should Rep be in here?
-
 library(dplyr)
 insects_rep<-aggregate(data=combined.long, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN = sum)
 insects_rep_N<-aggregate(data=combined.long, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN=length)
 #change variable name to reflect that it's number of traps
 insects_rep_N<-rename(insects_rep_N, TRAPS=SumOfADULTS)
-#merge trap data into insects_rep data frame
-insects_merged<-merge(insects_rep, insects_rep_N)
-
-#should Rep or TRAPS be in here?
-#I think we need TRAPS (aka number of traps) to standardize between the old and new...
-    #but is it in there in the form of "SumOfADULTS"?
+#null out SPID column
+insects_rep_N$SPID<-NULL
+#create new dataframe that's just the number of traps
+insects_traps<-insects_rep_N[!duplicated(insects_rep_N), ]
 
 #pool across reps and put back into wide format
-insects <-dcast(insects_merged, week+TREAT+STATION+CARD~SPID,
+insect <-dcast(insects_merged, week+TREAT+STATION+CARD~SPID,
                       value.var ="SumOfADULTS",  sum)
+#merge "traps" with "insects"
+insects <- merge(insect, insects_traps, all.x=TRUE)
 
 ###
 
@@ -313,7 +311,7 @@ insects <-dcast(insects_merged, week+TREAT+STATION+CARD~SPID,
 library (vegan)
 
 #Create matrix of environmental variables
-env.matrix<-insects[c(1:4)]
+env.matrix<-insects[c(1:4,30)]
 #create matrix of community variables
 com.matrix<-insects[c(5:29)]
 
@@ -411,12 +409,10 @@ evenness <-diversity/log(specnumber(insects[,5:29]))
 insects$evenness <- evenness
 
 ###
-
-#Mixed effects models
+#Generalized linear models
 library(lme4)
 library(lmerTest) #to obtain p values
 library (car) #Anova (needed because of negative binomial)  ##if we don't use neg binomial switch to "anova"
-citation("car")
 library (nortest)
 library(bbmle)
 library(DHARMa)
@@ -426,27 +422,25 @@ library (jtools)
 library(interactions)
 library(emmeans)
 
-#WORK ON THESE
 #richness
-#AIC 1179
-richness.model<-lm(richness ~ CARD + week + TREAT + STATION, data=insects)
-#richness.model<-lmer(richness ~ CARD + week + (1 | TREAT:STATION), data=insects)
+#AIC 1183
+richness.model<-glm(richness ~ CARD + week + TREAT + offset(TRAPS), data=insects)
 summary(richness.model)
 Anova (richness.model)
 AIC(richness.model)
 #pairwise comparison 
 rich.emm<-emmeans(richness.model,pairwise~CARD)
 rich.emm
-#results: no sig diff btw cards (p=0.955)
+#results: no sig diff btw cards (p=0.8897)
 
 #check assumptions
 dotchart(insects$richness, main = "richness", group = insects$CARD) # way to visualize outliers
 
 with(insects, ad.test(richness)) #Anderson-darling test for normality (good for small sample sizes), low p-value means assumption is violated
-#p-value < 2.2e-16
+#p-value = 1.577e-10
 
 with(insects, bartlett.test(richness ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
-#p-value = 0.3607
+#p-value = 0.3633
 
 plot(richness.model) # check distribution of residuals
 
@@ -455,9 +449,9 @@ qqnorm(resid(richness.model))
 qqline(resid(richness.model))
 
 plot(simulateResiduals(richness.model)) # another way to check for normality and homogeneity of variance
-#KS test: p = 
-#dispersion test: p = 
-#outlier test: p = 
+#KS test: p = 0.60684
+#dispersion test: p = 0.608
+#outlier test: p = 0.73751
 #no significant problems detected 
 
 densityPlot(rstudent(richness.model)) # check density estimate of the distribution of residuals
@@ -469,16 +463,16 @@ influenceIndexPlot(richness.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #abundance
-##AIC 3846
-abundance.model<-lm(abundance ~ CARD + week + TREAT + STATION, data=insects)  #does not meet normality assumptions
-#abundance.model<-glmer(abundance ~ CARD + week + (1 | TREAT:STATION), data=insects, family = negative.binomial (4)) #meets normality assumptions
+##AIC 3574
+abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = negative.binomial (4))
+#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects)  #does not meet normality assumptions
 summary(abundance.model)
 Anova(abundance.model)
 AIC(abundance.model)
 #pairwise comparison 
 abun.emm<-emmeans(abundance.model,pairwise~CARD)
 abun.emm
-#results: no sig diff btw cards (p = 0.0512)
+#results: sig diff btw cards (p = 0.0076)
 
 #check assumptions
 dotchart(insects$abundance, main = "abundance", group = insects$CARD) # way to visualize outliers
@@ -497,9 +491,10 @@ qqnorm(resid(abundance.model))
 qqline(resid(abundance.model))
 
 plot(simulateResiduals(abundance.model)) # another way to check for normality and homogeneity of variance
-#KS test: p = SIG
+##won't run with glm
+#KS test: p = 
 #dispersion test: p = 
-#outlier test: p = SIG
+#outlier test: p = 
 #no significant problems detected 
 
 densityPlot(rstudent(abundance.model)) # check density estimate of the distribution of residuals
@@ -511,8 +506,8 @@ influenceIndexPlot(abundance.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #diversity
-##AIC 37
-diversity.model<-lm(diversity ~ CARD + week + TREAT + STATION, data=insects)
+##AIC 151
+diversity.model<-glm(diversity ~ CARD + week + TREAT + offset(TRAPS), data=insects)
 #diversity.model<-lmer(diversity ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff btw cards #AIC = 116
 summary(diversity.model)
 Anova(diversity.model)
@@ -520,7 +515,7 @@ AIC(diversity.model)
 #pairwise comparison 
 div.emm<-emmeans(diversity.model,pairwise~CARD)
 div.emm
-#results: sig diff btw cards (p = 0.0496)
+#results: no sig diff btw cards (p = 0.2475)
 
 #check assumptions
 dotchart(insects$diversity, main = "diversity", group = insects$CARD) # way to visualize outliers
@@ -538,9 +533,9 @@ qqnorm(resid(diversity.model))
 qqline(resid(diversity.model))
 
 plot(simulateResiduals(diversity.model)) # another way to check for normality and homogeneity of variance
-#KS test: p = 
-#dispersion test: p =  
-#outlier test: p = 
+#KS test: p = 0.15437
+#dispersion test: p =  0.608
+#outlier test: p = SIG
 #no significant problems detected 
 
 densityPlot(rstudent(diversity.model)) # check density estimate of the distribution of residuals
@@ -552,16 +547,15 @@ influenceIndexPlot(diversity.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #evenness
-##AIC -387
-evenness.model<-lm(evenness ~ CARD + week + TREAT + STATION, data=insects)
-#evenness.model<-lmer(evenness ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff between cards #AIC = -267
+##AIC -52
+evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = poisson)
 summary(evenness.model)
 Anova(evenness.model)
 AIC(evenness.model)
 #pairwise comparison 
 even.emm<-emmeans(evenness.model,pairwise~CARD)
 even.emm
-#results: Sig diff btw cards (p = 0.0099)
+#results: no sig diff btw cards (p = 0.4079)
 
 #check assumptions
 dotchart(insects$evenness, main = "evenness", group = insects$CARD) # way to visualize outliers
@@ -579,9 +573,9 @@ qqnorm(resid(evenness.model))
 qqline(resid(evenness.model))
 
 plot(simulateResiduals(evenness.model)) # another way to check for normality and homogeneity of variance
-#KS test: p = 
+#KS test: p = SIG
 #dispersion test: p = 
-#outlier test: p =
+#outlier test: p = SIG
 #no significant problems detected 
 
 densityPlot(rstudent(evenness.model)) # check density estimate of the distribution of residuals
