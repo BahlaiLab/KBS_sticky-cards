@@ -506,21 +506,22 @@ for(i in 1:length(KBS20$X20SPOT)){
   cumX20SPOT<-c(cumX20SPOT, bugcount)
 }
 
+#no column for other in 2020
 #OTHER
-cumOTHER<-c()
-for(i in 1:length(KBS20$OTHER)){
-  if (KBS20$is.collected[i]=="no"){
-    bugcount<-KBS20$OTHER[i]
-  }else{
-    bugcount<-KBS20$OTHER[i]+ KBS20$OTHER[i-1]
-  }
-  cumOTHER<-c(cumOTHER, bugcount)
-}
+#cumOTHER<-c()
+#for(i in 1:length(KBS20$OTHER)){
+ # if (KBS20$is.collected[i]=="no"){
+  #  bugcount<-KBS20$OTHER[i]
+  #}else{
+   # bugcount<-KBS20$OTHER[i]+ KBS20$OTHER[i-1]
+  #}
+  #cumOTHER<-c(cumOTHER, bugcount)
+#}
 
 #put cumulative counts into dataframe
 KBS20_cum<-cbind(KBS20, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF, 
                cumCYCSP, cumH13, cumHAXY, cumHCONV, cumHGLAC, cumHPARN, cumHVAR, 
-               cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT, cumOTHER)
+               cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT)
 
 #just want "yes" lines because those show cumulative amounts
 KBS20_cum_final <- KBS20_cum[which(KBS20_cum$is.collected=="yes"),] 
@@ -530,7 +531,7 @@ write.csv(KBS20_cum_final, file="2020_LTER_cumulative.csv", row.names=FALSE)
 
 #after deleting non-cumulative counts, and adding in the data that only had one week for a card, 
 #add the cumulative count data file back in to reorder again for matching
-KBS20_cum_final_2.0 <- read.csv ("", na.strings = NULL)
+KBS20_cum_final_2.0 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2020_LTER_cumulative%202.0.csv", na.strings = NULL)
 #reorder
 KBS20_cum_final_2.0<-KBS20_cum_final_2.0[order(KBS20_cum_final_2.0$TREAT, KBS20_cum_final_2.0$REP, KBS20_cum_final_2.0$STATION, KBS20_cum_final_2.0$DOY),]
 str(KBS20_cum_final_2.0)
