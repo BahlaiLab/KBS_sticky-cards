@@ -537,7 +537,7 @@ KBS20_cum_final_2.0<-KBS20_cum_final_2.0[order(KBS20_cum_final_2.0$TREAT, KBS20_
 str(KBS20_cum_final_2.0)
 
 #print data into FINAL csv file
-write.csv(KBS20_cum_final_2.0, file="2021_LTER_final.csv", row.names=FALSE)
+write.csv(KBS20_cum_final_2.0, file="2020_LTER_final.csv", row.names=FALSE)
 
 ###
 
