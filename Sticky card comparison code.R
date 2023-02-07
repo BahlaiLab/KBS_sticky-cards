@@ -1,4 +1,5 @@
 #bring in data set of all KBS field data with week and DOY already attached 
+#also contains column "is.collected" --> no = not the week collected, yes = card collected
 #note this data had the june 10th data from treatments 1 and 4 removed because those cards only have one entry
 #this data will come back after the accumulation loop
 KBS <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_without%20june%2010th%20treat%201%20and%204.csv", na.strings = NULL)
