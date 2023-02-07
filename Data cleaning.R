@@ -256,7 +256,7 @@ KBS21_cum_final_2.0<-KBS21_cum_final_2.0[order(KBS21_cum_final_2.0$TREAT, KBS21_
 str(KBS21_cum_final_2.0)
 
 #print data into csv file
-write.csv(KBS_cum_final_2.0, file="2021_LTER_final.csv", row.names=FALSE)
+write.csv(KBS21_cum_final_2.0, file="2021_LTER_final.csv", row.names=FALSE)
 
 #bring in data set with all insects we IDed in the Bahlai lab
 Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_Bahlai%20-%20with%20corrections.csv", na.strings = NULL)
