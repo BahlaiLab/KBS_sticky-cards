@@ -256,7 +256,19 @@ KBS_cum_final_2.0<-KBS_cum_final_2.0[order(KBS_cum_final_2.0$TREAT, KBS_cum_fina
 str(KBS_cum_final_2.0)
 
 #print data into csv file
-write.csv(KBS_cum_final_2.0, file="2021_LTER_cumulative 3.0.csv", row.names=FALSE)
+write.csv(KBS_cum_final_2.0, file="2021_LTER_final.csv", row.names=FALSE)
+
+#bring in data set with all insects we IDed in the Bahlai lab
+Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_Bahlai%20-%20with%20corrections.csv", na.strings = NULL)
+
+#change order of data set
+Bahlai<-Bahlai[order(Bahlai$TREAT, Bahlai$REP, Bahlai$STATION, Bahlai$DOY),]
+str(Bahlai)
+
+#print into csv file
+write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
+
+##LTER (2021_LTER_final) + Bahlai (2021_Bahlai_reordered) = 2021_LTERandBahlai  <- used for analyses
 
 ###
 
@@ -777,22 +789,22 @@ for(i in 1:length(KBS22$OTHER)){
 }
 
 #put cumulative counts into dataframe
-KBS_cum<-cbind(KBS, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF, 
+KBS22_cum<-cbind(KBS22, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF, 
                cumCYCSP, cumH13, cumHAXY, cumHCONV, cumHGLAC, cumHPARN, cumHVAR, 
                cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT, cumOTHER)
 
 #just want "yes" lines because those show cumulative amounts
-KBS_cum_final <- KBS_cum[which(KBS_cum$is.collected=="yes"),] 
+KBS22_cum_final <- KBS22_cum[which(KBS22_cum$is.collected=="yes"),] 
 
 #print data into csv file
-write.csv(KBS_cum_final, file="2021_LTER_cumulative.csv", row.names=FALSE)
+write.csv(KBS22_cum_final, file="2022_LTER_cumulative.csv", row.names=FALSE)
 
-#after deleting non-cumulative counts, and adding in the data from treatments 1 and 4 from june 10th, 
+#after deleting non-cumulative counts, and adding in the data that only had one week for a card, 
 #add the cumulative count data file back in to reorder again for matching
-KBS_cum_final_2.0 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_cumulative%202.0.csv", na.strings = NULL)
+KBS22_cum_final_2.0 <- read.csv ("", na.strings = NULL)
 #reorder
-KBS_cum_final_2.0<-KBS_cum_final_2.0[order(KBS_cum_final_2.0$TREAT, KBS_cum_final_2.0$REP, KBS_cum_final_2.0$STATION, KBS_cum_final_2.0$DOY),]
-str(KBS_cum_final_2.0)
+KBS22_cum_final_2.0<-KBS22_cum_final_2.0[order(KBS22_cum_final_2.0$TREAT, KBS22_cum_final_2.0$REP, KBS22_cum_final_2.0$STATION, KBS22_cum_final_2.0$DOY),]
+str(KBS22_cum_final_2.0)
 
-#print data into csv file
-write.csv(KBS_cum_final_2.0, file="2021_LTER_cumulative 3.0.csv", row.names=FALSE)
+#print data into final csv file
+write.csv(KBS22_cum_final_2.0, file="2021_LTER_final.csv", row.names=FALSE)

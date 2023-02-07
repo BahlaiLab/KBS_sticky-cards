@@ -271,7 +271,7 @@ write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
 #START
 
 #bring in final data file of everything combined
-#LTER (2021_LTER_cumulative 3.0) + Bahlai (2021_Bahlai_reordered)
+#LTER (2021_LTER_final) + Bahlai (2021_Bahlai_reordered)
 combined <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTERandBahlai.csv", na.strings = NULL)
 #change week to characters
 #combined$week <- as.character(combined$week)
