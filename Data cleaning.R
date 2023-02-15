@@ -1,277 +1,3 @@
-#bring in data set of all KBS field data with week and DOY already attached 
-#also contains column "is.collected" --> no = not the week collected, yes = card collected
-#note this data had the june 10th data from treatments 1 and 4 removed because those cards only have one entry
-#this data will come back after the accumulation loop
-KBS21 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER.csv", na.strings = NULL)
-
-#change Rep and Station to characters
-KBS21$REP <- as.character(KBS21$REP)
-KBS21$STATION <- as.character(KBS21$STATION)
-#change order of data set
-KBS21<-KBS21[order(KBS21$TREAT, KBS21$REP, KBS21$STATION, KBS21$DOY),]
-str(KBS21)
-
-#combining two counting periods for each individual sticky card into one line
-#at KBS sticky cards were out for 2 weeks
-#at the end of week 1, lady beetles and other focal specimens would be counted and removed from cards
-#at the end of week 2, cards would be removed from the field and new specimens collected were counted 
-
-#need to perform this code for each species
-#starting with ABIPN
-cumABIPN<-c()
-for(i in 1:length(KBS21$ABIPN)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$ABIPN[i]
-  }else{
-    bugcount<-KBS21$ABIPN[i]+ KBS21$ABIPN[i-1]
-  }
-  cumABIPN<-c(cumABIPN, bugcount)
-}
-
-#BURSI
-cumBURSI<-c()
-for(i in 1:length(KBS21$BURSI)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$BURSI[i]
-  }else{
-    bugcount<-KBS21$BURSI[i]+ KBS21$BURSI[i-1]
-  }
-  cumBURSI<-c(cumBURSI, bugcount)
-}
-
-#C7
-cumC7<-c()
-for(i in 1:length(KBS21$C7)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$C7[i]
-  }else{
-    bugcount<-KBS21$C7[i]+ KBS21$C7[i-1]
-  }
-  cumC7<-c(cumC7, bugcount)
-}
-
-#CMAC
-cumCMAC<-c()
-for(i in 1:length(KBS21$CMAC)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$CMAC[i]
-  }else{
-    bugcount<-KBS21$CMAC[i]+ KBS21$CMAC[i-1]
-  }
-  cumCMAC<-c(cumCMAC, bugcount)
-}
-
-#CSTIG
-cumCSTIG<-c()
-for(i in 1:length(KBS21$CSTIG)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$CSTIG[i]
-  }else{
-    bugcount<-KBS21$CSTIG[i]+ KBS21$CSTIG[i-1]
-  }
-  cumCSTIG<-c(cumCSTIG, bugcount)
-}
-
-#CTRIF
-cumCTRIF<-c()
-for(i in 1:length(KBS21$CTRIF)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$CTRIF[i]
-  }else{
-    bugcount<-KBS21$CTRIF[i]+ KBS21$CTRIF[i-1]
-  }
-  cumCTRIF<-c(cumCTRIF, bugcount)
-}
-
-#CYCSP
-cumCYCSP<-c()
-for(i in 1:length(KBS21$CYCSP)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$CYCSP[i]
-  }else{
-    bugcount<-KBS21$CYCSP[i]+ KBS21$CYCSP[i-1]
-  }
-  cumCYCSP<-c(cumCYCSP, bugcount)
-}
-
-#H13
-cumH13<-c()
-for(i in 1:length(KBS21$H13)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$H13[i]
-  }else{
-    bugcount<-KBS21$H13[i]+ KBS21$H13[i-1]
-  }
-  cumH13<-c(cumH13, bugcount)
-}
-
-#HAXY
-cumHAXY<-c()
-for(i in 1:length(KBS21$HAXY)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$HAXY[i]
-  }else{
-    bugcount<-KBS21$HAXY[i]+ KBS21$HAXY[i-1]
-  }
-  cumHAXY<-c(cumHAXY, bugcount)
-}
-
-#HCONV
-cumHCONV<-c()
-for(i in 1:length(KBS21$HCONV)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$HCONV[i]
-  }else{
-    bugcount<-KBS21$HCONV[i]+ KBS21$HCONV[i-1]
-  }
-  cumHCONV<-c(cumHCONV, bugcount)
-}
-
-#HGLAC
-cumHGLAC<-c()
-for(i in 1:length(KBS21$HGLAC)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$HGLAC[i]
-  }else{
-    bugcount<-KBS21$HGLAC[i]+ KBS21$HGLAC[i-1]
-  }
-  cumHGLAC<-c(cumHGLAC, bugcount)
-}
-
-#HPARN
-cumHPARN<-c()
-for(i in 1:length(KBS21$HPARN)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$HPARN[i]
-  }else{
-    bugcount<-KBS21$HPARN[i]+ KBS21$HPARN[i-1]
-  }
-  cumHPARN<-c(cumHPARN, bugcount)
-}
-
-#HVAR
-cumHVAR<-c()
-for(i in 1:length(KBS21$HVAR)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$HVAR[i]
-  }else{
-    bugcount<-KBS21$HVAR[i]+ KBS21$HVAR[i-1]
-  }
-  cumHVAR<-c(cumHVAR, bugcount)
-}
-
-#PQUA
-cumPQUA<-c()
-for(i in 1:length(KBS21$PQUA)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$PQUA[i]
-  }else{
-    bugcount<-KBS21$PQUA[i]+ KBS21$PQUA[i-1]
-  }
-  cumPQUA<-c(cumPQUA, bugcount)
-}
-
-#CANTHARID
-cumCANTHARID<-c()
-for(i in 1:length(KBS21$CANTHARID)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$CANTHARID[i]
-  }else{
-    bugcount<-KBS21$CANTHARID[i]+ KBS21$CANTHARID[i-1]
-  }
-  cumCANTHARID<-c(cumCANTHARID, bugcount)
-}
-
-#LAMPY
-cumLAMPY<-c()
-for(i in 1:length(KBS21$LAMPY)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$LAMPY[i]
-  }else{
-    bugcount<-KBS21$LAMPY[i]+ KBS21$LAMPY[i-1]
-  }
-  cumLAMPY<-c(cumLAMPY, bugcount)
-}
-
-#LCW
-cumLCW<-c()
-for(i in 1:length(KBS21$LCW)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$LCW[i]
-  }else{
-    bugcount<-KBS21$LCW[i]+ KBS21$LCW[i-1]
-  }
-  cumLCW<-c(cumLCW, bugcount)
-}
-
-#MECOP
-cumMECOP<-c()
-for(i in 1:length(KBS21$MECOP)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$MECOP[i]
-  }else{
-    bugcount<-KBS21$MECOP[i]+ KBS21$MECOP[i-1]
-  }
-  cumMECOP<-c(cumMECOP, bugcount)
-}
-
-#X20SPOT
-cumX20SPOT<-c()
-for(i in 1:length(KBS21$X20SPOT)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$X20SPOT[i]
-  }else{
-    bugcount<-KBS21$X20SPOT[i]+ KBS21$X20SPOT[i-1]
-  }
-  cumX20SPOT<-c(cumX20SPOT, bugcount)
-}
-
-#OTHER
-cumOTHER<-c()
-for(i in 1:length(KBS21$OTHER)){
-  if (KBS21$is.collected[i]=="no"){
-    bugcount<-KBS21$OTHER[i]
-  }else{
-    bugcount<-KBS21$OTHER[i]+ KBS21$OTHER[i-1]
-  }
-  cumOTHER<-c(cumOTHER, bugcount)
-}
-
-#put cumulative counts into dataframe
-KBS21_cum<-cbind(KBS21, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF, 
-               cumCYCSP, cumH13, cumHAXY, cumHCONV, cumHGLAC, cumHPARN, cumHVAR, 
-               cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT, cumOTHER)
-
-#just want "yes" lines because those show cumulative amounts
-KBS21_cum_final <- KBS21_cum[which(KBS21_cum$is.collected=="yes"),] 
-
-#print data into csv file
-write.csv(KBS21_cum_final, file="2021_LTER_cumulative.csv", row.names=FALSE)
-
-#after deleting non-cumulative counts, and adding in the data from treatments 1 and 4 from june 10th, 
-#add the cumulative count data file back in to reorder again for matching
-KBS21_cum_final_2.0 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_cumulative%202.0.csv", na.strings = NULL)
-#reorder
-KBS21_cum_final_2.0<-KBS21_cum_final_2.0[order(KBS21_cum_final_2.0$TREAT, KBS21_cum_final_2.0$REP, KBS21_cum_final_2.0$STATION, KBS21_cum_final_2.0$DOY),]
-str(KBS21_cum_final_2.0)
-
-#print data into csv file
-write.csv(KBS21_cum_final_2.0, file="2021_LTER_final.csv", row.names=FALSE)
-
-#bring in data set with all insects we IDed in the Bahlai lab
-Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_Bahlai%20-%20with%20corrections.csv", na.strings = NULL)
-
-#change order of data set
-Bahlai<-Bahlai[order(Bahlai$TREAT, Bahlai$REP, Bahlai$STATION, Bahlai$DOY),]
-str(Bahlai)
-
-#print into csv file
-write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
-
-##LTER (2021_LTER_final) + Bahlai (2021_Bahlai_reordered) = 2021_LTERandBahlai  <- used for analyses
-
-###
-
 #2020
 
 #bring in data set of all KBS field data with week and DOY already attached 
@@ -538,6 +264,283 @@ str(KBS20_cum_final_2.0)
 
 #print data into FINAL csv file
 write.csv(KBS20_cum_final_2.0, file="2020_LTER_final.csv", row.names=FALSE)
+
+###
+
+#2021
+
+#bring in data set of all KBS field data with week and DOY already attached 
+#also contains column "is.collected" --> no = not the week collected, yes = card collected
+#note this data had the june 10th data from treatments 1 and 4 removed because those cards only have one entry
+#this data will come back after the accumulation loop
+KBS21 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER.csv", na.strings = NULL)
+
+#change Rep and Station to characters
+KBS21$REP <- as.character(KBS21$REP)
+KBS21$STATION <- as.character(KBS21$STATION)
+#change order of data set
+KBS21<-KBS21[order(KBS21$TREAT, KBS21$REP, KBS21$STATION, KBS21$DOY),]
+str(KBS21)
+
+#combining two counting periods for each individual sticky card into one line
+#at KBS sticky cards were out for 2 weeks
+#at the end of week 1, lady beetles and other focal specimens would be counted and removed from cards
+#at the end of week 2, cards would be removed from the field and new specimens collected were counted 
+
+#need to perform this code for each species
+#starting with ABIPN
+cumABIPN<-c()
+for(i in 1:length(KBS21$ABIPN)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$ABIPN[i]
+  }else{
+    bugcount<-KBS21$ABIPN[i]+ KBS21$ABIPN[i-1]
+  }
+  cumABIPN<-c(cumABIPN, bugcount)
+}
+
+#BURSI
+cumBURSI<-c()
+for(i in 1:length(KBS21$BURSI)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$BURSI[i]
+  }else{
+    bugcount<-KBS21$BURSI[i]+ KBS21$BURSI[i-1]
+  }
+  cumBURSI<-c(cumBURSI, bugcount)
+}
+
+#C7
+cumC7<-c()
+for(i in 1:length(KBS21$C7)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$C7[i]
+  }else{
+    bugcount<-KBS21$C7[i]+ KBS21$C7[i-1]
+  }
+  cumC7<-c(cumC7, bugcount)
+}
+
+#CMAC
+cumCMAC<-c()
+for(i in 1:length(KBS21$CMAC)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$CMAC[i]
+  }else{
+    bugcount<-KBS21$CMAC[i]+ KBS21$CMAC[i-1]
+  }
+  cumCMAC<-c(cumCMAC, bugcount)
+}
+
+#CSTIG
+cumCSTIG<-c()
+for(i in 1:length(KBS21$CSTIG)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$CSTIG[i]
+  }else{
+    bugcount<-KBS21$CSTIG[i]+ KBS21$CSTIG[i-1]
+  }
+  cumCSTIG<-c(cumCSTIG, bugcount)
+}
+
+#CTRIF
+cumCTRIF<-c()
+for(i in 1:length(KBS21$CTRIF)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$CTRIF[i]
+  }else{
+    bugcount<-KBS21$CTRIF[i]+ KBS21$CTRIF[i-1]
+  }
+  cumCTRIF<-c(cumCTRIF, bugcount)
+}
+
+#CYCSP
+cumCYCSP<-c()
+for(i in 1:length(KBS21$CYCSP)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$CYCSP[i]
+  }else{
+    bugcount<-KBS21$CYCSP[i]+ KBS21$CYCSP[i-1]
+  }
+  cumCYCSP<-c(cumCYCSP, bugcount)
+}
+
+#H13
+cumH13<-c()
+for(i in 1:length(KBS21$H13)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$H13[i]
+  }else{
+    bugcount<-KBS21$H13[i]+ KBS21$H13[i-1]
+  }
+  cumH13<-c(cumH13, bugcount)
+}
+
+#HAXY
+cumHAXY<-c()
+for(i in 1:length(KBS21$HAXY)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$HAXY[i]
+  }else{
+    bugcount<-KBS21$HAXY[i]+ KBS21$HAXY[i-1]
+  }
+  cumHAXY<-c(cumHAXY, bugcount)
+}
+
+#HCONV
+cumHCONV<-c()
+for(i in 1:length(KBS21$HCONV)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$HCONV[i]
+  }else{
+    bugcount<-KBS21$HCONV[i]+ KBS21$HCONV[i-1]
+  }
+  cumHCONV<-c(cumHCONV, bugcount)
+}
+
+#HGLAC
+cumHGLAC<-c()
+for(i in 1:length(KBS21$HGLAC)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$HGLAC[i]
+  }else{
+    bugcount<-KBS21$HGLAC[i]+ KBS21$HGLAC[i-1]
+  }
+  cumHGLAC<-c(cumHGLAC, bugcount)
+}
+
+#HPARN
+cumHPARN<-c()
+for(i in 1:length(KBS21$HPARN)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$HPARN[i]
+  }else{
+    bugcount<-KBS21$HPARN[i]+ KBS21$HPARN[i-1]
+  }
+  cumHPARN<-c(cumHPARN, bugcount)
+}
+
+#HVAR
+cumHVAR<-c()
+for(i in 1:length(KBS21$HVAR)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$HVAR[i]
+  }else{
+    bugcount<-KBS21$HVAR[i]+ KBS21$HVAR[i-1]
+  }
+  cumHVAR<-c(cumHVAR, bugcount)
+}
+
+#PQUA
+cumPQUA<-c()
+for(i in 1:length(KBS21$PQUA)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$PQUA[i]
+  }else{
+    bugcount<-KBS21$PQUA[i]+ KBS21$PQUA[i-1]
+  }
+  cumPQUA<-c(cumPQUA, bugcount)
+}
+
+#CANTHARID
+cumCANTHARID<-c()
+for(i in 1:length(KBS21$CANTHARID)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$CANTHARID[i]
+  }else{
+    bugcount<-KBS21$CANTHARID[i]+ KBS21$CANTHARID[i-1]
+  }
+  cumCANTHARID<-c(cumCANTHARID, bugcount)
+}
+
+#LAMPY
+cumLAMPY<-c()
+for(i in 1:length(KBS21$LAMPY)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$LAMPY[i]
+  }else{
+    bugcount<-KBS21$LAMPY[i]+ KBS21$LAMPY[i-1]
+  }
+  cumLAMPY<-c(cumLAMPY, bugcount)
+}
+
+#LCW
+cumLCW<-c()
+for(i in 1:length(KBS21$LCW)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$LCW[i]
+  }else{
+    bugcount<-KBS21$LCW[i]+ KBS21$LCW[i-1]
+  }
+  cumLCW<-c(cumLCW, bugcount)
+}
+
+#MECOP
+cumMECOP<-c()
+for(i in 1:length(KBS21$MECOP)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$MECOP[i]
+  }else{
+    bugcount<-KBS21$MECOP[i]+ KBS21$MECOP[i-1]
+  }
+  cumMECOP<-c(cumMECOP, bugcount)
+}
+
+#X20SPOT
+cumX20SPOT<-c()
+for(i in 1:length(KBS21$X20SPOT)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$X20SPOT[i]
+  }else{
+    bugcount<-KBS21$X20SPOT[i]+ KBS21$X20SPOT[i-1]
+  }
+  cumX20SPOT<-c(cumX20SPOT, bugcount)
+}
+
+#OTHER
+cumOTHER<-c()
+for(i in 1:length(KBS21$OTHER)){
+  if (KBS21$is.collected[i]=="no"){
+    bugcount<-KBS21$OTHER[i]
+  }else{
+    bugcount<-KBS21$OTHER[i]+ KBS21$OTHER[i-1]
+  }
+  cumOTHER<-c(cumOTHER, bugcount)
+}
+
+#put cumulative counts into dataframe
+KBS21_cum<-cbind(KBS21, cumABIPN, cumBURSI, cumC7, cumCMAC, cumCSTIG, cumCTRIF, 
+                 cumCYCSP, cumH13, cumHAXY, cumHCONV, cumHGLAC, cumHPARN, cumHVAR, 
+                 cumPQUA, cumCANTHARID, cumLAMPY, cumLCW, cumMECOP, cumX20SPOT, cumOTHER)
+
+#just want "yes" lines because those show cumulative amounts
+KBS21_cum_final <- KBS21_cum[which(KBS21_cum$is.collected=="yes"),] 
+
+#print data into csv file
+write.csv(KBS21_cum_final, file="2021_LTER_cumulative.csv", row.names=FALSE)
+
+#after deleting non-cumulative counts, and adding in the data from treatments 1 and 4 from june 10th, 
+#add the cumulative count data file back in to reorder again for matching
+KBS21_cum_final_2.0 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_cumulative%202.0.csv", na.strings = NULL)
+#reorder
+KBS21_cum_final_2.0<-KBS21_cum_final_2.0[order(KBS21_cum_final_2.0$TREAT, KBS21_cum_final_2.0$REP, KBS21_cum_final_2.0$STATION, KBS21_cum_final_2.0$DOY),]
+str(KBS21_cum_final_2.0)
+
+#print data into csv file
+write.csv(KBS21_cum_final_2.0, file="2021_LTER_final.csv", row.names=FALSE)
+
+#bring in data set with all insects we IDed in the Bahlai lab
+Bahlai <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_Bahlai%20-%20with%20corrections.csv", na.strings = NULL)
+
+#change order of data set
+Bahlai<-Bahlai[order(Bahlai$TREAT, Bahlai$REP, Bahlai$STATION, Bahlai$DOY),]
+str(Bahlai)
+
+#print into csv file
+write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
+
+##LTER (2021_LTER_final) + Bahlai (2021_Bahlai_reordered) = 2021_LTERandBahlai  <- used for analyses
+
 
 ###
 
