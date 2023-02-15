@@ -3,6 +3,7 @@
 #bring in data
 insects20 <- read.csv("", na.strings = NULL)
 
+###
 
 ##2021
 
@@ -409,3 +410,10 @@ accum
 pdf("accumulation curve with pooled data.pdf", height=6, width=8) #height and width in inches
 accum
 dev.off()
+
+###
+
+##2022
+
+#bring in data
+insects22 <- read.csv("", na.strings = NULL)
