@@ -1,3 +1,9 @@
+##2020
+
+#bring in data
+insects20 <- read.csv("", na.strings = NULL)
+
+
 ##2021
 
 #bring in final data file of everything combined
