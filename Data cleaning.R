@@ -266,7 +266,7 @@ str(KBS20_cum_final_2.0)
 write.csv(KBS20_cum_final_2.0, file="2020_LTER_final.csv", row.names=FALSE)
 
 #before importing "2020_LTER_final.csv" 
-  #add column CARD -- all 2020 cards are 'Old'
+  #add column CARD -- all 2020 cards are Old so title them 'Old20'
   #delete date and DOY as not needed because we use week
 
 #okay not quite done
@@ -307,6 +307,8 @@ insects20 <- merge(insect20, insects_traps20, all.x=TRUE)
 
 #print data into ACTUAL FINAL csv file to use for analyses
 write.csv(insects20, file="2020_LTER_for_analyses.csv", row.names=FALSE)
+
+#^this is what we'll use to merge with 21 and 22 data into one data frame
 
 ###
 
@@ -907,7 +909,7 @@ combined22$TREAT <- as.factor(combined22$TREAT)
 combined22$REP <- as.factor(combined22$REP)
 combined22$STATION <- as.factor(combined22$STATION)
 str(combined22)
-summary(combined20)
+summary(combined22)
 #remove rows with NAs 
 combined.na22 <- na.omit(combined22)
 
@@ -917,8 +919,8 @@ combined.long22 <- melt(combined.na22, id.vars = c("week", "TREAT", "REP", "STAT
                         variable.name = "SPID", value.name = "SumOfADULTS")
 
 library(dplyr)
-insects_rep22<-aggregate(data=combined.long20, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN = sum)
-insects_rep_N22<-aggregate(data=combined.long20, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN=length)
+insects_rep22<-aggregate(data=combined.long22, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN = sum)
+insects_rep_N22<-aggregate(data=combined.long22, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN=length)
 #change variable name to reflect that it's number of traps
 insects_rep_N22<-rename(insects_rep_N22, TRAPS=SumOfADULTS)
 #null out SPID column
