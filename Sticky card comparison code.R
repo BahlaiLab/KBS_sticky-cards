@@ -1,47 +1,34 @@
 ##2020
 
 #bring in data
-insects20 <- read.csv("", na.strings = NULL)
+insects20 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2020_LTER_for_analyses.csv", na.strings = NULL)
+
+#change week to characters
+insects20$week <- as.character(insects20$week)
+#change CARD, TREAT, and STATION to factor
+insects20$CARD <- as.factor(insects20$CARD)
+insects20$TREAT <- as.factor(insects20$TREAT)
+insects20$STATION <- as.factor(insects20$STATION)
+
+str(insects20)
+summary(insects20)
 
 ###
 
 ##2021
 
-#bring in final data file of everything combined
-#LTER (2021_LTER_final) + Bahlai (2021_Bahlai_reordered)
-combined <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTERandBahlai.csv", na.strings = NULL)
+#bring in data
+insects21 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_for_analyses.csv", na.strings = NULL)
+
 #change week to characters
-#combined$week <- as.character(combined$week)
-#change CARD, TREAT, REP, and STATION to factor
-combined$CARD <- as.factor(combined$CARD)
-combined$TREAT <- as.factor(combined$TREAT)
-combined$REP <- as.factor(combined$REP)
-combined$STATION <- as.factor(combined$STATION)
-str(combined)
-summary(combined)
-#remove rows with NAs (missing data from either LTER or Bahlai)
-combined.na <- na.omit(combined)
+insects21$week <- as.character(insects21$week)
+#change CARD, TREAT, and STATION to factor
+insects21$CARD <- as.factor(insects21$CARD)
+insects21$TREAT <- as.factor(insects21$TREAT)
+insects21$STATION <- as.factor(insects21$STATION)
 
-#Melt into long format to pool across reps
-library (reshape2)
-combined.long <- melt(combined.na, id.vars = c("week", "TREAT", "REP", "STATION", "CARD"), 
-                      variable.name = "SPID", value.name = "SumOfADULTS")
-
-library(dplyr)
-insects_rep<-aggregate(data=combined.long, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN = sum)
-insects_rep_N<-aggregate(data=combined.long, SumOfADULTS~week+TREAT+STATION+CARD+SPID, FUN=length)
-#change variable name to reflect that it's number of traps
-insects_rep_N<-rename(insects_rep_N, TRAPS=SumOfADULTS)
-#null out SPID column
-insects_rep_N$SPID<-NULL
-#create new dataframe that's just the number of traps
-insects_traps<-insects_rep_N[!duplicated(insects_rep_N), ]
-
-#pool across reps and put back into wide format
-insect <-dcast(insects_merged, week+TREAT+STATION+CARD~SPID,
-                      value.var ="SumOfADULTS",  sum)
-#merge "traps" with "insects"
-insects <- merge(insect, insects_traps, all.x=TRUE)
+str(insects21)
+summary(insects21)
 
 ###
 
@@ -416,4 +403,14 @@ dev.off()
 ##2022
 
 #bring in data
-insects22 <- read.csv("", na.strings = NULL)
+insects22 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2022_LTER_for_analyses.csv", na.strings = NULL)
+
+#change week to characters
+insects22$week <- as.character(insects22$week)
+#change CARD, TREAT, and STATION to factor
+insects22$CARD <- as.factor(insects22$CARD)
+insects22$TREAT <- as.factor(insects22$TREAT)
+insects22$STATION <- as.factor(insects22$STATION)
+
+str(insects22)
+summary(insects22)
