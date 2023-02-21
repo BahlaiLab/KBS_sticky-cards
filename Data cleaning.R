@@ -586,6 +586,7 @@ write.csv(Bahlai, file="2021_Bahlai_reordered.csv", row.names=FALSE)
 
 #bring in final data file of everything combined
 #LTER (2021_LTER_final) + Bahlai (2021_Bahlai_reordered)
+#New card = New21, Old card = Old21
 combined21 <- read.csv ("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTERandBahlai.csv", na.strings = NULL)
 #change week to characters
 combined21$week <- as.character(combined21$week)
@@ -895,7 +896,7 @@ str(KBS22_cum_final_2.0)
 write.csv(KBS22_cum_final_2.0, file="2022_LTER_final.csv", row.names=FALSE)
 
 #before importing "2022_LTER_final.csv" 
-#add column CARD -- all 2022 cards are 'New'
+#add column CARD -- all 2022 cards are New, so title them "New22"
 #delete date and DOY as not needed because we use week
 
 #okay not quite done
