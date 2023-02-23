@@ -36,12 +36,12 @@ summary(insects21)
 library (vegan)
 
 #Create matrix of environmental variables
-env.matrix<-insects[c(1:4,30)]
+env.matrix<-insects21[c(1:4,30)]
 #create matrix of community variables
-com.matrix<-insects[c(5:29)]
+com.matrix<-insects21[c(5:29)]
 
 #ordination by NMDS
-NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100) #stress=.24 -- no convergence
+NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100) #stress=.24 
 #NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=FALSE, trymax=100) #stress=.06 -- no convergence
 NMDS
 
@@ -49,16 +49,16 @@ NMDS
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
-ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old")
-ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New") 
+ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
+ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
 #display ground trap data as solid shapes - pitfall=circle, ramp trap=square, jar=triangle, flying trap as triangle outline
-points(NMDS, display="sites", select=which(env.matrix$CARD=="Old"),pch=19, col="#E69F00")
-points(NMDS, display="sites", select=which(env.matrix$CARD=="New"), pch=17, col="#009E73")
+points(NMDS, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
+points(NMDS, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
 #add legend
 legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
 
 #bootstrapping and testing for differences between the groups (cards)
-fit<-adonis(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
+fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
 fit
 #P-value = 0.3 -- no sig diff between card types
 
@@ -68,16 +68,11 @@ distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARD))
 #P-value = 0.6973 -- cannot assume homogeneity of multivariate dispersion
 
-#This is really doing the same thing
-library(pairwiseAdonis)
-pairwise.adonis(com.matrix, env.matrix$CARD)
-#P-value = 0.3
-
 #
 
 #subset by card type
-new <- insects[which(insects$CARD=="New"),] 
-old <- insects[which(insects$CARD=="Old"),] 
+new <- insects21[which(insects21$CARD=="New21"),] 
+old <- insects21[which(insects21$CARD=="Old21"),] 
 
 #calculate mean and SE richness and abundance of each card pooled by rep
 insects.abun <- rowSums(new[,5:29])
@@ -118,20 +113,20 @@ sd(old$richness)/sqrt(10) #0.49
 ###
 
 #To obtain richness counts
-insects.rowsums <- rowSums(insects[,5:29]>0)
-insects$richness <- insects.rowsums
+insects.rowsums <- rowSums(insects21[,5:29]>0)
+insects21$richness <- insects.rowsums
 
 #To obtain abundance counts
-insects.abun <- rowSums(insects[,5:29])
-insects$abundance <- insects.abun
+insects.abun <- rowSums(insects21[,5:29])
+insects21$abundance <- insects.abun
 
 #calculate Shannon diversity
-diversity <-diversity(insects[,5:29])
-insects$diversity <-diversity
+diversity <-diversity(insects21[,5:29])
+insects21$diversity <-diversity
 
 #calculate Evenness
-evenness <-diversity/log(specnumber(insects[,5:29]))
-insects$evenness <- evenness
+evenness <-diversity/log(specnumber(insects21[,5:29]))
+insects21$evenness <- evenness
 
 ###
 #Generalized linear models
