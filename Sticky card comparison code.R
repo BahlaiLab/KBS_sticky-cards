@@ -421,6 +421,7 @@ insects_all <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-
 #change week to characters
 insects_all$week <- as.character(insects_all$week)
 #change CARD, TREAT, and STATION to factor
+insects_all$CARDYEAR <- as.factor(insects_all$CARDYEAR)
 insects_all$CARD <- as.factor(insects_all$CARD)
 insects_all$TREAT <- as.factor(insects_all$TREAT)
 insects_all$STATION <- as.factor(insects_all$STATION)
@@ -435,46 +436,66 @@ library (vegan)
 
 #first need to get rid of any rows that sum to zero
 #so sum (aka get abundance per row)
-insects.abun <- rowSums(insects_all[,5:23])
+insects.abun <- rowSums(insects_all[,6:24])
 insects_all$abundance <- insects.abun
 
 #then remove rows = zero
-insects_all_nonzero <- insects_all[rowSums(insects_all[25])>0,]
+insects_all_nonzero <- insects_all[rowSums(insects_all[26])>0,]
 str(insects_all_nonzero)
 
 #Create matrix of environmental variables
-env.matrix<-insects_all_nonzero[c(1:4,24)]
+env.matrix<-insects_all_nonzero[c(1:5,25)]
 #create matrix of community variables
-com.matrix<-insects_all_nonzero[c(5:23)]
+com.matrix<-insects_all_nonzero[c(6:24)]
 
 #ordination by NMDS
-NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=300) #stress=.20
+NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=300) #stress=.20 (.198)
 NMDS
 
-#NMDS visualization
+#NMDS visualization with trap types by year
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
-ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
-ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
-ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old20")
-ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New22") 
-#display ground trap data as solid shapes - pitfall=circle, ramp trap=square, jar=triangle, flying trap as triangle outline
-points(NMDS, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
-points(NMDS, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
-points(NMDS, display="sites", select=which(env.matrix$CARD=="Old20"),pch=19, col="#E69F00")
-points(NMDS, display="sites", select=which(env.matrix$CARD=="New22"), pch=17, col="#009E73")
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old20")
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New22") 
+points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old21"),pch=19, col="#E69F00")
+points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="New21"), pch=17, col="#009E73")
+points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old20"),pch=19, col="#E69F00")
+points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="New22"), pch=17, col="#009E73")
 #add legend
 legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
 
-#bootstrapping and testing for differences between the groups (cards)
-fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
+#bootstrapping and testing for differences between the groups (cardyear)
+fit<-adonis2(com.matrix ~ CARDYEAR, data = env.matrix, permutations = 999, method="bray")
 fit
 #P-value = 0.001 -- sig diff between card types (but that is Old20, Old21, New21, New22)
 
 #check assumption of homogeneity of multivariate dispersion 
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
-anova(betadisper(distances_data, env.matrix$CARD))
-#P-value = 0.6973 -- cannot assume homogeneity of multivariate dispersion
+anova(betadisper(distances_data, env.matrix$CARDYEAR))
+#P-value = 4.753e-12 -- assumes homogeneity of multivariate dispersion
 
+#NMDS visualization for old and new combined between years
+plot(NMDS, disp='sites', type="n")
+title(main="", adj = 0.01, line = -2, cex.main=2.5)
+#add ellipsoids with ordiellipse
+ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old")
+ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New") 
+points(NMDS, display="sites", select=which(env.matrix$CARD=="Old"),pch=19, col="#E69F00")
+points(NMDS, display="sites", select=which(env.matrix$CARD=="New"), pch=17, col="#009E73")
+#add legend
+legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
+
+#bootstrapping and testing for differences between the groups (cards)
+fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
+fit
+#P-value = 0.001 -- sig diff between card types 
+
+#check assumption of homogeneity of multivariate dispersion 
+#P-value greater than 0.05 means assumption has been met
+distances_data<-vegdist(com.matrix)
+anova(betadisper(distances_data, env.matrix$CARD))
+#P-value = 1.185e-06 -- assumes homogeneity of multivariate dispersion
