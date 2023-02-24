@@ -449,23 +449,23 @@ env.matrix<-insects_all_nonzero[c(1:5,25)]
 com.matrix<-insects_all_nonzero[c(6:24)]
 
 #ordination by NMDS
-NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=300) #stress=.20 (.198)
+NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100) #stress=.20 (.198)
 NMDS
 
 #NMDS visualization with trap types by year
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#ffba21",kind="sd", conf=0.95, label=FALSE, show.groups = "Old20")
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#00c690",kind="sd", conf=0.95, label=FALSE, show.groups = "New22") 
 ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
 ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
-ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old20")
-ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New22") 
-points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old21"),pch=19, col="#E69F00")
+points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old21"),pch=20, col="#E69F00")
 points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="New21"), pch=17, col="#009E73")
-points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old20"),pch=19, col="#E69F00")
-points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="New22"), pch=17, col="#009E73")
+points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old20"),pch=18, col="#ffba21")
+points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="New22"), pch=15, col="#00c690")
 #add legend
-legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
+legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73", "#ffba21","#00c690"), cex=1.2, legend=c("2021 Old cards", "2021 New cards", "2020 Old cards", "2022 New cards"))
 
 #bootstrapping and testing for differences between the groups (cardyear)
 fit<-adonis2(com.matrix ~ CARDYEAR, data = env.matrix, permutations = 999, method="bray")
