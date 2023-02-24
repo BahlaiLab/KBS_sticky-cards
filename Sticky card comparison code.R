@@ -472,6 +472,15 @@ fit<-adonis2(com.matrix ~ CARDYEAR, data = env.matrix, permutations = 999, metho
 fit
 #P-value = 0.001 -- sig diff between card types (but that is Old20, Old21, New21, New22)
 
+#pairwise comparison
+#library(devtools)
+#install_github("pmartinezarbizu/pairwiseAdonis/pairwiseAdonis")
+
+library (pairwiseAdonis)
+pairwise.adonis(com.matrix, env.matrix$CARDYEAR)
+#no diff between cards in 2021 (within year)
+#sig diff(0.001) between old and new cards in diff years and same card between years
+
 #check assumption of homogeneity of multivariate dispersion 
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
