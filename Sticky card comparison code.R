@@ -46,16 +46,16 @@ NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=300) 
 NMDS
 
 #NMDS visualization
+#8x9
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
 ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
 ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
-#display ground trap data as solid shapes - pitfall=circle, ramp trap=square, jar=triangle, flying trap as triangle outline
 points(NMDS, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
 points(NMDS, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
 #add legend
-legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
+legend(0.99,1.39, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
 
 #bootstrapping and testing for differences between the groups (cards)
 fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
@@ -132,7 +132,9 @@ insects21$evenness <- evenness
 #Generalized linear models
 library(lme4)
 library(lmerTest) #to obtain p values
-library (car) #Anova (needed because of negative binomial)  ##if we don't use neg binomial switch to "anova"
+library (car) #Anova 
+library(emmeans)
+
 library (nortest)
 library(bbmle)
 library(DHARMa)
@@ -140,18 +142,17 @@ library(ggplot2)
 library(sjPlot)
 library (jtools)
 library(interactions)
-library(emmeans)
 
 #richness
-#AIC 1183
-richness.model<-glm(richness ~ CARD + week + TREAT + offset(TRAPS), data=insects)
+#AIC 1173
+richness.model<-glm(richness ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
 summary(richness.model)
 Anova (richness.model)
 AIC(richness.model)
 #pairwise comparison 
 rich.emm<-emmeans(richness.model,pairwise~CARD)
 rich.emm
-#results: no sig diff btw cards (p=0.8897)
+#results: no sig diff btw cards (p=0.89)
 
 #check assumptions
 dotchart(insects$richness, main = "richness", group = insects$CARD) # way to visualize outliers
@@ -183,8 +184,9 @@ influenceIndexPlot(richness.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #abundance
-##AIC 3574
-abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = negative.binomial (4))
+##AIC 3763
+abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
+#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = negative.binomial (4))
 #abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects)  #does not meet normality assumptions
 summary(abundance.model)
 Anova(abundance.model)
@@ -192,7 +194,7 @@ AIC(abundance.model)
 #pairwise comparison 
 abun.emm<-emmeans(abundance.model,pairwise~CARD)
 abun.emm
-#results: sig diff btw cards (p = 0.0076)
+#results: sig diff btw cards (p = 0.03)
 
 #check assumptions
 dotchart(insects$abundance, main = "abundance", group = insects$CARD) # way to visualize outliers
@@ -226,8 +228,8 @@ influenceIndexPlot(abundance.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #diversity
-##AIC 151
-diversity.model<-glm(diversity ~ CARD + week + TREAT + offset(TRAPS), data=insects)
+##AIC 107
+diversity.model<-glm(diversity ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
 #diversity.model<-lmer(diversity ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff btw cards #AIC = 116
 summary(diversity.model)
 Anova(diversity.model)
@@ -235,7 +237,7 @@ AIC(diversity.model)
 #pairwise comparison 
 div.emm<-emmeans(diversity.model,pairwise~CARD)
 div.emm
-#results: no sig diff btw cards (p = 0.2475)
+#results: no sig diff btw cards (p = 0.21)
 
 #check assumptions
 dotchart(insects$diversity, main = "diversity", group = insects$CARD) # way to visualize outliers
@@ -267,15 +269,16 @@ influenceIndexPlot(diversity.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #evenness
-##AIC -52
-evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = poisson)
+##AIC -79
+evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
+#evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = poisson)
 summary(evenness.model)
 Anova(evenness.model)
 AIC(evenness.model)
 #pairwise comparison 
 even.emm<-emmeans(evenness.model,pairwise~CARD)
 even.emm
-#results: no sig diff btw cards (p = 0.4079)
+#results: no sig diff btw cards (p = 0.38)
 
 #check assumptions
 dotchart(insects$evenness, main = "evenness", group = insects$CARD) # way to visualize outliers
@@ -305,6 +308,70 @@ outlierTest(evenness.model)
 influenceIndexPlot(evenness.model, vars = c("Cook"), id = list(n = 3))
 
 ###
+library(ggplot2)
+
+#richness by card type
+richness.plot<-ggplot(insects21, aes(x = factor(CARD), y = richness, fill=CARD))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Richness")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
+                    breaks=c("Old21", "New21"),
+                    labels=c("Old cards 2021", "New cards 2021"))
+richness.plot
+
+#abundance by card type
+abundance.plot<-ggplot(insects21, aes(x = factor(CARD), y = abundance, fill=CARD))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Abundance (log10)")+
+  scale_y_continuous(trans="log10")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
+                    breaks=c("Old21", "New21"),
+                    labels=c("Old cards 2021", "New cards 2021"))
+abundance.plot
+
+#diveristy by card type
+diversity.plot<-ggplot(insects21, aes(x = factor(CARD), y = diversity, fill=CARD))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Shannon diversity")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
+                    breaks=c("Old21", "New21"),
+                    labels=c("Old cards 2021", "New cards 2021"))
+diversity.plot
+
+#evenness by card type
+evenness.plot<-ggplot(insects21, aes(x = factor(CARD), y = evenness, fill=CARD))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Evenness")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
+                    breaks=c("Old21", "New21"),
+                    labels=c("Old cards 2021", "New cards 2021"))
+evenness.plot
+
+#
+#mush together plots
+library(ggpubr) 
+boxplot_2021 <- ggarrange(richness.plot, abundance.plot, diversity.plot, evenness.plot, 
+                              ncol = 2, nrow = 2,
+                              common.legend = TRUE, legend = "bottom")
+boxplot_2021
+
+pdf("boxplot_2021.pdf", height=8, width=8) #height and width in inches
+boxplot_2021
+dev.off()
+
+##
 
 #species accumulation
 library (BiodiversityR)
@@ -453,19 +520,20 @@ NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=100) 
 NMDS
 
 #NMDS visualization with trap types by year
+#8x9
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
 ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#ffba21",kind="sd", conf=0.95, label=FALSE, show.groups = "Old20")
-ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#00c690",kind="sd", conf=0.95, label=FALSE, show.groups = "New22") 
-ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#00c690",kind="sd", conf=0.95, label=FALSE, show.groups = "New22")
 ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
+ordiellipse(NMDS, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
 points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old21"),pch=20, col="#E69F00")
 points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="New21"), pch=17, col="#009E73")
 points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="Old20"),pch=18, col="#ffba21")
 points(NMDS, display="sites", select=which(env.matrix$CARDYEAR=="New22"), pch=15, col="#00c690")
 #add legend
-legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73", "#ffba21","#00c690"), cex=1.2, legend=c("2021 Old cards", "2021 New cards", "2020 Old cards", "2022 New cards"))
+legend(0.97,1.78, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73", "#ffba21","#00c690"), cex=1.2, legend=c("2021 Old cards", "2021 New cards", "2020 Old cards", "2022 New cards"))
 
 #bootstrapping and testing for differences between the groups (cardyear)
 fit<-adonis2(com.matrix ~ CARDYEAR, data = env.matrix, permutations = 999, method="bray")
@@ -488,6 +556,7 @@ anova(betadisper(distances_data, env.matrix$CARDYEAR))
 #P-value = 4.753e-12 -- assumes homogeneity of multivariate dispersion
 
 #NMDS visualization for old and new combined between years
+#8x9
 plot(NMDS, disp='sites', type="n")
 title(main="", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
@@ -496,7 +565,7 @@ ordiellipse(NMDS, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf
 points(NMDS, display="sites", select=which(env.matrix$CARD=="Old"),pch=19, col="#E69F00")
 points(NMDS, display="sites", select=which(env.matrix$CARD=="New"), pch=17, col="#009E73")
 #add legend
-legend(1.315,1.684, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
+legend(1.2,1.78, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards", "New cards"))
 
 #bootstrapping and testing for differences between the groups (cards)
 fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
@@ -532,6 +601,8 @@ insects_all$evenness <- evenness
 library(lme4)
 library(lmerTest) #to obtain p values
 library (car) #Anova (needed because of negative binomial)  ##if we don't use neg binomial switch to "anova"
+library(emmeans)
+
 library (nortest)
 library(bbmle)
 library(DHARMa)
@@ -539,7 +610,6 @@ library(ggplot2)
 library(sjPlot)
 library (jtools)
 library(interactions)
-library(emmeans)
 
 #richness
 #AIC 3115
@@ -607,7 +677,7 @@ richness.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")), 
   theme(legend.position="bottom")+
   labs(title="", x="", y="Richness")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="Card type and year:",
                     breaks=c("Old20", "Old21", "New21", "New22"),
                     labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
 richness.plot
@@ -620,7 +690,7 @@ abundance.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")),
   labs(title="", x="", y="Abundance (log10)")+
   scale_y_continuous(trans="log10")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="Card type and year:",
                     breaks=c("Old20", "Old21", "New21", "New22"),
                     labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
 abundance.plot
@@ -632,7 +702,7 @@ diversity.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")),
   theme(legend.position="bottom")+
   labs(title="", x="", y="Shannon diversity")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="Card type and year:",
                     breaks=c("Old20", "Old21", "New21", "New22"),
                     labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
 diversity.plot
@@ -644,7 +714,7 @@ evenness.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")), 
   theme(legend.position="bottom")+
   labs(title="", x="", y="Evenness")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="Card type and year:",
                     breaks=c("Old20", "Old21", "New21", "New22"),
                     labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
 evenness.plot
