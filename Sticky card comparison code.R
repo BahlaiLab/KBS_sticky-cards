@@ -508,3 +508,155 @@ fit
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARD))
 #P-value = 1.185e-06 -- assumes homogeneity of multivariate dispersion
+
+###
+
+#To obtain richness counts
+insects.rowsums <- rowSums(insects_all[,6:24]>0)
+insects_all$richness <- insects.rowsums
+
+#To obtain abundance counts
+insects.abun <- rowSums(insects_all[,6:24])
+insects_all$abundance <- insects.abun
+
+#calculate Shannon diversity
+diversity <-diversity(insects_all[,6:24])
+insects_all$diversity <-diversity
+
+#calculate Evenness
+evenness <-diversity/log(specnumber(insects_all[,6:24]))
+insects_all$evenness <- evenness
+
+###
+#Generalized linear models
+library(lme4)
+library(lmerTest) #to obtain p values
+library (car) #Anova (needed because of negative binomial)  ##if we don't use neg binomial switch to "anova"
+library (nortest)
+library(bbmle)
+library(DHARMa)
+library(ggplot2)
+library(sjPlot)
+library (jtools)
+library(interactions)
+library(emmeans)
+
+#richness
+#AIC 3115
+richness.model<-glm(richness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
+summary(richness.model)
+Anova (richness.model)
+AIC(richness.model)
+#pairwise comparison 
+rich.emm<-emmeans(richness.model,pairwise~CARDYEAR)
+rich.emm
+#results: Sig diff = New21-New22, New21-Old20, New22-Old21, Old20-Old21
+        #no sig diff = New21-Old21 and New22-Old20
+
+#
+
+#abundance
+##AIC 6269
+abundance.model<-glm(abundance ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
+#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = negative.binomial (4))
+#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects)  #does not meet normality assumptions
+summary(abundance.model)
+Anova(abundance.model)
+AIC(abundance.model)
+#pairwise comparison 
+abun.emm<-emmeans(abundance.model,pairwise~CARDYEAR)
+abun.emm
+#results: sig diff = New21-New22, New21-Old20, New22-Old21, Old20-Old21
+        #no sig diff = New21-Old21 and New22-Old20
+
+#
+
+#diversity
+##AIC 1594
+diversity.model<-glm(diversity ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
+#diversity.model<-lmer(diversity ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff btw cards #AIC = 116
+summary(diversity.model)
+Anova(diversity.model)
+AIC(diversity.model)
+#pairwise comparison 
+div.emm<-emmeans(diversity.model,pairwise~CARDYEAR)
+div.emm
+#results: no sig diff btw any comparisons
+
+#
+
+#evenness
+##AIC 1186
+evenness.model<-glm(evenness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
+#evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = poisson)
+summary(evenness.model)
+Anova(evenness.model)
+AIC(evenness.model)
+#pairwise comparison 
+even.emm<-emmeans(evenness.model,pairwise~CARDYEAR)
+even.emm
+#results: sig diff = New21-New22, New22-Old20 and New22-Old21 
+        #no sig diff = New21-Old20, New21-Old21, Old20-Old21
+
+##
+
+#CARDYEAR richness by card type
+richness.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")), y = richness, fill=CARDYEAR))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Richness")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+                    breaks=c("Old20", "Old21", "New21", "New22"),
+                    labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
+richness.plot
+
+#CARDYEAR abundance by card type
+abundance.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")), y = abundance, fill=CARDYEAR))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Abundance (log10)")+
+  scale_y_continuous(trans="log10")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+                    breaks=c("Old20", "Old21", "New21", "New22"),
+                    labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
+abundance.plot
+
+#CARDYEAR diveristy by card type
+diversity.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")), y = diversity, fill=CARDYEAR))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Shannon diversity")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+                    breaks=c("Old20", "Old21", "New21", "New22"),
+                    labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
+diversity.plot
+
+#CARDYEAR evenness by card type
+evenness.plot<-ggplot(insects_all, aes(x = factor(CARD,level = c("Old","New")), y = evenness, fill=CARDYEAR))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="bottom")+
+  labs(title="", x="", y="Evenness")+
+  #theme (plot.title = element_text(hjust=0.5))+
+  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="CARDYEAR:",
+                    breaks=c("Old20", "Old21", "New21", "New22"),
+                    labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
+evenness.plot
+
+#
+#mush together plots
+library(ggpubr) 
+allyears_boxplot <- ggarrange(richness.plot, abundance.plot, diversity.plot, evenness.plot, 
+                                ncol = 2, nrow = 2,
+                                common.legend = TRUE, legend = "bottom")
+allyears_boxplot
+
+pdf("allyears_boxplot.pdf", height=8, width=8) #height and width in inches
+allyears_boxplot
+dev.off()
