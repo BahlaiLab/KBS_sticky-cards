@@ -462,6 +462,285 @@ dev.off()
 
 ###
 
+#Examining individual taxa for 2021
+
+#ABIPN
+ABIPN<-insects21[c(1:5,30)]
+ABIPN.glm<-glm(ABIPN ~ CARD + week + TREAT + offset(TRAPS), data=ABIPN)
+summary(ABIPN.glm)
+Anova (ABIPN.glm)
+AIC(ABIPN.glm) #-156
+#pairwise comparison 
+ABIPN.emm<-emmeans(ABIPN.glm,pairwise~CARD)
+ABIPN.emm
+#results: no sig diff btw cards (p=0.44)
+
+#BURSI
+BURSI<-insects21[c(1:4,6,30)]
+BURSI.glm<-glm(BURSI ~ CARD + week + TREAT + offset(TRAPS), data=BURSI)
+summary(BURSI.glm)
+Anova (BURSI.glm)
+AIC(BURSI.glm) #98
+#pairwise comparison 
+BURSI.emm<-emmeans(BURSI.glm,pairwise~CARD)
+BURSI.emm
+#results: no sig diff btw cards (p=.67)
+
+#C7
+C7<-insects21[c(1:4,7,30)]
+C7.glm<-glm(C7 ~ CARD + week + TREAT + offset(TRAPS), data=C7)
+summary(C7.glm)
+Anova (C7.glm)
+AIC(C7.glm) #1281
+#pairwise comparison 
+C7.emm<-emmeans(C7.glm,pairwise~CARD)
+C7.emm
+#results: no sig diff btw cards (p=.60)
+
+#CMAC
+CMAC<-insects21[c(1:4,8,30)]
+glm<-glm(CMAC ~ CARD + week + TREAT + offset(TRAPS), data=CMAC)
+summary(glm)
+Anova (glm)
+AIC(glm) #399
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.47)
+
+#CSTIG
+CSTIG<-insects21[c(1:4,9,30)]
+glm<-glm(CSTIG ~ CARD + week + TREAT + offset(TRAPS), data=CSTIG)
+summary(glm)
+Anova (glm)
+AIC(glm) #196
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.52)
+
+#CTRIF
+CTRIF<-insects21[c(1:4,10,30)]
+glm<-glm(CTRIF ~ CARD + week + TREAT + offset(TRAPS), data=CTRIF)
+summary(glm)
+Anova (glm)
+AIC(glm) #-156
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.44)
+
+#CYCSP
+CYCSP<-insects21[c(1:4,11,30)]
+glm<-glm(CYCSP ~ CARD + week + TREAT + offset(TRAPS), data=CYCSP)
+summary(glm)
+Anova (glm)
+AIC(glm) #267
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.07)
+
+#H13
+H13<-insects21[c(1:4,12,30)]
+glm<-glm(H13 ~ CARD + week + TREAT + offset(TRAPS), data=H13)
+summary(glm)
+Anova (glm)
+AIC(glm) #-156
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.44)
+
+#HAXY
+HAXY<-insects21[c(1:4,13,30)]
+glm<-glm(HAXY ~ CARD + week + TREAT + offset(TRAPS), data=HAXY)
+summary(glm)
+Anova (glm)
+AIC(glm) #1966
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.48)
+
+#HCONV
+HCONV<-insects21[c(1:4,14,30)]
+glm<-glm(HCONV ~ CARD + week + TREAT + offset(TRAPS), data=HCONV)
+summary(glm)
+Anova (glm)
+AIC(glm) #77
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.79)
+
+#HGLAC
+HGLAC<-insects21[c(1:4,15,30)]
+glm<-glm(HGLAC ~ CARD + week + TREAT + offset(TRAPS), data=HGLAC)
+summary(glm)
+Anova (glm)
+AIC(glm) #-156
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.44)
+
+#HPARN
+HPARN<-insects21[c(1:4,16,30)]
+glm<-glm(HPARN ~ CARD + week + TREAT + offset(TRAPS), data=HPARN)
+summary(glm)
+Anova (glm)
+AIC(glm) #459
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.46)
+
+#HVAR
+HVAR<-insects21[c(1:4,17,30)]
+glm<-glm(HVAR ~ CARD + week + TREAT + offset(TRAPS), data=HVAR)
+summary(glm)
+Anova (glm)
+AIC(glm) #811
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.0009)
+
+#PQUA
+PQUA<-insects21[c(1:4,18,30)]
+glm<-glm(PQUA ~ CARD + week + TREAT + offset(TRAPS), data=PQUA)
+summary(glm)
+Anova (glm)
+AIC(glm) #822
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.24)
+
+#CANTHARID
+CANTHARID<-insects21[c(1:4,19,30)]
+glm<-glm(CANTHARID ~ CARD + week + TREAT + offset(TRAPS), data=CANTHARID)
+summary(glm)
+Anova (glm)
+AIC(glm) #1526
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.23)
+
+#LAMPY
+LAMPY<-insects21[c(1:4,20,30)]
+glm<-glm(LAMPY ~ CARD + week + TREAT + offset(TRAPS), data=LAMPY)
+summary(glm)
+Anova (glm)
+AIC(glm) #1686
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.38)
+
+#LCW
+LCW<-insects21[c(1:4,21,30)]
+glm<-glm(LCW ~ CARD + week + TREAT + offset(TRAPS), data=LCW)
+summary(glm)
+Anova (glm)
+AIC(glm) #1519
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.01)
+
+#MECOP
+MECOP<-insects21[c(1:4,22,30)]
+glm<-glm(MECOP ~ CARD + week + TREAT + offset(TRAPS), data=MECOP)
+summary(glm)
+Anova (glm)
+AIC(glm) #1614
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.62)
+
+#X20SPOT
+X20SPOT<-insects21[c(1:4,23,30)]
+glm<-glm(X20SPOT ~ CARD + week + TREAT + offset(TRAPS), data=X20SPOT)
+summary(glm)
+Anova (glm)
+AIC(glm) #211
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.44)
+
+#OTHER
+OTHER<-insects21[c(1:4,24,30)]
+glm<-glm(OTHER ~ CARD + week + TREAT + offset(TRAPS), data=OTHER)
+summary(glm)
+Anova (glm)
+AIC(glm) #-48
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=.74)
+
+#Syrphidae
+Syrphidae<-insects21[c(1:4,25,30)]
+glm<-glm(Syrphidae ~ CARD + week + TREAT + offset(TRAPS), data=Syrphidae)
+summary(glm)
+Anova (glm)
+AIC(glm) #1431
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p < 0.0001)
+
+#Ichneumonoidae
+Ichneumonoidae<-insects21[c(1:4,26,30)]
+glm<-glm(Ichneumonoidae ~ CARD + week + TREAT + offset(TRAPS), data=Ichneumonoidae)
+summary(glm)
+Anova (glm)
+AIC(glm) #2319
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=0.46)
+
+#Chalcidoidae
+Chalcidoidae<-insects21[c(1:4,27,30)]
+glm<-glm(Chalcidoidae ~ CARD + week + TREAT + offset(TRAPS), data=Chalcidoidae)
+summary(glm)
+Anova (glm)
+AIC(glm) #3741
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=0.02)
+
+#Lepidoptera
+Lepidoptera<-insects21[c(1:4,28,30)]
+glm<-glm(Lepidoptera ~ CARD + week + TREAT + offset(TRAPS), data=Lepidoptera)
+summary(glm)
+Anova (glm)
+AIC(glm) #2385
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=0.13)
+
+#Orthoptera
+Orthoptera<-insects21[c(1:4,29,30)]
+glm<-glm(Orthoptera ~ CARD + week + TREAT + offset(TRAPS), data=Orthoptera)
+summary(glm)
+Anova (glm)
+AIC(glm) #2385
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARD)
+emm
+#results: no sig diff btw cards (p=0.06)
+
+###
+
 ##2022
 
 #bring in data
@@ -730,3 +1009,216 @@ allyears_boxplot
 pdf("allyears_boxplot.pdf", height=8, width=8) #height and width in inches
 allyears_boxplot
 dev.off()
+
+##
+
+#Examining individual taxa for all years  #### RUN THESE
+
+#ABIPN
+ABIPN<-insects_all[c(1:6,25)]
+ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(TRAPS), data=ABIPN)
+summary(ABIPN.glm)
+Anova (ABIPN.glm)
+AIC(ABIPN.glm) #-156
+#pairwise comparison 
+ABIPN.emm<-emmeans(ABIPN.glm,pairwise~CARDYEAR)
+ABIPN.emm
+#results: no sig diff btw cards (p=0.44)
+
+#BURSI
+BURSI<-insects_all[c(1:5,7,25)]
+BURSI.glm<-glm(BURSI ~ CARD + week + TREAT + offset(TRAPS), data=BURSI)
+summary(BURSI.glm)
+Anova (BURSI.glm)
+AIC(BURSI.glm) #98
+#pairwise comparison 
+BURSI.emm<-emmeans(BURSI.glm,pairwise~CARDYEAR)
+BURSI.emm
+#results: no sig diff btw cards (p=.67)
+
+#C7
+C7<-insects_all[c(1:5,8,25)]
+C7.glm<-glm(C7 ~ CARD + week + TREAT + offset(TRAPS), data=C7)
+summary(C7.glm)
+Anova (C7.glm)
+AIC(C7.glm) #1281
+#pairwise comparison 
+C7.emm<-emmeans(C7.glm,pairwise~CARDYEAR)
+C7.emm
+#results: no sig diff btw cards (p=.60)
+
+#CMAC
+CMAC<-insects_all[c(1:5,9,25)]
+glm<-glm(CMAC ~ CARD + week + TREAT + offset(TRAPS), data=CMAC)
+summary(glm)
+Anova (glm)
+AIC(glm) #399
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.47)
+
+#CSTIG
+CSTIG<-insects_all[c(1:5,10,25)]
+glm<-glm(CSTIG ~ CARD + week + TREAT + offset(TRAPS), data=CSTIG)
+summary(glm)
+Anova (glm)
+AIC(glm) #196
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.52)
+
+#CTRIF
+CTRIF<-insects_all[c(1:5,11,25)]
+glm<-glm(CTRIF ~ CARD + week + TREAT + offset(TRAPS), data=CTRIF)
+summary(glm)
+Anova (glm)
+AIC(glm) #-156
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.44)
+
+#CYCSP
+CYCSP<-insects_all[c(1:5,12,25)]
+glm<-glm(CYCSP ~ CARD + week + TREAT + offset(TRAPS), data=CYCSP)
+summary(glm)
+Anova (glm)
+AIC(glm) #267
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.07)
+
+#H13
+H13<-insects_all[c(1:5,13,25)]
+glm<-glm(H13 ~ CARD + week + TREAT + offset(TRAPS), data=H13)
+summary(glm)
+Anova (glm)
+AIC(glm) #-156
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.44)
+
+#HAXY
+HAXY<-insects_all[c(1:5,14,25)]
+glm<-glm(HAXY ~ CARD + week + TREAT + offset(TRAPS), data=HAXY)
+summary(glm)
+Anova (glm)
+AIC(glm) #1966
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.48)
+
+#HCONV
+HCONV<-insects_all[c(1:5,15,25)]
+glm<-glm(HCONV ~ CARD + week + TREAT + offset(TRAPS), data=HCONV)
+summary(glm)
+Anova (glm)
+AIC(glm) #77
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.79)
+
+#HGLAC
+HGLAC<-insects_all[c(1:5,16,25)]
+glm<-glm(HGLAC ~ CARD + week + TREAT + offset(TRAPS), data=HGLAC)
+summary(glm)
+Anova (glm)
+AIC(glm) #-156
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.44)
+
+#HPARN
+HPARN<-insects_all[c(1:5,17,25)]
+glm<-glm(HPARN ~ CARD + week + TREAT + offset(TRAPS), data=HPARN)
+summary(glm)
+Anova (glm)
+AIC(glm) #459
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.46)
+
+#HVAR
+HVAR<-insects_all[c(1:5,18,25)]
+glm<-glm(HVAR ~ CARD + week + TREAT + offset(TRAPS), data=HVAR)
+summary(glm)
+Anova (glm)
+AIC(glm) #811
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.0009)
+
+#PQUA
+PQUA<-insects_all[c(1:5,19,25)]
+glm<-glm(PQUA ~ CARD + week + TREAT + offset(TRAPS), data=PQUA)
+summary(glm)
+Anova (glm)
+AIC(glm) #822
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.24)
+
+#CANTHARID
+CANTHARID<-insects_all[c(1:5,20,25)]
+glm<-glm(CANTHARID ~ CARD + week + TREAT + offset(TRAPS), data=CANTHARID)
+summary(glm)
+Anova (glm)
+AIC(glm) #1526
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.23)
+
+#LAMPY
+LAMPY<-insects_all[c(1:5,21,25)]
+glm<-glm(LAMPY ~ CARD + week + TREAT + offset(TRAPS), data=LAMPY)
+summary(glm)
+Anova (glm)
+AIC(glm) #1686
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.38)
+
+#LCW
+LCW<-insects_all[c(1:5,22,25)]
+glm<-glm(LCW ~ CARD + week + TREAT + offset(TRAPS), data=LCW)
+summary(glm)
+Anova (glm)
+AIC(glm) #1519
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.01)
+
+#MECOP
+MECOP<-insects_all[c(1:5,23,25)]
+glm<-glm(MECOP ~ CARD + week + TREAT + offset(TRAPS), data=MECOP)
+summary(glm)
+Anova (glm)
+AIC(glm) #1614
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.62)
+
+#X20SPOT
+X20SPOT<-insects_all[c(1:5,24,25)]
+glm<-glm(X20SPOT ~ CARD + week + TREAT + offset(TRAPS), data=X20SPOT)
+summary(glm)
+Anova (glm)
+AIC(glm) #211
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.44)
