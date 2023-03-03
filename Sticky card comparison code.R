@@ -144,15 +144,16 @@ library (jtools)
 library(interactions)
 
 #richness
-#AIC 1173
-richness.model<-glm(richness ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
+#AIC 1310
+richness.model<-glm(richness ~ CARD + week + TREAT + offset(TRAPS), data=insects21, family = poisson)
 summary(richness.model)
 Anova (richness.model)
+#card: not sig, week and treat: sig
 AIC(richness.model)
 #pairwise comparison 
 rich.emm<-emmeans(richness.model,pairwise~CARD)
 rich.emm
-#results: no sig diff btw cards (p=0.89)
+#results: no sig diff btw cards (p=0.80)
 
 #check assumptions
 dotchart(insects$richness, main = "richness", group = insects$CARD) # way to visualize outliers
@@ -184,17 +185,17 @@ influenceIndexPlot(richness.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #abundance
-##AIC 3763
-abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
-#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = negative.binomial (4))
-#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects)  #does not meet normality assumptions
+##AIC 17070
+abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects21, family = poisson)
 summary(abundance.model)
 Anova(abundance.model)
+#all sig
 AIC(abundance.model)
 #pairwise comparison 
 abun.emm<-emmeans(abundance.model,pairwise~CARD)
 abun.emm
-#results: sig diff btw cards (p = 0.03)
+#results: sig diff btw cards (p = <0.0001)
+  #greater for new cards
 
 #check assumptions
 dotchart(insects$abundance, main = "abundance", group = insects$CARD) # way to visualize outliers
@@ -230,9 +231,9 @@ influenceIndexPlot(abundance.model, vars = c("Cook"), id = list(n = 3))
 #diversity
 ##AIC 107
 diversity.model<-glm(diversity ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
-#diversity.model<-lmer(diversity ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff btw cards #AIC = 116
 summary(diversity.model)
 Anova(diversity.model)
+#card: not sig, week and treat: sig
 AIC(diversity.model)
 #pairwise comparison 
 div.emm<-emmeans(diversity.model,pairwise~CARD)
@@ -270,15 +271,15 @@ influenceIndexPlot(diversity.model, vars = c("Cook"), id = list(n = 3))
 
 #evenness
 ##AIC -79
-evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects21)
-#evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = poisson)
+evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects21, family = poisson)
 summary(evenness.model)
 Anova(evenness.model)
 AIC(evenness.model)
+#card and week: not sig, treat: sig
 #pairwise comparison 
 even.emm<-emmeans(evenness.model,pairwise~CARD)
 even.emm
-#results: no sig diff btw cards (p = 0.38)
+#results: no sig diff btw cards (p = 0.64)
 
 #check assumptions
 dotchart(insects$evenness, main = "evenness", group = insects$CARD) # way to visualize outliers
@@ -469,6 +470,7 @@ ABIPN<-insects21[c(1:5,30)]
 ABIPN.glm<-glm(ABIPN ~ CARD + week + TREAT + offset(TRAPS), data=ABIPN)
 summary(ABIPN.glm)
 Anova (ABIPN.glm)
+#card: not sig, week and treat: sig
 AIC(ABIPN.glm) #-156
 #pairwise comparison 
 ABIPN.emm<-emmeans(ABIPN.glm,pairwise~CARD)
@@ -480,6 +482,7 @@ BURSI<-insects21[c(1:4,6,30)]
 BURSI.glm<-glm(BURSI ~ CARD + week + TREAT + offset(TRAPS), data=BURSI)
 summary(BURSI.glm)
 Anova (BURSI.glm)
+#card and week: not sig, treat: sig
 AIC(BURSI.glm) #98
 #pairwise comparison 
 BURSI.emm<-emmeans(BURSI.glm,pairwise~CARD)
@@ -491,6 +494,7 @@ C7<-insects21[c(1:4,7,30)]
 C7.glm<-glm(C7 ~ CARD + week + TREAT + offset(TRAPS), data=C7)
 summary(C7.glm)
 Anova (C7.glm)
+#card: not sig, week and treat: sig
 AIC(C7.glm) #1281
 #pairwise comparison 
 C7.emm<-emmeans(C7.glm,pairwise~CARD)
@@ -502,6 +506,7 @@ CMAC<-insects21[c(1:4,8,30)]
 glm<-glm(CMAC ~ CARD + week + TREAT + offset(TRAPS), data=CMAC)
 summary(glm)
 Anova (glm)
+#card and week: not sig, treat: sig
 AIC(glm) #399
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -513,6 +518,7 @@ CSTIG<-insects21[c(1:4,9,30)]
 glm<-glm(CSTIG ~ CARD + week + TREAT + offset(TRAPS), data=CSTIG)
 summary(glm)
 Anova (glm)
+#card and week: not sig, treat: sig
 AIC(glm) #196
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -524,6 +530,7 @@ CTRIF<-insects21[c(1:4,10,30)]
 glm<-glm(CTRIF ~ CARD + week + TREAT + offset(TRAPS), data=CTRIF)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #-156
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -535,6 +542,7 @@ CYCSP<-insects21[c(1:4,11,30)]
 glm<-glm(CYCSP ~ CARD + week + TREAT + offset(TRAPS), data=CYCSP)
 summary(glm)
 Anova (glm)
+#card and week: not sig, treat: sig
 AIC(glm) #267
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -546,6 +554,7 @@ H13<-insects21[c(1:4,12,30)]
 glm<-glm(H13 ~ CARD + week + TREAT + offset(TRAPS), data=H13)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #-156
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -557,6 +566,7 @@ HAXY<-insects21[c(1:4,13,30)]
 glm<-glm(HAXY ~ CARD + week + TREAT + offset(TRAPS), data=HAXY)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #1966
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -568,6 +578,7 @@ HCONV<-insects21[c(1:4,14,30)]
 glm<-glm(HCONV ~ CARD + week + TREAT + offset(TRAPS), data=HCONV)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #77
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -579,6 +590,7 @@ HGLAC<-insects21[c(1:4,15,30)]
 glm<-glm(HGLAC ~ CARD + week + TREAT + offset(TRAPS), data=HGLAC)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #-156
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -590,6 +602,7 @@ HPARN<-insects21[c(1:4,16,30)]
 glm<-glm(HPARN ~ CARD + week + TREAT + offset(TRAPS), data=HPARN)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #459
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -601,17 +614,19 @@ HVAR<-insects21[c(1:4,17,30)]
 glm<-glm(HVAR ~ CARD + week + TREAT + offset(TRAPS), data=HVAR)
 summary(glm)
 Anova (glm)
+#all sig
 AIC(glm) #811
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
 emm
-#results: no sig diff btw cards (p=.0009)
+#results: sig diff btw cards (p=.0009)
 
 #PQUA
 PQUA<-insects21[c(1:4,18,30)]
 glm<-glm(PQUA ~ CARD + week + TREAT + offset(TRAPS), data=PQUA)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #822
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -623,6 +638,7 @@ CANTHARID<-insects21[c(1:4,19,30)]
 glm<-glm(CANTHARID ~ CARD + week + TREAT + offset(TRAPS), data=CANTHARID)
 summary(glm)
 Anova (glm)
+#card and treat: not sig, week: sig
 AIC(glm) #1526
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -634,6 +650,7 @@ LAMPY<-insects21[c(1:4,20,30)]
 glm<-glm(LAMPY ~ CARD + week + TREAT + offset(TRAPS), data=LAMPY)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #1686
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -645,17 +662,19 @@ LCW<-insects21[c(1:4,21,30)]
 glm<-glm(LCW ~ CARD + week + TREAT + offset(TRAPS), data=LCW)
 summary(glm)
 Anova (glm)
+#all sig
 AIC(glm) #1519
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
 emm
-#results: no sig diff btw cards (p=.01)
+#results: sig diff btw cards (p=.01)
 
 #MECOP
 MECOP<-insects21[c(1:4,22,30)]
 glm<-glm(MECOP ~ CARD + week + TREAT + offset(TRAPS), data=MECOP)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #1614
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -667,6 +686,7 @@ X20SPOT<-insects21[c(1:4,23,30)]
 glm<-glm(X20SPOT ~ CARD + week + TREAT + offset(TRAPS), data=X20SPOT)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #211
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -678,6 +698,7 @@ OTHER<-insects21[c(1:4,24,30)]
 glm<-glm(OTHER ~ CARD + week + TREAT + offset(TRAPS), data=OTHER)
 summary(glm)
 Anova (glm)
+#card and week: not sig, treat: sig
 AIC(glm) #-48
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -689,17 +710,19 @@ Syrphidae<-insects21[c(1:4,25,30)]
 glm<-glm(Syrphidae ~ CARD + week + TREAT + offset(TRAPS), data=Syrphidae)
 summary(glm)
 Anova (glm)
+#all sig
 AIC(glm) #1431
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
 emm
-#results: no sig diff btw cards (p < 0.0001)
+#results: sig diff btw cards (p < 0.0001)
 
 #Ichneumonoidae
 Ichneumonoidae<-insects21[c(1:4,26,30)]
 glm<-glm(Ichneumonoidae ~ CARD + week + TREAT + offset(TRAPS), data=Ichneumonoidae)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #2319
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -711,17 +734,19 @@ Chalcidoidae<-insects21[c(1:4,27,30)]
 glm<-glm(Chalcidoidae ~ CARD + week + TREAT + offset(TRAPS), data=Chalcidoidae)
 summary(glm)
 Anova (glm)
+#all sig
 AIC(glm) #3741
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
 emm
-#results: no sig diff btw cards (p=0.02)
+#results: sig diff btw cards (p=0.02)
 
 #Lepidoptera
 Lepidoptera<-insects21[c(1:4,28,30)]
 glm<-glm(Lepidoptera ~ CARD + week + TREAT + offset(TRAPS), data=Lepidoptera)
 summary(glm)
 Anova (glm)
+#card: not sig, week and treat: sig
 AIC(glm) #2385
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
@@ -733,6 +758,7 @@ Orthoptera<-insects21[c(1:4,29,30)]
 glm<-glm(Orthoptera ~ CARD + week + TREAT + offset(TRAPS), data=Orthoptera)
 summary(glm)
 Anova (glm)
+#card and week: not sig, treat: sig
 AIC(glm) #2385
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
