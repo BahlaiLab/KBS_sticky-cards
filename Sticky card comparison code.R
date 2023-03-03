@@ -1,20 +1,3 @@
-##2020
-
-#bring in data
-insects20 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2020_LTER_for_analyses.csv", na.strings = NULL)
-
-#change week to characters
-insects20$week <- as.character(insects20$week)
-#change CARD, TREAT, and STATION to factor
-insects20$CARD <- as.factor(insects20$CARD)
-insects20$TREAT <- as.factor(insects20$TREAT)
-insects20$STATION <- as.factor(insects20$STATION)
-
-str(insects20)
-summary(insects20)
-
-###
-
 ##2021
 
 #bring in data
@@ -465,6 +448,9 @@ dev.off()
 
 #Examining individual taxa for 2021
 
+#calculate taxa abundance
+colSums(insects21[,5:29])
+
 #ABIPN
 ABIPN<-insects21[c(1:5,30)]
 ABIPN.glm<-glm(ABIPN ~ CARD + week + TREAT + offset(TRAPS), data=ABIPN)
@@ -767,24 +753,6 @@ emm
 
 ###
 
-##2022
-
-#bring in data
-insects22 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2022_LTER_for_analyses.csv", na.strings = NULL)
-
-#change week to characters
-insects22$week <- as.character(insects22$week)
-#change CARD, TREAT, and STATION to factor
-insects22$CARD <- as.factor(insects22$CARD)
-insects22$TREAT <- as.factor(insects22$TREAT)
-insects22$STATION <- as.factor(insects22$STATION)
-
-str(insects22)
-summary(insects22)
-
-
-###
-
 ##all years
 
 #bring in data
@@ -901,6 +869,9 @@ insects_all$diversity <-diversity
 evenness <-diversity/log(specnumber(insects_all[,6:24]))
 insects_all$evenness <- evenness
 
+#calculate taxa abundance
+colSums(insects_all[,6:24])
+
 ###
 #Generalized linear models
 library(lme4)
@@ -917,61 +888,74 @@ library (jtools)
 library(interactions)
 
 #richness
-#AIC 3115
-richness.model<-glm(richness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
+#AIC 3212
+richness.model<-glm(richness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all, family=poisson)
 summary(richness.model)
 Anova (richness.model)
 AIC(richness.model)
+#all sig (CARDYEAR, week, treatment)
 #pairwise comparison 
 rich.emm<-emmeans(richness.model,pairwise~CARDYEAR)
 rich.emm
-#results: Sig diff = New21-New22, New21-Old20, New22-Old21, Old20-Old21
-        #no sig diff = New21-Old21 and New22-Old20
+#results: Sig diff = New21-Old20, New22-Old21, Old20-Old21
+        #no sig diff = New21-New22,New21-Old21 and New22-Old20
+rich.cld<-multcomp::cld(rich.emm, alpha = 0.05, Letters = LETTERS)
+rich.cld 
+#New22 AB
+#Old20 A
+#New21 BC
+#Old21 C
 
 #
 
 #abundance
-##AIC 6269
-abundance.model<-glm(abundance ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
-#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = negative.binomial (4))
-#abundance.model<-glm(abundance ~ CARD + week + TREAT + offset(TRAPS), data=insects)  #does not meet normality assumptions
+##AIC 7164
+abundance.model<-glm(abundance ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all, family=poisson)
 summary(abundance.model)
 Anova(abundance.model)
+#all sig (CARDYEAR, week, treatment)
 AIC(abundance.model)
 #pairwise comparison 
 abun.emm<-emmeans(abundance.model,pairwise~CARDYEAR)
 abun.emm
-#results: sig diff = New21-New22, New21-Old20, New22-Old21, Old20-Old21
-        #no sig diff = New21-Old21 and New22-Old20
+#results: sig diff btw all comparisons
+abun.cld<-multcomp::cld(abun.emm, alpha = 0.05, Letters = LETTERS)
+abun.cld 
+#A B C D 
 
 #
 
 #diversity
 ##AIC 1594
 diversity.model<-glm(diversity ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
-#diversity.model<-lmer(diversity ~ CARD + week + (1 | TREAT:STATION), data=insects) #no sig diff btw cards #AIC = 116
 summary(diversity.model)
 Anova(diversity.model)
+#CARDYEAR no sig, week and treat significant
 AIC(diversity.model)
 #pairwise comparison 
 div.emm<-emmeans(diversity.model,pairwise~CARDYEAR)
 div.emm
 #results: no sig diff btw any comparisons
+div.cld<-multcomp::cld(div.emm, alpha = 0.05, Letters = LETTERS)
+div.cld 
+#A A A A 
 
 #
 
 #evenness
-##AIC 1186
-evenness.model<-glm(evenness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all)
-#evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects, family = poisson)
+##AIC Inf
+evenness.model<-glm(evenness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=insects_all, family = poisson)
 summary(evenness.model)
 Anova(evenness.model)
+#CARDYEAR and week not sig, treatment sig
 AIC(evenness.model)
 #pairwise comparison 
 even.emm<-emmeans(evenness.model,pairwise~CARDYEAR)
 even.emm
-#results: sig diff = New21-New22, New22-Old20 and New22-Old21 
-        #no sig diff = New21-Old20, New21-Old21, Old20-Old21
+#results: no sig diff btw any comparisons
+even.cld<-multcomp::cld(even.emm, alpha = 0.05, Letters = LETTERS)
+even.cld 
+#A A A A 
 
 ##
 
@@ -1038,213 +1022,486 @@ dev.off()
 
 ##
 
-#Examining individual taxa for all years  #### RUN THESE
+#Examining individual taxa for Old 2020 and Old 2021
+
+#pull out that data  
+old20 <- insects_all[which(insects_all$CARDYEAR=="Old20"),] 
+old21 <- insects_all[which(insects_all$CARDYEAR=="Old21"),] 
+#combine
+library (plyr)
+old20_old21 <- rbind.fill (old20, old21)
+
+#calculate taxa abundance
+colSums(old20_old21[,6:24])
 
 #ABIPN
-ABIPN<-insects_all[c(1:6,25)]
+ABIPN<-old20_old21[c(1:6,25)]
 ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(TRAPS), data=ABIPN)
 summary(ABIPN.glm)
 Anova (ABIPN.glm)
-AIC(ABIPN.glm) #-156
+#cardyear: not sig, week and treat: sig
+AIC(ABIPN.glm) #5.4
 #pairwise comparison 
 ABIPN.emm<-emmeans(ABIPN.glm,pairwise~CARDYEAR)
 ABIPN.emm
-#results: no sig diff btw cards (p=0.44)
+#results: no sig diff btw cards (0.52)
 
 #BURSI
-BURSI<-insects_all[c(1:5,7,25)]
-BURSI.glm<-glm(BURSI ~ CARD + week + TREAT + offset(TRAPS), data=BURSI)
+BURSI<-old20_old21[c(1:5,7,25)]
+BURSI.glm<-glm(BURSI ~ CARDYEAR + week + TREAT + offset(TRAPS), data=BURSI)
 summary(BURSI.glm)
 Anova (BURSI.glm)
-AIC(BURSI.glm) #98
+#cardyear: not sig, week and treat: sig
+AIC(BURSI.glm) #481
 #pairwise comparison 
 BURSI.emm<-emmeans(BURSI.glm,pairwise~CARDYEAR)
 BURSI.emm
-#results: no sig diff btw cards (p=.67)
+#results: no sig diff btw cards (0.48)
 
 #C7
-C7<-insects_all[c(1:5,8,25)]
-C7.glm<-glm(C7 ~ CARD + week + TREAT + offset(TRAPS), data=C7)
+C7<-old20_old21[c(1:5,8,25)]
+C7.glm<-glm(C7 ~ CARDYEAR + week + TREAT + offset(TRAPS), data=C7)
 summary(C7.glm)
 Anova (C7.glm)
-AIC(C7.glm) #1281
+#cardyear: not sig, week and treat: sig
+AIC(C7.glm) #2297
 #pairwise comparison 
 C7.emm<-emmeans(C7.glm,pairwise~CARDYEAR)
 C7.emm
-#results: no sig diff btw cards (p=.60)
+#results: no sig diff btw cards (0.54)
 
 #CMAC
-CMAC<-insects_all[c(1:5,9,25)]
-glm<-glm(CMAC ~ CARD + week + TREAT + offset(TRAPS), data=CMAC)
+CMAC<-old20_old21[c(1:5,9,25)]
+glm<-glm(CMAC ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CMAC)
 summary(glm)
 Anova (glm)
-AIC(glm) #399
+#all sig
+AIC(glm) #2962
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.47)
+#results: sig diff btw cards (<0.0001)
 
 #CSTIG
-CSTIG<-insects_all[c(1:5,10,25)]
-glm<-glm(CSTIG ~ CARD + week + TREAT + offset(TRAPS), data=CSTIG)
+CSTIG<-old20_old21[c(1:5,10,25)]
+glm<-glm(CSTIG ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CSTIG)
+summary(glm)
+Anova(glm)
+#cardyear: not sig, week and treat: sig
+AIC(glm) #182
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.054)
+
+#CTRIF
+CTRIF<-old20_old21[c(1:5,11,25)]
+glm<-glm(CTRIF ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CTRIF)
 summary(glm)
 Anova (glm)
-AIC(glm) #196
+#cardyear: not sig, week and treat: sig
+AIC(glm) #5.38
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
 #results: no sig diff btw cards (p=.52)
 
-#CTRIF
-CTRIF<-insects_all[c(1:5,11,25)]
-glm<-glm(CTRIF ~ CARD + week + TREAT + offset(TRAPS), data=CTRIF)
-summary(glm)
-Anova (glm)
-AIC(glm) #-156
-#pairwise comparison 
-emm<-emmeans(glm,pairwise~CARDYEAR)
-emm
-#results: no sig diff btw cards (p=.44)
-
 #CYCSP
-CYCSP<-insects_all[c(1:5,12,25)]
-glm<-glm(CYCSP ~ CARD + week + TREAT + offset(TRAPS), data=CYCSP)
+CYCSP<-old20_old21[c(1:5,12,25)]
+glm<-glm(CYCSP ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CYCSP)
 summary(glm)
 Anova (glm)
-AIC(glm) #267
+#cardyear: not sig, week and treat: sig
+AIC(glm) #872
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.07)
+#results: no sig diff btw cards (p=.29)
 
 #H13
-H13<-insects_all[c(1:5,13,25)]
-glm<-glm(H13 ~ CARD + week + TREAT + offset(TRAPS), data=H13)
+H13<-old20_old21[c(1:5,13,25)]
+glm<-glm(H13 ~ CARDYEAR + week + TREAT + offset(TRAPS), data=H13)
 summary(glm)
 Anova (glm)
-AIC(glm) #-156
+#cardyear: not sig, week and treat: sig
+AIC(glm) #74
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.44)
+#results: no sig diff btw cards (p=.76)
 
 #HAXY
-HAXY<-insects_all[c(1:5,14,25)]
-glm<-glm(HAXY ~ CARD + week + TREAT + offset(TRAPS), data=HAXY)
+HAXY<-old20_old21[c(1:5,14,25)]
+glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HAXY)
 summary(glm)
 Anova (glm)
-AIC(glm) #1966
+#all sig
+AIC(glm) #3155
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.48)
+#results: sig diff btw cards (p<0.0001)
 
 #HCONV
-HCONV<-insects_all[c(1:5,15,25)]
-glm<-glm(HCONV ~ CARD + week + TREAT + offset(TRAPS), data=HCONV)
+HCONV<-old20_old21[c(1:5,15,25)]
+glm<-glm(HCONV ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HCONV)
 summary(glm)
 Anova (glm)
-AIC(glm) #77
+#all sig
+AIC(glm) #127
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.79)
+#results: sig diff btw cards (p=.0064)
 
 #HGLAC
-HGLAC<-insects_all[c(1:5,16,25)]
-glm<-glm(HGLAC ~ CARD + week + TREAT + offset(TRAPS), data=HGLAC)
+HGLAC<-old20_old21[c(1:5,16,25)]
+glm<-glm(HGLAC ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HGLAC)
 summary(glm)
 Anova (glm)
-AIC(glm) #-156
+#cardyear: not sig, week and treat: sig
+AIC(glm) #18
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.44)
+#results: no sig diff btw cards (p=.64)
 
 #HPARN
-HPARN<-insects_all[c(1:5,17,25)]
-glm<-glm(HPARN ~ CARD + week + TREAT + offset(TRAPS), data=HPARN)
+HPARN<-old20_old21[c(1:5,17,25)]
+glm<-glm(HPARN ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HPARN)
 summary(glm)
 Anova (glm)
-AIC(glm) #459
+#cardyear: not sig, week and treat: sig
+AIC(glm) #703
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.46)
+#results: no sig diff btw cards (p=.06)
 
 #HVAR
-HVAR<-insects_all[c(1:5,18,25)]
-glm<-glm(HVAR ~ CARD + week + TREAT + offset(TRAPS), data=HVAR)
+HVAR<-old20_old21[c(1:5,18,25)]
+glm<-glm(HVAR ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HVAR)
 summary(glm)
 Anova (glm)
-AIC(glm) #811
+#all sig
+AIC(glm) #1273
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.0009)
+#results: no sig diff btw cards (p<0.0001)
 
 #PQUA
-PQUA<-insects_all[c(1:5,19,25)]
-glm<-glm(PQUA ~ CARD + week + TREAT + offset(TRAPS), data=PQUA)
+PQUA<-old20_old21[c(1:5,19,25)]
+glm<-glm(PQUA ~ CARDYEAR + week + TREAT + offset(TRAPS), data=PQUA)
 summary(glm)
 Anova (glm)
-AIC(glm) #822
+#cardyear: not sig, week and treat: sig
+AIC(glm) #1503
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.24)
+#results: no sig diff btw cards (p=.37)
 
 #CANTHARID
-CANTHARID<-insects_all[c(1:5,20,25)]
-glm<-glm(CANTHARID ~ CARD + week + TREAT + offset(TRAPS), data=CANTHARID)
+CANTHARID<-old20_old21[c(1:5,20,25)]
+glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CANTHARID)
 summary(glm)
 Anova (glm)
-AIC(glm) #1526
+#all sig
+AIC(glm) #2836
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.23)
+#results: no sig diff btw cards (p=.0002)
 
 #LAMPY
-LAMPY<-insects_all[c(1:5,21,25)]
-glm<-glm(LAMPY ~ CARD + week + TREAT + offset(TRAPS), data=LAMPY)
+LAMPY<-old20_old21[c(1:5,21,25)]
+glm<-glm(LAMPY ~ CARDYEAR + week + TREAT + offset(TRAPS), data=LAMPY)
 summary(glm)
 Anova (glm)
-AIC(glm) #1686
+#all sig
+AIC(glm) #2821
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.38)
+#results: no sig diff btw cards (p<0.0001)
 
 #LCW
-LCW<-insects_all[c(1:5,22,25)]
-glm<-glm(LCW ~ CARD + week + TREAT + offset(TRAPS), data=LCW)
+LCW<-old20_old21[c(1:5,22,25)]
+glm<-glm(LCW ~ CARDYEAR + week + TREAT + offset(TRAPS), data=LCW)
 summary(glm)
 Anova (glm)
-AIC(glm) #1519
+#all sig
+AIC(glm) #2479
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.01)
+#results: no sig diff btw cards (p<0.0001)
 
 #MECOP
-MECOP<-insects_all[c(1:5,23,25)]
-glm<-glm(MECOP ~ CARD + week + TREAT + offset(TRAPS), data=MECOP)
+MECOP<-old20_old21[c(1:5,23,25)]
+glm<-glm(MECOP ~ CARDYEAR + week + TREAT + offset(TRAPS), data=MECOP)
 summary(glm)
 Anova (glm)
-AIC(glm) #1614
+#all sig
+AIC(glm) #2406
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.62)
+#results: no sig diff btw cards (p=0.0058)
 
 #X20SPOT
-X20SPOT<-insects_all[c(1:5,24,25)]
-glm<-glm(X20SPOT ~ CARD + week + TREAT + offset(TRAPS), data=X20SPOT)
+X20SPOT<-old20_old21[c(1:5,24,25)]
+glm<-glm(X20SPOT ~ CARDYEAR + week + TREAT + offset(TRAPS), data=X20SPOT)
 summary(glm)
 Anova (glm)
-AIC(glm) #211
+#all sig
+AIC(glm) #2265
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
-#results: no sig diff btw cards (p=.44)
+#results: no sig diff btw cards (p<0.0001)
+
+##
+
+#Examining individual taxa for New 2021 and New 2022
+
+#pull out that data  
+new21 <- insects_all[which(insects_all$CARDYEAR=="New21"),] 
+new22 <- insects_all[which(insects_all$CARDYEAR=="New22"),] 
+#combine
+library (plyr)
+new21_new22 <- rbind.fill (new21, new22)
+
+#calculate taxa abundance
+colSums(new21_new22[,6:24])
+
+#ABIPN
+ABIPN<-new21_new22[c(1:6,25)]
+ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(TRAPS), data=ABIPN)
+summary(ABIPN.glm)
+Anova (ABIPN.glm)
+#all sig
+AIC(ABIPN.glm) #513
+#pairwise comparison 
+ABIPN.emm<-emmeans(ABIPN.glm,pairwise~CARDYEAR)
+ABIPN.emm
+#results: sig diff btw cards (p<0.0001)
+###THIS DOESN'T MAKE SENSE BECAUSE WE CAUGHT ZERO^
+
+#BURSI
+BURSI<-new21_new22[c(1:5,7,25)]
+BURSI.glm<-glm(BURSI ~ CARDYEAR + week + TREAT + offset(TRAPS), data=BURSI)
+summary(BURSI.glm)
+Anova (BURSI.glm)
+#cardyear: all sig
+AIC(BURSI.glm) #582
+#pairwise comparison 
+BURSI.emm<-emmeans(BURSI.glm,pairwise~CARDYEAR)
+BURSI.emm
+#results: sig diff btw cards (p<0.0001)
+
+#C7
+C7<-new21_new22[c(1:5,8,25)]
+C7.glm<-glm(C7 ~ CARDYEAR + week + TREAT + offset(TRAPS), data=C7)
+summary(C7.glm)
+Anova (C7.glm)
+#cardyear: not sig, week and treat: sig
+AIC(C7.glm) #1750
+#pairwise comparison 
+C7.emm<-emmeans(C7.glm,pairwise~CARDYEAR)
+C7.emm
+#results: no sig diff btw cards (0.78)
+
+#CMAC
+CMAC<-new21_new22[c(1:5,9,25)]
+glm<-glm(CMAC ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CMAC)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #1080
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (0.002)
+
+#CSTIG
+CSTIG<-new21_new22[c(1:5,10,25)]
+glm<-glm(CSTIG ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CSTIG)
+summary(glm)
+Anova(glm)
+#all sig
+AIC(glm) #558
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#CTRIF
+CTRIF<-new21_new22[c(1:5,11,25)]
+glm<-glm(CTRIF ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CTRIF)
+summary(glm)
+Anova (glm)
+#cardyear: all aig
+AIC(glm) #513
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+###THIS DOESN'T MAKE SENSE BECAUSE WE CAUGHT ZERO^
+
+#CYCSP
+CYCSP<-new21_new22[c(1:5,12,25)]
+glm<-glm(CYCSP ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CYCSP)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #729
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#H13
+H13<-new21_new22[c(1:5,13,25)]
+glm<-glm(H13 ~ CARDYEAR + week + TREAT + offset(TRAPS), data=H13)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #655
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#HAXY
+HAXY<-new21_new22[c(1:5,14,25)]
+glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HAXY)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #1842
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#HCONV
+HCONV<-new21_new22[c(1:5,15,25)]
+glm<-glm(HCONV ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HCONV)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #659
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#HGLAC
+HGLAC<-new21_new22[c(1:5,16,25)]
+glm<-glm(HGLAC ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HGLAC)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #520
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#HPARN
+HPARN<-new21_new22[c(1:5,17,25)]
+glm<-glm(HPARN ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HPARN)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #573
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#HVAR
+HVAR<-new21_new22[c(1:5,18,25)]
+glm<-glm(HVAR ~ CARDYEAR + week + TREAT + offset(TRAPS), data=HVAR)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #660
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
+
+#PQUA
+PQUA<-new21_new22[c(1:5,19,25)]
+glm<-glm(PQUA ~ CARDYEAR + week + TREAT + offset(TRAPS), data=PQUA)
+summary(glm)
+Anova (glm)
+#cardyear: not sig, week and treat: sig
+AIC(glm) #946
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=.099)
+
+#CANTHARID
+CANTHARID<-new21_new22[c(1:5,20,25)]
+glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(TRAPS), data=CANTHARID)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #1656
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p=.0012)
+
+#LAMPY
+LAMPY<-new21_new22[c(1:5,21,25)]
+glm<-glm(LAMPY ~ CARDYEAR + week + TREAT + offset(TRAPS), data=LAMPY)
+summary(glm)
+Anova (glm)
+#cardyear and treat: no sig, week: sig
+AIC(glm) #2010
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=0.37)
+
+#LCW
+LCW<-new21_new22[c(1:5,22,25)]
+glm<-glm(LCW ~ CARDYEAR + week + TREAT + offset(TRAPS), data=LCW)
+summary(glm)
+Anova (glm)
+#cardyear: not sig, week and treat: sig
+AIC(glm) #1224
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=0.69)
+
+#MECOP
+MECOP<-new21_new22[c(1:5,23,25)]
+glm<-glm(MECOP ~ CARDYEAR + week + TREAT + offset(TRAPS), data=MECOP)
+summary(glm)
+Anova (glm)
+#cardyear: not sig, week and treat: sig
+AIC(glm) #1549
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: no sig diff btw cards (p=0.70)
+
+#X20SPOT
+X20SPOT<-new21_new22[c(1:5,24,25)]
+glm<-glm(X20SPOT ~ CARDYEAR + week + TREAT + offset(TRAPS), data=X20SPOT)
+summary(glm)
+Anova (glm)
+#all sig
+AIC(glm) #560
+#pairwise comparison 
+emm<-emmeans(glm,pairwise~CARDYEAR)
+emm
+#results: sig diff btw cards (p<0.0001)
