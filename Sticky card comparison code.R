@@ -681,20 +681,20 @@ library (BiodiversityR)
 library(ggplot2)
 
 #individual curves for each trap (card) type
-new.com.matrix<-new[c(8:32)]
+new.com.matrix<-new[c(5:29)]
 new_curve<-accumresult(new.com.matrix, method = "exact", permutations = 1000)
 
-old.com.matrix<-old[c(8:32)]
+old.com.matrix<-old[c(5:29)]
 old_curve<-accumresult(old.com.matrix, method = "exact", permutations = 1000)
 
 #first-order jackknife estimates are based on the number of singletons
 #second-order jackknife estimates are based on the number of singletons and doubletons
 
 #calculates species richness for each sample
-specnumber(com.matrix) #ranges from 1 to 8?
+specnumber(com.matrix) #ranges from 1 to 12
 
 #calculates species richness by treatment (CARD)
-specnumber(com.matrix, groups = insects$CARD) #new=21; sticky=21
+specnumber(com.matrix, groups = insects21$CARD) #new=21; old=21
 
 #total richness and jackknife
 rich <- diversityresult(com.matrix, y=NULL, index = "richness")
@@ -781,6 +781,16 @@ insects_all$STATION <- as.factor(insects_all$STATION)
 str(insects_all)
 summary(insects_all)
 
+#calculate total abundance from all three years (of field collected data)
+colSums(insects_all[,6:24])
+
+#2020 abundance
+old20 <- insects_all[which(insects_all$CARDYEAR=="Old20"),]
+colSums(old20[,6:24])
+
+#2022 abundance
+new22 <- insects_all[which(insects_all$CARDYEAR=="New22"),] 
+colSums(new22[,6:24])
 
 ##Old20 and Old21
 
