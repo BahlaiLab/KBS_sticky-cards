@@ -1674,8 +1674,13 @@ emm<-emmeans(glm,pairwise~CARDYEAR)
 emm
 #results: no sig diff btw cards (p=0.99)
 
+###
+
+#for paper
+
+#Doesn't work ...
 #merge all 3 NMDSs
-pdf("combined NMDSs.pdf", height=6.5, width=13)
+pdf("combined NMDSs.pdf", height=10, width=13)
 par(mfrow=c(1,3), mar=c(4.1, 4.8, 1.5, 8.1),xpd=TRUE) 
 
 plot(NMDS21, disp='sites', type="n")
@@ -1684,7 +1689,7 @@ ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", co
 ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
-legend(0.99,1.39, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards 2021", "New cards 2021"))
+legend(0.99,1.39, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("2021 Old cards", "2021 New cards"))
 
 plot(NMDSold, disp='sites', type="n")
 title(main="B", adj = 0.01, line = -2, cex.main=2.5)
