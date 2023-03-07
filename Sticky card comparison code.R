@@ -38,7 +38,7 @@ ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", co
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
 #add legend
-legend(0.99,1.39, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("Old cards 2021", "New cards 2021"))
+legend(0.833,1.395, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("2021 Old cards", "2021 New cards"))
 
 #bootstrapping and testing for differences between the groups (cards)
 fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
@@ -259,7 +259,7 @@ influenceIndexPlot(diversity.model, vars = c("Cook"), id = list(n = 3))
 #
 
 #evenness
-##AIC -79
+##AIC Inf
 evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects21, family = poisson)
 summary(evenness.model)
 Anova(evenness.model)
@@ -480,7 +480,7 @@ AIC(glm) #1344
 #pairwise comparison 
 emm<-emmeans(glm,pairwise~CARD)
 emm
-#results: sig diff btw cards (p=.05) -> Anova says 0.049 and significant
+#results: sig diff btw cards? (p=.05) -> Anova says 0.049 and significant
 
 #HCONV
 HCONV<-insects21[c(1:4,14,30)]
