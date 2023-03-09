@@ -1356,7 +1356,7 @@ ordiellipse(NMDSnew, env.matrix$CARDYEAR, draw="polygon", col="#009E73",kind="sd
 points(NMDSnew, display="sites", select=which(env.matrix$CARDYEAR=="New21"),pch=17, col="#009E73")
 points(NMDSnew, display="sites", select=which(env.matrix$CARDYEAR=="New22"),pch=18, col="#00c690")
 #add legend
-legend(0.905,1.393, title=NULL, pch=c(17,18), col=c("#009E73", "#00c690"), cex=1.2, legend=c("2021 New cards", "2022 New cards"))
+legend(0.86,1.363, title=NULL, pch=c(17,18), col=c("#009E73", "#00c690"), cex=1.2, legend=c("2021 New cards", "2022 New cards"))
 
 #bootstrapping and testing for differences between the groups (cardyear)
 fit<-adonis2(com.matrix ~ CARDYEAR, data = env.matrix, permutations = 999, method="bray")
