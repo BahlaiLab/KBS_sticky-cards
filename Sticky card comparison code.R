@@ -26,7 +26,6 @@ com.matrix<-insects21[c(5:29)]
 
 #ordination by NMDS
 NMDS21<-metaMDS(com.matrix, distance="bray", k=2, autotransform=TRUE, trymax=300) #stress=.23
-#NMDS<-metaMDS(com.matrix, distance="bray", k=2, autotransform=FALSE, trymax=100) #stress=.06 -- no convergence
 NMDS21
 
 #NMDS visualization
