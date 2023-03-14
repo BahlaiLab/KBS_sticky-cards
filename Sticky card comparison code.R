@@ -3,8 +3,6 @@
 #bring in data
 insects21 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_for_analyses.csv", na.strings = NULL)
 
-insects21 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_for_analyses_change%20to%20Leps.csv", na.strings = NULL)
-
 #change week, CARD, TREAT, and STATION to factor
 insects21$week <- as.factor(insects21$week)
 insects21$CARD <- as.factor(insects21$CARD)
@@ -38,7 +36,7 @@ ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", co
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
 #add legend
-legend(0.833,1.395, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("2021 Old cards", "2021 New cards"))
+legend(0.933,1.399, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("2021 Old cards", "2021 New cards"))
 
 #bootstrapping and testing for differences between the groups (cards)
 fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
@@ -49,7 +47,7 @@ fit
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARD))
-#P-value = 0.6973 -- cannot assume homogeneity of multivariate dispersion
+#P-value = 0.5337 -- cannot assume homogeneity of multivariate dispersion
 
 #
 
@@ -106,10 +104,6 @@ insects21$abundance <- insects.abun
 #calculate Shannon diversity
 diversity <-diversity(insects21[,5:29])
 insects21$diversity <-diversity
-
-#calculate Evenness
-evenness <-diversity/log(specnumber(insects21[,5:29]))
-insects21$evenness <- evenness
 
 ###
 #Generalized linear models
@@ -241,44 +235,6 @@ densityPlot(rstudent(diversity.model)) # check density estimate of the distribut
 outlierTest(diversity.model)
 influenceIndexPlot(diversity.model, vars = c("Cook"), id = list(n = 3))
 
-#
-
-#evenness
-##AIC Infinite
-evenness.model<-glm(evenness ~ CARD + week + TREAT + offset(TRAPS), data=insects21, family = poisson)
-summary(evenness.model)
-Anova(evenness.model)
-#card and week: not sig, treat: sig
-#results: no sig diff btw cards (p = 0.64)
-AIC(evenness.model)
-
-#check assumptions
-dotchart(insects21$evenness, main = "evenness", group = insects21$CARD) # way to visualize outliers
-
-with(insects21, ad.test(evenness)) #Anderson-darling test for normality (good for small sample sizes), low p-value means assumption is violated
-#p-value = 0.02624
-
-with(insects21, bartlett.test(evenness ~ CARD)) #Bartlett test for homogeneity of variance, low p-value means assumption is violated
-#p-value = 0.8218
-
-plot(evenness.model) # check distribution of residuals
-
-# check normality with these figures, are there outliers at either end
-qqnorm(resid(evenness.model))
-qqline(resid(evenness.model))
-
-plot(simulateResiduals(evenness.model)) # another way to check for normality and homogeneity of variance
-#KS test: p = SIG
-#dispersion test: p = SIG
-#outlier test: p = 
-#no significant problems detected 
-
-densityPlot(rstudent(evenness.model)) # check density estimate of the distribution of residuals
-
-# check for outliers influencing the data
-outlierTest(evenness.model)
-influenceIndexPlot(evenness.model, vars = c("Cook"), id = list(n = 3))
-
 ###
 library(ggplot2)
 
@@ -319,27 +275,15 @@ diversity.plot<-ggplot(insects21, aes(x = factor(CARD), y = diversity, fill=CARD
                     labels=c("Old cards 2021", "New cards 2021"))
 diversity.plot
 
-#evenness by card type
-evenness.plot<-ggplot(insects21, aes(x = factor(CARD), y = evenness, fill=CARD))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(legend.position="bottom")+
-  labs(title="", x="", y="Evenness")+
-  #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
-                    breaks=c("Old21", "New21"),
-                    labels=c("Old cards 2021", "New cards 2021"))
-evenness.plot
-
 #
 #mush together plots
 library(ggpubr) 
-boxplot_2021 <- ggarrange(richness.plot, abundance.plot, diversity.plot, evenness.plot, 
-                              ncol = 2, nrow = 2,
+boxplot_2021 <- ggarrange(richness.plot, abundance.plot, diversity.plot, 
+                              ncol = 3, nrow = 1,
                               common.legend = TRUE, legend = "bottom")
 boxplot_2021
 
-pdf("boxplot_2021.pdf", height=8, width=8) #height and width in inches
+pdf("boxplot_2021.pdf", height=5, width=8) #height and width in inches
 boxplot_2021
 dev.off()
 
@@ -888,10 +832,6 @@ old20_old21$abundance <- insects.abun
 diversity <-diversity(old20_old21[,6:24])
 old20_old21$diversity <-diversity
 
-#calculate Evenness
-evenness <-diversity/log(specnumber(old20_old21[,6:24]))
-old20_old21$evenness <- evenness
-
 #Generalized linear models
 library (car) #Anova 
 
@@ -922,15 +862,6 @@ Anova(diversity.model)
 #all sig
 #results: sig diff btw cards (p=0.0001)
 AIC(diversity.model)
-
-#evenness
-##AIC Infinite
-evenness.model<-glm(evenness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=old20_old21, family = poisson)
-summary(evenness.model)
-Anova(evenness.model)
-#CARDYEAR: not sig, treatment and week: sig
-#results: no sig diff btw cards (0.89)
-AIC(evenness.model)
 
 ##
 
@@ -971,28 +902,15 @@ diversity.plot<-ggplot(old20_old21, aes(x = factor(CARDYEAR), y = diversity, fil
                     labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
 diversity.plot
 
-#CARDYEAR evenness by card type
-evenness.plot<-ggplot(old20_old21, aes(x = factor(CARDYEAR), y = evenness, fill=CARDYEAR))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(legend.position="bottom")+
-  labs(title="", x="", y="Evenness")+
-  #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="Card:",
-                    breaks=c("Old20", "Old21", "New21", "New22"),
-                    labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
-evenness.plot
-
 #
 #mush together plots
 library(ggpubr) 
-oldcard_boxplot <- ggarrange(richness.plot, abundance.plot, diversity.plot, evenness.plot, 
-                                ncol = 2, nrow = 2,
+oldcard_boxplot <- ggarrange(richness.plot, abundance.plot, diversity.plot, 
+                                ncol = 3, nrow = 1,
                                 common.legend = TRUE, legend = "bottom")
-#oldcard_boxplot2 <- annotate_figure(oldcard_boxplot, top = text_grob("Old cards between years", 
-                                      #color = "black", face = "bold", size = 13))
+oldcard_boxplot
 
-pdf("oldcard_boxplot.pdf", height=8, width=8) #height and width in inches
+pdf("oldcard_boxplot.pdf", height=5, width=8) #height and width in inches
 oldcard_boxplot
 dev.off()
 
@@ -1366,7 +1284,7 @@ fit
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARDYEAR))
-#P-value = .5 -- cannot assume homogeneity of multivariate dispersion
+#P-value = .5006 -- cannot assume homogeneity of multivariate dispersion
 
 ##
 
@@ -1382,10 +1300,6 @@ new21_new22$abundance <- insects.abun
 diversity <-diversity(new21_new22[,6:24])
 new21_new22$diversity <-diversity
 
-#calculate Evenness
-evenness <-diversity/log(specnumber(new21_new22[,6:24]))
-new21_new22$evenness <- evenness
-
 #Generalized linear models for New cards
 library (car) #Anova 
 
@@ -1397,8 +1311,6 @@ Anova (richness.model)
 #CARDYEAR: not sig , week and treatment: sig
 #results: no sig diff btw cards (p=0.28)
 AIC(richness.model)
-
-#
 
 #abundance
 ##AIC 2695
@@ -1417,15 +1329,6 @@ Anova(diversity.model)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(diversity.model)
-
-#evenness
-##AIC Inf
-evenness.model<-glm(evenness ~ CARDYEAR + week + TREAT + offset(TRAPS), data=new21_new22, family = poisson)
-summary(evenness.model)
-Anova(evenness.model)
-#CARDYEAR and week: not sig, treatment: sig
-#results: no sig diff btw cards (0.13)
-AIC(evenness.model)
 
 ##
 
@@ -1466,27 +1369,15 @@ diversity.plot<-ggplot(new21_new22, aes(x = factor(CARDYEAR), y = diversity, fil
                     labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
 diversity.plot
 
-#CARDYEAR evenness by card type
-evenness.plot<-ggplot(new21_new22, aes(x = factor(CARDYEAR), y = evenness, fill=CARDYEAR))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(legend.position="bottom")+
-  labs(title="", x="", y="Evenness")+
-  #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00","#009E73","#00c690"),name="Card:",
-                    breaks=c("Old20", "Old21", "New21", "New22"),
-                    labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
-evenness.plot
-
 #
 #mush together plots
 library(ggpubr) 
-newcard_boxplot <- ggarrange(richness.plot, abundance.plot, diversity.plot, evenness.plot, 
-                             ncol = 2, nrow = 2,
+newcard_boxplot <- ggarrange(richness.plot, abundance.plot, diversity.plot, 
+                             ncol = 3, nrow = 1,
                              common.legend = TRUE, legend = "bottom")
 newcard_boxplot
 
-pdf("newcard_boxplot.pdf", height=8, width=8) #height and width in inches
+pdf("newcard_boxplot.pdf", height=5, width=8) #height and width in inches
 newcard_boxplot
 dev.off()
 
