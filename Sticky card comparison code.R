@@ -245,9 +245,9 @@ richness.plot<-ggplot(insects21, aes(x = factor(CARD), y = richness, fill=CARD))
   theme(legend.position="bottom")+
   labs(title="", x="", y="Richness")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
-                    breaks=c("Old21", "New21"),
-                    labels=c("Old cards 2021", "New cards 2021"))
+  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
+                    breaks=c("New21", "Old21"),
+                    labels=c("New cards 2021", "Old cards 2021"))
 richness.plot
 
 #abundance by card type
@@ -258,9 +258,9 @@ abundance.plot<-ggplot(insects21, aes(x = factor(CARD), y = abundance, fill=CARD
   labs(title="", x="", y="Abundance (log10)")+
   scale_y_continuous(trans="log10")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
-                    breaks=c("Old21", "New21"),
-                    labels=c("Old cards 2021", "New cards 2021"))
+  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
+                    breaks=c("New21", "Old21"),
+                    labels=c("New cards 2021", "Old cards 2021"))
 abundance.plot
 
 #diveristy by card type
@@ -270,9 +270,9 @@ diversity.plot<-ggplot(insects21, aes(x = factor(CARD), y = diversity, fill=CARD
   theme(legend.position="bottom")+
   labs(title="", x="", y="Shannon diversity")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card type:",
-                    breaks=c("Old21", "New21"),
-                    labels=c("Old cards 2021", "New cards 2021"))
+  scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
+                    breaks=c("New21", "Old21"),
+                    labels=c("New cards 2021", "Old cards 2021"))
 diversity.plot
 
 #
@@ -298,6 +298,10 @@ old <- insects21[which(insects21$CARD=="Old21"),]
 new <- insects21[which(insects21$CARD=="New21"),] 
 colSums(old[,5:29])
 colSums(new[,5:29])
+
+#traps per card type
+colSums(old[,29:30]) #912 traps
+colSums(new[,29:30]) #606 traps
 
 #ABIPN
 ABIPN<-insects21[c(1:5,30)]
@@ -928,6 +932,10 @@ colSums(old20_old21[,6:24]) #all old cards
 colSums(old20[,6:24]) #2020 old cards
 colSums(old21[,6:24]) #2021 old cards
 
+#traps per card type
+colSums(old20[,24:25]) #1730 traps
+colSums(old21[,24:25]) #912 traps
+
 #ABIPN
 ABIPN<-old20_old21[c(1:6,25)]
 ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(TRAPS), data=ABIPN, family=poisson)
@@ -1397,6 +1405,10 @@ colSums(new21_new22[,6:24]) #all new cards
 colSums(new21[,6:24]) #2021 new cards
 colSums(new22[,6:24]) #2022 new cards
 
+#traps per card type
+colSums(new21[,24:25]) #606 traps
+colSums(new22[,24:25]) #1113 traps
+
 #ABIPN
 ABIPN<-new21_new22[c(1:6,25)]
 ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(TRAPS), data=ABIPN, family=poisson)
@@ -1700,16 +1712,8 @@ MECOP.plot
 
 #Doesn't work ...
 #merge all 3 NMDSs
-pdf("combined NMDSs.pdf", height=10, width=13)
-par(mfrow=c(1,3), mar=c(4.1, 4.8, 1.5, 8.1),xpd=TRUE) 
-
-plot(NMDS21, disp='sites', type="n")
-title(main="A", adj = 0.01, line = -2, cex.main=2.5)
-ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
-ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
-points(NMDS21, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
-points(NMDS21, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
-legend(0.99,1.39, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("2021 Old cards", "2021 New cards"))
+pdf("combined NMDSs.pdf", height=12, width=12)
+par(mfrow=c(1,3), mar=c(5.1, 4.1, 4.1, 2.1),xpd=TRUE) 
 
 plot(NMDSold, disp='sites', type="n")
 title(main="B", adj = 0.01, line = -2, cex.main=2.5)
@@ -1718,6 +1722,14 @@ ordiellipse(NMDSold, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd
 points(NMDSold, display="sites", select=which(env.matrix$CARDYEAR=="Old21"),pch=19, col="#E69F00")
 points(NMDSold, display="sites", select=which(env.matrix$CARDYEAR=="Old20"),pch=15, col="#ffba21")
 legend(0.97,1.78, title=NULL, pch=c(15,19), col=c("#ffba21", "#E69F00"), cex=1.2, legend=c("2020 Old cards", "2021 Old cards"))
+
+plot(NMDS21, disp='sites', type="n")
+title(main="A", adj = 0.01, line = -2, cex.main=2.5)
+ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
+ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
+points(NMDS21, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
+points(NMDS21, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
+legend(0.99,1.39, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("2021 Old cards", "2021 New cards"))
 
 plot(NMDSnew, disp='sites', type="n")
 title(main="C", adj = 0.01, line = -2, cex.main=2.5)
@@ -1729,6 +1741,19 @@ legend(0.905,1.393, title=NULL, pch=c(17,18), col=c("#009E73", "#00c690"), cex=1
 dev.off()
 ###
 
+#merge all boxplots
+library(ggpubr) 
+all_boxplots <- ggarrange(oldcard_boxplot, boxplot_2021, newcard_boxplot, 
+                             ncol = 1, nrow = 3,
+                            labels = c("A", "B", "C"),
+                             common.legend = TRUE, legend = "bottom")
+all_boxplots
+
+pdf("all_boxplots.pdf", height=8, width=8) #height and width in inches
+all_boxplots
+dev.off()
+
+#######
 
 ###All years combined -- not using
 
