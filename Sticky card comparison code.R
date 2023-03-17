@@ -246,8 +246,8 @@ richness.plot<-ggplot(insects21, aes(x = factor(CARD), y = richness, fill=CARD))
   labs(title="", x="", y="Richness")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
-                    breaks=c("New21", "Old21"),
-                    labels=c("New cards 2021", "Old cards 2021"))
+                    breaks=c("Old21", "New21"),
+                    labels=c("Old cards 2021", "New cards 2021"))
 richness.plot
 
 #abundance by card type
@@ -259,8 +259,8 @@ abundance.plot<-ggplot(insects21, aes(x = factor(CARD), y = abundance, fill=CARD
   scale_y_continuous(trans="log10")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
-                    breaks=c("New21", "Old21"),
-                    labels=c("New cards 2021", "Old cards 2021"))
+                    breaks=c("Old21", "New21"),
+                    labels=c("Old cards 2021", "New cards 2021"))
 abundance.plot
 
 #diveristy by card type
@@ -271,8 +271,8 @@ diversity.plot<-ggplot(insects21, aes(x = factor(CARD), y = diversity, fill=CARD
   labs(title="", x="", y="Shannon diversity")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
-                    breaks=c("New21", "Old21"),
-                    labels=c("New cards 2021", "Old cards 2021"))
+                    breaks=c("Old21", "New21"),
+                    labels=c("Old cards 2021", "New cards 2021"))
 diversity.plot
 
 #
@@ -1130,7 +1130,7 @@ CSTIG.plot<-ggplot(CSTIG, aes(x = CARDYEAR, y = CSTIG, fill=CARDYEAR))+
                     labels=c("Old cards 2020", "Old cards 2021"))
 CSTIG.plot
 
-HAXY.plot<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
+HAXY.plot_old<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
@@ -1139,7 +1139,7 @@ HAXY.plot<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
-HAXY.plot
+HAXY.plot_old
 
 HCONV.plot<-ggplot(HCONV, aes(x = CARDYEAR, y = HCONV, fill=CARDYEAR))+
   geom_boxplot()+
@@ -1185,7 +1185,7 @@ X20SPOT.plot<-ggplot(X20SPOT, aes(x = CARDYEAR, y = X20SPOT, fill=CARDYEAR))+
                     labels=c("Old cards 2020", "Old cards 2021"))
 X20SPOT.plot
 
-CANTHARID.plot<-ggplot(CANTHARID, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
+CANTHARID.plot_old<-ggplot(CANTHARID, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
@@ -1194,7 +1194,7 @@ CANTHARID.plot<-ggplot(CANTHARID, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
-CANTHARID.plot
+CANTHARID.plot_old
 
 LAMPY.plot<-ggplot(LAMPY, aes(x = CARDYEAR, y = LAMPY, fill=CARDYEAR))+
   geom_boxplot()+
@@ -1369,7 +1369,7 @@ abundance.plot<-ggplot(new21_new22, aes(x = factor(CARDYEAR), y = abundance, fil
                     labels=c("Old cards 2020", "Old cards 2021", "New cards 2021", "New cards 2022"))
 abundance.plot
 
-#CARDYEAR diveristy by card type
+#CARDYEAR diversity by card type
 diversity.plot<-ggplot(new21_new22, aes(x = factor(CARDYEAR), y = diversity, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
@@ -1580,7 +1580,6 @@ AIC(glm) #114
 ###
 
 #Plots of taxa that were significantly different
-# NEED TO EDIT TO BE FOR NEW CARDS
 
 CMAC.plot<-ggplot(CMAC, aes(x = CARDYEAR, y = CMAC, fill=CARDYEAR))+
   geom_boxplot()+
@@ -1589,7 +1588,7 @@ CMAC.plot<-ggplot(CMAC, aes(x = CARDYEAR, y = CMAC, fill=CARDYEAR))+
   labs(title="", x="", y="Colemegilla maculata")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
-                    breaks=c("New21, "New22"),
+                    breaks=c("New21", "New22"),
                     labels=c("New cards 2021", "New cards 2022"))
 CMAC.plot
 
@@ -1599,32 +1598,21 @@ H13.plot<-ggplot(H13, aes(x = CARDYEAR, y = H13, fill=CARDYEAR))+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia tredecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("New21, "New22"),
-                    labels=c("New cards 2021", "New cards 2022"))
+  scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
+                             breaks=c("New21", "New22"),
+                             labels=c("New cards 2021", "New cards 2022"))
 H13.plot
 
-HAXY.plot<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
+HAXY.plot_new<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Harmonia axyridis")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-HAXY.plot
-
-HCONV.plot<-ggplot(HCONV, aes(x = CARDYEAR, y = HCONV, fill=CARDYEAR))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia convergens")+
-  #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-HCONV.plot
+  scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
+                    breaks=c("New21", "New22"),
+                    labels=c("New cards 2021", "New cards 2022"))
+HAXY.plot_new
 
 HPARN.plot<-ggplot(HPARN, aes(x = CARDYEAR, y = HPARN, fill=CARDYEAR))+
   geom_boxplot()+
@@ -1632,43 +1620,32 @@ HPARN.plot<-ggplot(HPARN, aes(x = CARDYEAR, y = HPARN, fill=CARDYEAR))+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia parenthesiS")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
+  scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
+                    breaks=c("New21", "New22"),
+                    labels=c("New cards 2021", "New cards 2022"))
 HPARN.plot
 
-HVAR.plot<-ggplot(HVAR, aes(x = CARDYEAR, y = HVAR, fill=CARDYEAR))+
+PQUA.plot<-ggplot(PQUA, aes(x = CARDYEAR, y = PQUA, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia variegata")+
+  labs(title="", x="", y="Propylea quatuordecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-HVAR.plot
+  scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
+                    breaks=c("New21", "New22"),
+                    labels=c("New cards 2021", "New cards 2022"))
+PQUA.plot
 
-X20SPOT.plot<-ggplot(X20SPOT, aes(x = CARDYEAR, y = X20SPOT, fill=CARDYEAR))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(legend.position="bottom")+
-  labs(title="", x="", y="Psyllobora virgintimaculata")+
-  #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-X20SPOT.plot
-
-CANTHARID.plot<-ggplot(CANTHARID, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
+CANTHARID.plot_new<-ggplot(CANTHARID, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Cantharidae")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-CANTHARID.plot
+  scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
+                    breaks=c("New21", "New22"),
+                    labels=c("New cards 2021", "New cards 2022"))
+CANTHARID.plot_new
 
 LAMPY.plot<-ggplot(LAMPY, aes(x = CARDYEAR, y = LAMPY, fill=CARDYEAR))+
   geom_boxplot()+
@@ -1676,32 +1653,10 @@ LAMPY.plot<-ggplot(LAMPY, aes(x = CARDYEAR, y = LAMPY, fill=CARDYEAR))+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Lampyridae")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
+  scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
+                    breaks=c("New21", "New22"),
+                    labels=c("New cards 2021", "New cards 2022"))
 LAMPY.plot
-
-LCW.plot<-ggplot(LCW, aes(x = CARDYEAR, y = LCW, fill=CARDYEAR))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(legend.position="bottom")+
-  labs(title="", x="", y="Chrysopidae and Hemerobiidae")+
-  #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-LCW.plot
-
-MECOP.plot<-ggplot(MECOP, aes(x = CARDYEAR, y = MECOP, fill=CARDYEAR))+
-  geom_boxplot()+
-  theme_bw()+
-  theme(legend.position="bottom")+
-  labs(title="", x="", y="Mecoptera")+
-  #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-MECOP.plot
 
 ##
 
@@ -1748,6 +1703,18 @@ all_boxplots
 
 pdf("all_boxplots.pdf", height=8, width=8) #height and width in inches
 all_boxplots
+dev.off()
+
+#indivdual taxa for poster
+ind_boxplots <- ggarrange(HAXY.plot_old, HAXY.plot, HAXY.plot_new,
+                          CANTHARID.plot_old, CANTHARID.plot, CANTHARID.plot_new,
+                          ncol = 3, nrow = 2,
+                          labels = c("A", "B", "C", "D", "E", "F"),
+                          common.legend = TRUE, legend = "bottom")
+ind_boxplots
+
+pdf("individual taxa boxplots.pdf", height=8, width=8) #height and width in inches
+ind_boxplots
 dev.off()
 
 #######
