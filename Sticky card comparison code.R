@@ -1588,21 +1588,21 @@ CMAC.plot<-ggplot(CMAC, aes(x = CARDYEAR, y = CMAC, fill=CARDYEAR))+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Colemegilla maculata")+
   #theme (plot.title = element_text(hjust=0.5))+
-  scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
+  scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
+                    breaks=c("New21, "New22"),
+                    labels=c("New cards 2021", "New cards 2022"))
 CMAC.plot
 
-CSTIG.plot<-ggplot(CSTIG, aes(x = CARDYEAR, y = CSTIG, fill=CARDYEAR))+
+H13.plot<-ggplot(H13, aes(x = CARDYEAR, y = H13, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Chilochous stigma")+
+  labs(title="", x="", y="Hippodamia tredecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
-                    breaks=c("Old20", "Old21"),
-                    labels=c("Old cards 2020", "Old cards 2021"))
-CSTIG.plot
+                    breaks=c("New21, "New22"),
+                    labels=c("New cards 2021", "New cards 2022"))
+H13.plot
 
 HAXY.plot<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
   geom_boxplot()+
