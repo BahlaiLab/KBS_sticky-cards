@@ -47,7 +47,10 @@ fit
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARD))
-#P-value = 0.5337 -- cannot assume homogeneity of multivariate dispersion
+#P-value = 0.5337 -- assumes homogeneity of multivariate dispersion
+
+#conclusion: Card types within year present homogeneity among group dispersion (compositions vary similarly) 
+# and not do have significantly different compositions.
 
 #
 
@@ -822,7 +825,10 @@ fit
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARDYEAR))
-#P-value = 2.512e-10 -- assumes homogeneity of multivariate dispersion
+#P-value = 2.512e-10 -- cannont assume homogeneity of multivariate dispersion
+
+#conclusion: Old cards between years present hetrogeneity among group dispersion (compositions vary differently) 
+# and have significantly different compositions.
 
 ###
 
@@ -1296,7 +1302,10 @@ fit
 #P-value greater than 0.05 means assumption has been met
 distances_data<-vegdist(com.matrix)
 anova(betadisper(distances_data, env.matrix$CARDYEAR))
-#P-value = .5006 -- cannot assume homogeneity of multivariate dispersion
+#P-value = .5006 -- assumes homogeneity of multivariate dispersion
+
+#conclusion: new cards between years present homogeneity among group dispersion (compositions vary similarly) 
+# and have significantly different compositions.
 
 ##
 
