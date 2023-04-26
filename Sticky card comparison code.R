@@ -682,7 +682,7 @@ PQUA.plot<-ggplot(PQUA, aes(x = CARD, y = PQUA, fill=CARD))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Propylea quatuordecimpunctata")+
+  labs(title="", x="", y="P. quatuordecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
                     breaks=c("Old21", "New21"),
@@ -715,7 +715,7 @@ LCW.plot<-ggplot(LCW, aes(x = CARD, y = LCW, fill=CARD))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Chrysopidae and Hemerobiidae")+
+  labs(title="", x="", y="Chrysopidae & Hemerobiidae")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#E69F00","#009E73"),name="Card:",
                     breaks=c("Old21", "New21"),
@@ -1169,8 +1169,8 @@ Anova (glm)
 AIC(glm) #49
 
 #HAXY
-HAXY<-old20_old21[c(1:5,14,25)]
-glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HAXY, family=poisson)
+HAXY_old<-old20_old21[c(1:5,14,25)]
+glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HAXY_old, family=poisson)
 summary(glm)
 Anova (glm)
 #all sig
@@ -1223,8 +1223,8 @@ Anova (glm)
 AIC(glm) #857
 
 #CANTHARID
-CANTHARID<-old20_old21[c(1:5,20,25)]
-glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CANTHARID, family=poisson)
+CANTHARID_old<-old20_old21[c(1:5,20,25)]
+glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CANTHARID_old, family=poisson)
 summary(glm)
 Anova (glm)
 #all sig
@@ -1359,7 +1359,7 @@ H13.plot<-ggplot(H13, aes(x = CARDYEAR, y = H13, fill=CARDYEAR))+
                     labels=c("Old cards 2020", "Old cards 2021"))
 H13.plot
 
-HAXY.plot_old<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
+HAXY.plot_old<-ggplot(HAXY_old, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
@@ -1425,7 +1425,7 @@ PQUA.plot<-ggplot(PQUA, aes(x = CARDYEAR, y = PQUA, fill=CARDYEAR))+
                     labels=c("Old cards 2020", "Old cards 2021"))
 PQUA.plot
 
-CANTHARID.plot_old<-ggplot(CANTHARID, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
+CANTHARID.plot_old<-ggplot(CANTHARID_old, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
@@ -1485,8 +1485,8 @@ X20SPOT.plot
 #merge plots
 library (ggpubr)
 taxa.plots_old <-ggarrange(ABIPN.plot, BURSI.plot, C7.plot, CMAC.plot, CSTIG.plot, CTRIF.plot, 
-                           CYCSP.plot, H13.plot, HAXY.plot, HCONV.plot, HGLAC.plot, HPARN.plot, 
-                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot, LAMPY.plot, LCW.plot, MECOP.plot, 
+                           CYCSP.plot, H13.plot, HAXY.plot_old, HCONV.plot, HGLAC.plot, HPARN.plot, 
+                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot_old, LAMPY.plot, LCW.plot, MECOP.plot, 
                             #labels = c("A", "B"),
                             ncol = 5, nrow = 4,
                             common.legend = TRUE, legend = "bottom")
@@ -1735,8 +1735,8 @@ Anova (glm)
 AIC(glm) #165
 
 #HAXY
-HAXY<-new21_new22[c(1:5,14,25)]
-glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HAXY, family=poisson)
+HAXY_new<-new21_new22[c(1:5,14,25)]
+glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HAXY_new, family=poisson)
 summary(glm)
 Anova (glm)
 #all sig
@@ -1789,8 +1789,8 @@ Anova (glm)
 AIC(glm) #471
 
 #CANTHARID
-CANTHARID<-new21_new22[c(1:5,20,25)]
-glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CANTHARID, family=poisson)
+CANTHARID_new<-new21_new22[c(1:5,20,25)]
+glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CANTHARID_new, family=poisson)
 summary(glm)
 Anova (glm)
 #all sig
@@ -1925,7 +1925,7 @@ H13.plot<-ggplot(H13, aes(x = CARDYEAR, y = H13, fill=CARDYEAR))+
                              labels=c("New cards 2021", "New cards 2022"))
 H13.plot
 
-HAXY.plot_new<-ggplot(HAXY, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
+HAXY.plot_new<-ggplot(HAXY_new, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
@@ -1991,7 +1991,7 @@ PQUA.plot<-ggplot(PQUA, aes(x = CARDYEAR, y = PQUA, fill=CARDYEAR))+
                     labels=c("New cards 2021", "New cards 2022"))
 PQUA.plot
 
-CANTHARID.plot_new<-ggplot(CANTHARID, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
+CANTHARID.plot_new<-ggplot(CANTHARID_new, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
@@ -2049,8 +2049,8 @@ X20SPOT.plot
 #merge plots
 library (ggpubr)
 taxa.plots_new <-ggarrange(ABIPN.plot, BURSI.plot, C7.plot, CMAC.plot, CSTIG.plot, CTRIF.plot, 
-                           CYCSP.plot, H13.plot, HAXY.plot, HCONV.plot, HGLAC.plot, HPARN.plot, 
-                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot, LAMPY.plot, LCW.plot, MECOP.plot, 
+                           CYCSP.plot, H13.plot, HAXY.plot_new, HCONV.plot, HGLAC.plot, HPARN.plot, 
+                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot_new, LAMPY.plot, LCW.plot, MECOP.plot, 
                            #labels = c("A", "B"),
                            ncol = 5, nrow = 4,
                            common.legend = TRUE, legend = "bottom")
