@@ -534,10 +534,11 @@ AIC(glm) #65
 ###
 
 #boxplots for individual taxa 2021
+library(ggplot2)
 
 ABIPN.plot<-ggplot(ABIPN, aes(x = CARD, y = ABIPN, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Adalia bipunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -548,7 +549,7 @@ ABIPN.plot
 
 BURSI.plot<-ggplot(BURSI, aes(x = CARD, y = BURSI, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Brachiacantha ursina")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -559,7 +560,7 @@ BURSI.plot
 
 C7.plot<-ggplot(C7, aes(x = CARD, y = C7, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coccinella septempuncata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -570,7 +571,7 @@ C7.plot
 
 CMAC.plot<-ggplot(CMAC, aes(x = CARD, y = CMAC, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coleomegilla maculata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -581,7 +582,7 @@ CMAC.plot
 
 CSTIG.plot<-ggplot(CSTIG, aes(x = CARD, y = CSTIG, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Chilochous stigma")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -592,7 +593,7 @@ CSTIG.plot
 
 CTRIF.plot<-ggplot(CTRIF, aes(x = CARD, y = CTRIF, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coccinella trifasciata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -614,7 +615,7 @@ CYCSP.plot
 
 H13.plot<-ggplot(H13, aes(x = CARD, y = H13, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia tredecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -636,7 +637,7 @@ HAXY.plot
 
 HCONV.plot<-ggplot(HCONV, aes(x = CARD, y = HCONV, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia convergens")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -647,7 +648,7 @@ HCONV.plot
 
 HGLAC.plot<-ggplot(HGLAC, aes(x = CARD, y = HGLAC, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia glacialis")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -658,7 +659,7 @@ HGLAC.plot
 
 HPARN.plot<-ggplot(HPARN, aes(x = CARD, y = HPARN, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia parenthesis")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -680,7 +681,7 @@ HVAR.plot
 
 PQUA.plot<-ggplot(PQUA, aes(x = CARD, y = PQUA, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="P. quatuordecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -702,7 +703,7 @@ CANTHARID.plot
 
 LAMPY.plot<-ggplot(LAMPY, aes(x = CARD, y = LAMPY, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Lampyridae")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -724,7 +725,7 @@ LCW.plot
 
 MECOP.plot<-ggplot(MECOP, aes(x = CARD, y = MECOP, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Mecoptera")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -735,7 +736,7 @@ MECOP.plot
 
 X20SPOT.plot<-ggplot(X20SPOT, aes(x = CARD, y = X20SPOT, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Psyllobora virgintimaculata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -779,7 +780,7 @@ Chalcidoidea.plot
 
 Lepidoptera.plot<-ggplot(Lepidoptera, aes(x = CARD, y = Lepidoptera, fill=CARD))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Lepidoptera")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -803,14 +804,14 @@ Orthoptera.plot
 library (ggpubr)
 taxa.plots_2021 <-ggarrange(ABIPN.plot, BURSI.plot, C7.plot, CMAC.plot, CSTIG.plot, CTRIF.plot, 
                             CYCSP.plot, H13.plot, HAXY.plot, HCONV.plot, HGLAC.plot, HPARN.plot, 
-                            HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot, LAMPY.plot, LCW.plot, MECOP.plot, 
-                            Syrphidae.plot, Ichneumonoidea.plot, Chalcidoidea.plot, Lepidoptera.plot, Orthoptera.plot,
+                            HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot, LCW.plot, LAMPY.plot, MECOP.plot, 
+                            Chalcidoidea.plot, Ichneumonoidea.plot, Lepidoptera.plot, Orthoptera.plot, Syrphidae.plot,
                            #labels = c("A", "B"),
                            ncol = 5, nrow = 5,
                            common.legend = TRUE, legend = "bottom")
 taxa.plots_2021
 
-pdf("taxa.plots_2021.pdf", height=10, width=10) #height and width in inches
+pdf("taxa.plots_2021.pdf", height=10.5, width=10) #height and width in inches
 taxa.plots_2021
 dev.off()
 #
@@ -1273,7 +1274,7 @@ AIC(glm) #753
 
 ABIPN.plot<-ggplot(ABIPN, aes(x = CARDYEAR, y = ABIPN, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Adalia bipunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1284,7 +1285,7 @@ ABIPN.plot
 
 BURSI.plot<-ggplot(BURSI, aes(x = CARDYEAR, y = BURSI, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Brachiacantha ursina")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1295,7 +1296,7 @@ BURSI.plot
 
 C7.plot<-ggplot(C7, aes(x = CARDYEAR, y = C7, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coccinella septempuncata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1328,7 +1329,7 @@ CSTIG.plot
 
 CTRIF.plot<-ggplot(CTRIF, aes(x = CARDYEAR, y = CTRIF, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coccinella trifasciata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1339,7 +1340,7 @@ CTRIF.plot
 
 CYCSP.plot<-ggplot(CYCSP, aes(x = CARDYEAR, y = CYCSP, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Cycloneda munda")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1350,7 +1351,7 @@ CYCSP.plot
 
 H13.plot<-ggplot(H13, aes(x = CARDYEAR, y = H13, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia tredecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1383,7 +1384,7 @@ HCONV.plot
 
 HGLAC.plot<-ggplot(HGLAC, aes(x = CARDYEAR, y = HGLAC, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia glacialis")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1394,9 +1395,9 @@ HGLAC.plot
 
 HPARN.plot<-ggplot(HPARN, aes(x = CARDYEAR, y = HPARN, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia parenthesiS")+
+  labs(title="", x="", y="Hippodamia parenthesis")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
@@ -1416,7 +1417,7 @@ HVAR.plot
 
 PQUA.plot<-ggplot(PQUA, aes(x = CARDYEAR, y = PQUA, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Propylea quatuordecimpunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1486,7 +1487,7 @@ X20SPOT.plot
 library (ggpubr)
 taxa.plots_old <-ggarrange(ABIPN.plot, BURSI.plot, C7.plot, CMAC.plot, CSTIG.plot, CTRIF.plot, 
                            CYCSP.plot, H13.plot, HAXY.plot_old, HCONV.plot, HGLAC.plot, HPARN.plot, 
-                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot_old, LAMPY.plot, LCW.plot, MECOP.plot, 
+                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot_old, LCW.plot, LAMPY.plot, MECOP.plot, 
                             #labels = c("A", "B"),
                             ncol = 5, nrow = 4,
                             common.legend = TRUE, legend = "bottom")
@@ -1835,11 +1836,11 @@ AIC(glm) #114
 
 ###
 
-#Plots of taxa that were significantly different
+#Plots of taxa
 
 ABIPN.plot<-ggplot(ABIPN, aes(x = CARDYEAR, y = ABIPN, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Adalia bipunctata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1850,7 +1851,7 @@ ABIPN.plot
 
 BURSI.plot<-ggplot(BURSI, aes(x = CARDYEAR, y = BURSI, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Brachiacantha ursina")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1872,7 +1873,7 @@ C7.plot
 
 CMAC.plot<-ggplot(CMAC, aes(x = CARDYEAR, y = CMAC, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Colemegilla maculata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1883,7 +1884,7 @@ CMAC.plot
 
 CSTIG.plot<-ggplot(CSTIG, aes(x = CARDYEAR, y = CSTIG, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Chilochous stigma")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1894,7 +1895,7 @@ CSTIG.plot
 
 CTRIF.plot<-ggplot(CTRIF, aes(x = CARDYEAR, y = CTRIF, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coccinella trifasciata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1905,7 +1906,7 @@ CTRIF.plot
 
 CYCSP.plot<-ggplot(CYCSP, aes(x = CARDYEAR, y = CYCSP, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Cycloneda munda")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1938,7 +1939,7 @@ HAXY.plot_new
 
 HCONV.plot<-ggplot(HCONV, aes(x = CARDYEAR, y = HCONV, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia convergens")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1949,7 +1950,7 @@ HCONV.plot
 
 HGLAC.plot<-ggplot(HGLAC, aes(x = CARDYEAR, y = HGLAC, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia glacialis")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -1962,7 +1963,7 @@ HPARN.plot<-ggplot(HPARN, aes(x = CARDYEAR, y = HPARN, fill=CARDYEAR))+
   geom_boxplot()+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia parenthesiS")+
+  labs(title="", x="", y="Hippodamia parenthesis")+
   #theme (plot.title = element_text(hjust=0.5))+
   scale_fill_manual(values=c("#009E73","#00c690"),name="Card:",
                     breaks=c("New21", "New22"),
@@ -1971,7 +1972,7 @@ HPARN.plot
 
 HVAR.plot<-ggplot(HVAR, aes(x = CARDYEAR, y = HVAR, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia variegata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -2015,7 +2016,7 @@ LAMPY.plot
 
 LCW.plot<-ggplot(LCW, aes(x = CARDYEAR, y = LCW, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Chrysopidae and Hemerobiidae")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -2026,7 +2027,7 @@ LCW.plot
 
 MECOP.plot<-ggplot(MECOP, aes(x = CARDYEAR, y = MECOP, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Mecoptera")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -2037,7 +2038,7 @@ MECOP.plot
 
 X20SPOT.plot<-ggplot(X20SPOT, aes(x = CARDYEAR, y = X20SPOT, fill=CARDYEAR))+
   geom_boxplot()+
-  theme_bw()+
+  theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Psyllobora virgintimaculata")+
   #theme (plot.title = element_text(hjust=0.5))+
@@ -2050,7 +2051,7 @@ X20SPOT.plot
 library (ggpubr)
 taxa.plots_new <-ggarrange(ABIPN.plot, BURSI.plot, C7.plot, CMAC.plot, CSTIG.plot, CTRIF.plot, 
                            CYCSP.plot, H13.plot, HAXY.plot_new, HCONV.plot, HGLAC.plot, HPARN.plot, 
-                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot_new, LAMPY.plot, LCW.plot, MECOP.plot, 
+                           HVAR.plot, PQUA.plot, X20SPOT.plot, CANTHARID.plot_new, LCW.plot, LAMPY.plot, MECOP.plot, 
                            #labels = c("A", "B"),
                            ncol = 5, nrow = 4,
                            common.legend = TRUE, legend = "bottom")
