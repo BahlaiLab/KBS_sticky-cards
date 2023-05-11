@@ -535,6 +535,7 @@ AIC(glm) #65
 
 #boxplots for individual taxa 2021
 library(ggplot2)
+library(ggtext)
 
 ABIPN.plot<-ggplot(ABIPN, aes(x = CARD, y = ABIPN, fill=CARD))+
   geom_boxplot(outlier.shape = NA)+
@@ -1111,7 +1112,6 @@ colSums(old21[,6:24]) #2021 old cards
 colSums(old20[,24:25]) #1730 traps
 colSums(old21[,24:25]) #912 traps
 
-
 #ABIPN
 ABIPN<-old20_old21[c(1:6,25)]
 ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=ABIPN, family=poisson)
@@ -1288,209 +1288,228 @@ AIC(glm) #753
 #Plots of individual taxa for old cards
 
 ABIPN.plot<-ggplot(ABIPN, aes(x = CARDYEAR, y = ABIPN, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = ABIPN[which(ABIPN$ABIPN>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Adalia bipunctata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Adalia bipunctata*")+
+  theme(axis.title.y = ggtext::element_markdown())+
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 ABIPN.plot
 
 BURSI.plot<-ggplot(BURSI, aes(x = CARDYEAR, y = BURSI, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = BURSI[which(BURSI$BURSI>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Brachiacantha ursina")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Brachiacantha ursina*")+
+  theme(axis.title.y = ggtext::element_markdown())+
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 BURSI.plot
 
 C7.plot<-ggplot(C7, aes(x = CARDYEAR, y = C7, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = C7[which(C7$C7>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Coccinella septempuncata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Coccinella septempuncata*")+
+  theme(axis.title.y = ggtext::element_markdown())+
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 C7.plot
 
 CMAC.plot<-ggplot(CMAC, aes(x = CARDYEAR, y = CMAC, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = CMAC[which(CMAC$CMAC>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Colemegilla maculata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Colemegilla maculata*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 CMAC.plot
 
 CSTIG.plot<-ggplot(CSTIG, aes(x = CARDYEAR, y = CSTIG, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = CSTIG[which(CSTIG$CSTIG>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Chilochous stigma")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Chilochous stigma*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 CSTIG.plot
 
 CTRIF.plot<-ggplot(CTRIF, aes(x = CARDYEAR, y = CTRIF, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = CTRIF[which(CTRIF$CTRIF>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Coccinella trifasciata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Coccinella trifasciata*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 CTRIF.plot
 
 CYCSP.plot<-ggplot(CYCSP, aes(x = CARDYEAR, y = CYCSP, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = CYCSP[which(CYCSP$CYCSP>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Cycloneda munda")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Cycloneda munda*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 CYCSP.plot
 
 H13.plot<-ggplot(H13, aes(x = CARDYEAR, y = H13, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = H13[which(H13$H13>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia tredecimpunctata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Hippodamia tredecimpunctata*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 H13.plot
 
 HAXY.plot_old<-ggplot(HAXY_old, aes(x = CARDYEAR, y = HAXY, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = HAXY_old[which(HAXY_old$HAXY>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Harmonia axyridis")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Harmonia axyridis*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 HAXY.plot_old
 
 HCONV.plot<-ggplot(HCONV, aes(x = CARDYEAR, y = HCONV, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = HCONV[which(HCONV$HCONV>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia convergens")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Hippodamia convergens*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 HCONV.plot
 
 HGLAC.plot<-ggplot(HGLAC, aes(x = CARDYEAR, y = HGLAC, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = HGLAC[which(HGLAC$HGLAC>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia glacialis")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Hippodamia glacialis*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 HGLAC.plot
 
 HPARN.plot<-ggplot(HPARN, aes(x = CARDYEAR, y = HPARN, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = HPARN[which(HPARN$HPARN>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia parenthesis")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Hippodamia parenthesis*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 HPARN.plot
 
 HVAR.plot<-ggplot(HVAR, aes(x = CARDYEAR, y = HVAR, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = HVAR[which(HVAR$HVAR>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Hippodamia variegata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Hippodamia variegata*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 HVAR.plot
 
 PQUA.plot<-ggplot(PQUA, aes(x = CARDYEAR, y = PQUA, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = PQUA[which(PQUA$PQUA>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_grey()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Propylea quatuordecimpunctata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="*Propylea quatuordecimpunctata*")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 PQUA.plot
 
 CANTHARID.plot_old<-ggplot(CANTHARID_old, aes(x = CARDYEAR, y = CANTHARID, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = CANTHARID_old[which(CANTHARID_old$CANTHARID>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Cantharidae")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 CANTHARID.plot_old
 
 LAMPY.plot<-ggplot(LAMPY, aes(x = CARDYEAR, y = LAMPY, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = LAMPY[which(LAMPY$LAMPY>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Lampyridae")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 LAMPY.plot
 
 LCW.plot<-ggplot(LCW, aes(x = CARDYEAR, y = LCW, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = LCW[which(LCW$LCW>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Chrysopidae and Hemerobiidae")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 LCW.plot
 
 MECOP.plot<-ggplot(MECOP, aes(x = CARDYEAR, y = MECOP, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = MECOP[which(MECOP$MECOP>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Mecoptera")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
 MECOP.plot
 
 X20SPOT.plot<-ggplot(X20SPOT, aes(x = CARDYEAR, y = X20SPOT, fill=CARDYEAR))+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(data = X20SPOT[which(X20SPOT$X20SPOT>0),], shape = 1, size = 0.75, width = 0.2, height = 0.2)+
   theme_bw()+
   theme(legend.position="bottom")+
-  labs(title="", x="", y="Psyllobora virgintimaculata")+
-  #theme (plot.title = element_text(hjust=0.5))+
+  labs(title="", x="", y="Psyllobora vigintimaculata")+
+  theme(axis.title.y = ggtext::element_markdown())+ 
   scale_fill_manual(values=c("#ffba21","#E69F00"),name="Card:",
                     breaks=c("Old20", "Old21"),
                     labels=c("Old cards 2020", "Old cards 2021"))
