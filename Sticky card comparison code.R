@@ -538,6 +538,7 @@ library(ggplot2)
 
 ABIPN.plot<-ggplot(ABIPN, aes(x = CARD, y = ABIPN, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Adalia bipunctata")+
@@ -549,6 +550,7 @@ ABIPN.plot
 
 BURSI.plot<-ggplot(BURSI, aes(x = CARD, y = BURSI, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Brachiacantha ursina")+
@@ -560,6 +562,7 @@ BURSI.plot
 
 C7.plot<-ggplot(C7, aes(x = CARD, y = C7, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coccinella septempuncata")+
@@ -571,6 +574,7 @@ C7.plot
 
 CMAC.plot<-ggplot(CMAC, aes(x = CARD, y = CMAC, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coleomegilla maculata")+
@@ -582,6 +586,7 @@ CMAC.plot
 
 CSTIG.plot<-ggplot(CSTIG, aes(x = CARD, y = CSTIG, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Chilochous stigma")+
@@ -593,6 +598,7 @@ CSTIG.plot
 
 CTRIF.plot<-ggplot(CTRIF, aes(x = CARD, y = CTRIF, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Coccinella trifasciata")+
@@ -604,6 +610,7 @@ CTRIF.plot
 
 CYCSP.plot<-ggplot(CYCSP, aes(x = CARD, y = CYCSP, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Cycloneda munda")+
@@ -615,6 +622,7 @@ CYCSP.plot
 
 H13.plot<-ggplot(H13, aes(x = CARD, y = H13, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia tredecimpunctata")+
@@ -626,6 +634,7 @@ H13.plot
 
 HAXY.plot<-ggplot(HAXY, aes(x = CARD, y = HAXY, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Harmonia axyridis")+
@@ -637,6 +646,7 @@ HAXY.plot
 
 HCONV.plot<-ggplot(HCONV, aes(x = CARD, y = HCONV, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia convergens")+
@@ -648,6 +658,7 @@ HCONV.plot
 
 HGLAC.plot<-ggplot(HGLAC, aes(x = CARD, y = HGLAC, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia glacialis")+
@@ -659,6 +670,7 @@ HGLAC.plot
 
 HPARN.plot<-ggplot(HPARN, aes(x = CARD, y = HPARN, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia parenthesis")+
@@ -670,6 +682,7 @@ HPARN.plot
 
 HVAR.plot<-ggplot(HVAR, aes(x = CARD, y = HVAR, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Hippodamia variegata")+
@@ -681,6 +694,7 @@ HVAR.plot
 
 PQUA.plot<-ggplot(PQUA, aes(x = CARD, y = PQUA, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="P. quatuordecimpunctata")+
@@ -692,6 +706,7 @@ PQUA.plot
 
 CANTHARID.plot<-ggplot(CANTHARID, aes(x = CARD, y = CANTHARID, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Cantharidae")+
@@ -703,6 +718,7 @@ CANTHARID.plot
 
 LAMPY.plot<-ggplot(LAMPY, aes(x = CARD, y = LAMPY, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Lampyridae")+
@@ -714,6 +730,7 @@ LAMPY.plot
 
 LCW.plot<-ggplot(LCW, aes(x = CARD, y = LCW, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Chrysopidae & Hemerobiidae")+
@@ -725,6 +742,7 @@ LCW.plot
 
 MECOP.plot<-ggplot(MECOP, aes(x = CARD, y = MECOP, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Mecoptera")+
@@ -736,6 +754,7 @@ MECOP.plot
 
 X20SPOT.plot<-ggplot(X20SPOT, aes(x = CARD, y = X20SPOT, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Psyllobora virgintimaculata")+
@@ -747,6 +766,7 @@ X20SPOT.plot
 
 Syrphidae.plot<-ggplot(Syrphidae, aes(x = CARD, y = Syrphidae, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Syrphidae")+
@@ -758,6 +778,7 @@ Syrphidae.plot
 
 Ichneumonoidea.plot<-ggplot(Ichneumonoidea, aes(x = CARD, y = Ichneumonoidea, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Ichneumonoidea")+
@@ -769,6 +790,7 @@ Ichneumonoidea.plot
 
 Chalcidoidea.plot<-ggplot(Chalcidoidea, aes(x = CARD, y = Chalcidoidea, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Chalcidoidea")+
@@ -780,6 +802,7 @@ Chalcidoidea.plot
 
 Lepidoptera.plot<-ggplot(Lepidoptera, aes(x = CARD, y = Lepidoptera, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_grey()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Lepidoptera")+
@@ -791,6 +814,7 @@ Lepidoptera.plot
 
 Orthoptera.plot<-ggplot(Orthoptera, aes(x = CARD, y = Orthoptera, fill=CARD))+
   geom_boxplot()+
+  geom_jitter()+
   theme_bw()+
   theme(legend.position="bottom")+
   labs(title="", x="", y="Orthoptera")+
