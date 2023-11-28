@@ -314,6 +314,7 @@ ABIPN<-insects21[c(1:5,30)]
 ABIPN.glm<-glm(ABIPN ~ CARD + week + TREAT + offset(log(TRAPS)), data=ABIPN, family=poisson)
 summary(ABIPN.glm)
 Anova (ABIPN.glm)
+anova (ABIPN.glm)
 #did not converge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(ABIPN.glm) #32
@@ -323,6 +324,7 @@ BURSI<-insects21[c(1:4,6,30)]
 BURSI.glm<-glm(BURSI ~ CARD + week + TREAT + offset(log(TRAPS)), data=BURSI, family=poisson)
 summary(BURSI.glm)
 Anova (BURSI.glm)
+anova (BURSI.glm)
 #card and treat: not sig, week: sig
 #results: no sig diff btw cards (p=.91)
 AIC(BURSI.glm) #111
@@ -332,6 +334,7 @@ C7<-insects21[c(1:4,7,30)]
 C7.glm<-glm(C7 ~ CARD + week + TREAT + offset(log(TRAPS)), data=C7, family=poisson)
 summary(C7.glm)
 Anova (C7.glm)
+anova (C7.glm)
 #card: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.39)
 AIC(C7.glm) #792
@@ -341,6 +344,7 @@ CMAC<-insects21[c(1:4,8,30)]
 glm<-glm(CMAC ~ CARD + week + TREAT + offset(log(TRAPS)), data=CMAC, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card and treat: not sig, week: sig
 #results: no sig diff btw cards (p=.58)
 AIC(glm) #222
@@ -350,6 +354,7 @@ CSTIG<-insects21[c(1:4,9,30)]
 glm<-glm(CSTIG ~ CARD + week + TREAT + offset(log(TRAPS)), data=CSTIG, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.58)
 AIC(glm) #223
@@ -359,6 +364,7 @@ CTRIF<-insects21[c(1:4,10,30)]
 glm<-glm(CTRIF ~ CARD + week + TREAT + offset(log(TRAPS)), data=CTRIF, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #did not converge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(glm) #32
@@ -368,6 +374,7 @@ CYCSP<-insects21[c(1:4,11,30)]
 glm<-glm(CYCSP ~ CARD + week + TREAT + offset(log(TRAPS)), data=CYCSP, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #week: not sig, card and treat: sig
 #results: sig diff btw cards (p=.01)
 AIC(glm) #197
@@ -377,6 +384,7 @@ H13<-insects21[c(1:4,12,30)]
 glm<-glm(H13 ~ CARD + week + TREAT + offset(log(TRAPS)), data=H13, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #did not converge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(glm) #32
@@ -386,6 +394,7 @@ HAXY<-insects21[c(1:4,13,30)]
 glm<-glm(HAXY ~ CARD + week + TREAT + offset(log(TRAPS)), data=HAXY, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig 
 #results: sig diff btw cards (p=.044) 
 AIC(glm) #1358
@@ -395,6 +404,7 @@ HCONV<-insects21[c(1:4,14,30)]
 glm<-glm(HCONV ~ CARD + week + TREAT + offset(log(TRAPS)), data=HCONV, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card and treat: not sig, week: sig
 #results: no sig diff btw cards (p=.27)
 AIC(glm) #103
@@ -404,6 +414,7 @@ HGLAC<-insects21[c(1:4,15,30)]
 glm<-glm(HGLAC ~ CARD + week + TREAT + offset(log(TRAPS)), data=HGLAC, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #did not converge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(glm) #32
@@ -413,6 +424,7 @@ HPARN<-insects21[c(1:4,16,30)]
 glm<-glm(HPARN ~ CARD + week + TREAT + offset(log(TRAPS)), data=HPARN, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.56)
 AIC(glm) #253
@@ -422,6 +434,7 @@ HVAR<-insects21[c(1:4,17,30)]
 glm<-glm(HVAR ~ CARD + week + TREAT + offset(log(TRAPS)), data=HVAR, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #448
@@ -431,6 +444,7 @@ PQUA<-insects21[c(1:4,18,30)]
 glm<-glm(PQUA ~ CARD + week + TREAT + offset(log(TRAPS)), data=PQUA, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.17)
 AIC(glm) #447
@@ -440,6 +454,7 @@ CANTHARID<-insects21[c(1:4,19,30)]
 glm<-glm(CANTHARID ~ CARD + week + TREAT + offset(log(TRAPS)), data=CANTHARID, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p=.007)
 AIC(glm) #495
@@ -449,6 +464,7 @@ LAMPY<-insects21[c(1:4,20,30)]
 glm<-glm(LAMPY ~ CARD + week + TREAT + offset(log(TRAPS)), data=LAMPY, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.09)
 AIC(glm) #1431
@@ -458,6 +474,7 @@ LCW<-insects21[c(1:4,21,30)]
 glm<-glm(LCW ~ CARD + week + TREAT + offset(log(TRAPS)), data=LCW, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #1026
@@ -467,6 +484,7 @@ MECOP<-insects21[c(1:4,22,30)]
 glm<-glm(MECOP ~ CARD + week + TREAT + offset(log(TRAPS)), data=MECOP, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.16)
 AIC(glm) #571
@@ -476,6 +494,7 @@ X20SPOT<-insects21[c(1:4,23,30)]
 glm<-glm(X20SPOT ~ CARD + week + TREAT + offset(log(TRAPS)), data=X20SPOT, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card and week: not sig, treat: sig
 #results: no sig diff btw cards (p=.65)
 AIC(glm) #158
@@ -485,6 +504,7 @@ OTHER<-insects21[c(1:4,24,30)]
 glm<-glm(OTHER ~ CARD + week + TREAT + offset(log(TRAPS)), data=OTHER, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #nothing sig
 #results: no sig diff btw cards (p=.53)
 AIC(glm) #61
@@ -494,6 +514,7 @@ Syrphidae<-insects21[c(1:4,25,30)]
 glm<-glm(Syrphidae ~ CARD + week + TREAT + offset(log(TRAPS)), data=Syrphidae, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p < 0.0001)
 AIC(glm) #839
@@ -503,6 +524,7 @@ Ichneumonoidea<-insects21[c(1:4,26,30)]
 glm<-glm(Ichneumonoidea ~ CARD + week + TREAT + offset(log(TRAPS)), data=Ichneumonoidea, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p=0.003)
 AIC(glm) #2194
@@ -512,6 +534,7 @@ Chalcidoidea<-insects21[c(1:4,27,30)]
 glm<-glm(Chalcidoidea ~ CARD + week + TREAT + offset(log(TRAPS)), data=Chalcidoidea, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #14926
@@ -521,6 +544,7 @@ Lepidoptera<-insects21[c(1:4,28,30)]
 glm<-glm(Lepidoptera ~ CARD + week + TREAT + offset(log(TRAPS)), data=Lepidoptera, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #card: not sig, week and treat: sig
 #results: no sig diff btw cards (p=0.23)
 AIC(glm) #699
@@ -530,6 +554,7 @@ Orthoptera<-insects21[c(1:4,29,30)]
 glm<-glm(Orthoptera ~ CARD + week + TREAT + offset(log(TRAPS)), data=Orthoptera, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p=0.04)
 AIC(glm) #65
@@ -1039,6 +1064,7 @@ AIC(richness.model)
 abundance.model<-glm(abundance ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=old20_old21, family=poisson)
 summary(abundance.model)
 Anova(abundance.model)
+anova (abundance.model)
 #all sig (CARDYEAR, week, treatment)
 #results: sig diff btw cards (p<0.0001)
 AIC(abundance.model)
@@ -1048,6 +1074,7 @@ AIC(abundance.model)
 diversity.model<-glm(diversity ~ CARDYEAR + week + TREAT + offset(TRAPS), data=old20_old21)
 summary(diversity.model)
 Anova(diversity.model)
+anova (diversity.model)
 #all sig
 #results: sig diff btw cards (p=0.0001)
 AIC(diversity.model)
@@ -1121,6 +1148,7 @@ ABIPN<-old20_old21[c(1:6,25)]
 ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=ABIPN, family=poisson)
 summary(ABIPN.glm)
 Anova (ABIPN.glm)
+anova (ABIPN.glm)
 #did not converge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(ABIPN.glm) #40
@@ -1130,6 +1158,7 @@ BURSI<-old20_old21[c(1:5,7,25)]
 BURSI.glm<-glm(BURSI ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=BURSI, family=poisson)
 summary(BURSI.glm)
 Anova (BURSI.glm)
+anova (BURSI.glm)
 #cardyear: not sig, week and treat: sig
 #results: no sig diff btw cards (0.14)
 AIC(BURSI.glm) #191
@@ -1139,6 +1168,7 @@ C7<-old20_old21[c(1:5,8,25)]
 C7.glm<-glm(C7 ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=C7, family=poisson)
 summary(C7.glm)
 Anova (C7.glm)
+anova (C7.glm)
 #cardyear: not sig, week and treat: sig
 #results: no sig diff btw cards (0.35)
 AIC(C7.glm) #1387
@@ -1148,6 +1178,7 @@ CMAC<-old20_old21[c(1:5,9,25)]
 glm<-glm(CMAC ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CMAC, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (<0.0001)
 AIC(glm) #929
@@ -1157,6 +1188,7 @@ CSTIG<-old20_old21[c(1:5,10,25)]
 glm<-glm(CSTIG ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CSTIG, family=poisson)
 summary(glm)
 Anova(glm)
+anova (glm)
 #week: not sig, cardyear and treat: sig
 #results: sig diff btw cards (p=.0006)
 AIC(glm) #65
@@ -1166,6 +1198,7 @@ CTRIF<-old20_old21[c(1:5,11,25)]
 glm<-glm(CTRIF ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CTRIF, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #did not coverge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(glm) #40
@@ -1175,6 +1208,7 @@ CYCSP<-old20_old21[c(1:5,12,25)]
 glm<-glm(CYCSP ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CYCSP, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.23)
 AIC(glm) #430
@@ -1184,6 +1218,7 @@ H13<-old20_old21[c(1:5,13,25)]
 glm<-glm(H13 ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=H13, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #nothing sig
 #results: no sig diff btw cards (p=.17)
 AIC(glm) #49
@@ -1193,6 +1228,7 @@ HAXY_old<-old20_old21[c(1:5,14,25)]
 glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HAXY_old, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #1784
@@ -1202,6 +1238,7 @@ HCONV<-old20_old21[c(1:5,15,25)]
 glm<-glm(HCONV ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HCONV, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #week and treat: not sig, cardyear: sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #93
@@ -1211,6 +1248,7 @@ HGLAC<-old20_old21[c(1:5,16,25)]
 glm<-glm(HGLAC ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HGLAC, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #nothing sig
 #results: no sig diff btw cards (p=.33)
 AIC(glm) #45
@@ -1220,6 +1258,7 @@ HPARN<-old20_old21[c(1:5,17,25)]
 glm<-glm(HPARN ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HPARN, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.05)
 AIC(glm) #338
@@ -1229,6 +1268,7 @@ HVAR<-old20_old21[c(1:5,18,25)]
 glm<-glm(HVAR ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HVAR, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #632
@@ -1238,6 +1278,7 @@ PQUA<-old20_old21[c(1:5,19,25)]
 glm<-glm(PQUA ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=PQUA, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear: not sig, week and treat: sig
 #results: no sig diff btw cards (p=.17)
 AIC(glm) #857
@@ -1247,6 +1288,7 @@ CANTHARID_old<-old20_old21[c(1:5,20,25)]
 glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CANTHARID_old, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #1026
@@ -1256,6 +1298,7 @@ LAMPY<-old20_old21[c(1:5,21,25)]
 glm<-glm(LAMPY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=LAMPY, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #2176
@@ -1265,6 +1308,7 @@ LCW<-old20_old21[c(1:5,22,25)]
 glm<-glm(LCW ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=LCW, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #1472
@@ -1274,6 +1318,7 @@ MECOP<-old20_old21[c(1:5,23,25)]
 glm<-glm(MECOP ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=MECOP, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #955
@@ -1283,6 +1328,7 @@ X20SPOT<-old20_old21[c(1:5,24,25)]
 glm<-glm(X20SPOT ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=X20SPOT, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #753
@@ -1615,6 +1661,7 @@ library (car) #Anova
 richness.model<-glm(richness ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=new21_new22, family=poisson)
 summary(richness.model)
 Anova (richness.model)
+anova (richness.model)
 #CARDYEAR and treat: not sig , week: sig
 #results: no sig diff btw cards (p=0.14)
 AIC(richness.model)
@@ -1624,6 +1671,7 @@ AIC(richness.model)
 abundance.model<-glm(abundance ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=new21_new22, family=poisson)
 summary(abundance.model)
 Anova(abundance.model)
+anova(abundance.model)
 #all sig (CARDYEAR, week, treatment)
 #results: sig diff btw cards (p<0.0001)
 AIC(abundance.model)
@@ -1633,6 +1681,7 @@ AIC(abundance.model)
 diversity.model<-glm(diversity ~ CARDYEAR + week + TREAT + offset(TRAPS), data=new21_new22)
 summary(diversity.model)
 Anova(diversity.model)
+anova (diversity.model)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(diversity.model)
@@ -1706,6 +1755,7 @@ ABIPN<-new21_new22[c(1:6,25)]
 ABIPN.glm<-glm(ABIPN ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=ABIPN, family=poisson)
 summary(ABIPN.glm)
 Anova (ABIPN.glm)
+anova (ABIPN.glm)
 #did not converge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(ABIPN.glm) #46
@@ -1715,6 +1765,7 @@ BURSI<-new21_new22[c(1:5,7,25)]
 BURSI.glm<-glm(BURSI ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=BURSI, family=poisson)
 summary(BURSI.glm)
 Anova (BURSI.glm)
+anova (BURSI.glm)
 #cardyear and treat: not sig, week: sig 
 #results: no sig diff btw cards (p=0.5)
 AIC(BURSI.glm) #135
@@ -1724,6 +1775,7 @@ C7<-new21_new22[c(1:5,8,25)]
 C7.glm<-glm(C7 ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=C7, family=poisson)
 summary(C7.glm)
 Anova (C7.glm)
+anova (C7.glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(C7.glm) #957
@@ -1733,6 +1785,7 @@ CMAC<-new21_new22[c(1:5,9,25)]
 glm<-glm(CMAC ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CMAC, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear: not sig, week and treat: sig 
 #results: no sig diff btw cards (0.78)
 AIC(glm) #498
@@ -1742,6 +1795,7 @@ CSTIG<-new21_new22[c(1:5,10,25)]
 glm<-glm(CSTIG ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CSTIG, family=poisson)
 summary(glm)
 Anova(glm)
+anova (glm)
 #cardyear and week: not sig, treat: sig 
 #results: no sig diff btw cards (p=1)
 AIC(glm) #62
@@ -1751,6 +1805,7 @@ CTRIF<-new21_new22[c(1:5,11,25)]
 glm<-glm(CTRIF ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CTRIF, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #did not converge because zero caught
 #results: no sig diff btw cards (p=1)
 AIC(glm) #46
@@ -1760,6 +1815,7 @@ CYCSP<-new21_new22[c(1:5,12,25)]
 glm<-glm(CYCSP ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CYCSP, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear: not sig, week and treat: sig 
 #results: no sig diff btw cards (p=0.54)
 AIC(glm) #264
@@ -1769,6 +1825,7 @@ H13<-new21_new22[c(1:5,13,25)]
 glm<-glm(H13 ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=H13, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #treat: not sig, cardyear and week: sig
 #results: sig diff btw cards (p=0.0077)
 AIC(glm) #165
@@ -1778,6 +1835,7 @@ HAXY_new<-new21_new22[c(1:5,14,25)]
 glm<-glm(HAXY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HAXY_new, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #1178
@@ -1787,6 +1845,7 @@ HCONV<-new21_new22[c(1:5,15,25)]
 glm<-glm(HCONV ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HCONV, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #week and treat: sig, cardyear: not sig
 #results: no sig diff btw cards (p=.9999)
 AIC(glm) #144
@@ -1796,6 +1855,7 @@ HGLAC<-new21_new22[c(1:5,16,25)]
 glm<-glm(HGLAC ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HGLAC, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #nothing sig
 #results: no sig diff btw cards (p=1)
 AIC(glm) #56
@@ -1805,6 +1865,7 @@ HPARN<-new21_new22[c(1:5,17,25)]
 glm<-glm(HPARN ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HPARN, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear and treat: sig, week: not sig
 #results: sig diff btw cards (p=.008)
 AIC(glm) #157
@@ -1814,6 +1875,7 @@ HVAR<-new21_new22[c(1:5,18,25)]
 glm<-glm(HVAR ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=HVAR, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #week and treat: sig, cardyear: not sig
 #results: no sig diff btw cards (p=.48)
 AIC(glm) #241
@@ -1823,6 +1885,7 @@ PQUA<-new21_new22[c(1:5,19,25)]
 glm<-glm(PQUA ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=PQUA, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #471
@@ -1832,6 +1895,7 @@ CANTHARID_new<-new21_new22[c(1:5,20,25)]
 glm<-glm(CANTHARID ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=CANTHARID_new, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p<0.0001)
 AIC(glm) #892
@@ -1841,6 +1905,7 @@ LAMPY<-new21_new22[c(1:5,21,25)]
 glm<-glm(LAMPY ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=LAMPY, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #all sig
 #results: sig diff btw cards (p=0.0006)
 AIC(glm) #1460
@@ -1850,6 +1915,7 @@ LCW<-new21_new22[c(1:5,22,25)]
 glm<-glm(LCW ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=LCW, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear: not sig, week and treat: sig
 #results: no sig diff btw cards (p=0.069)
 AIC(glm) #808
@@ -1859,6 +1925,7 @@ MECOP<-new21_new22[c(1:5,23,25)]
 glm<-glm(MECOP ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=MECOP, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear: not sig, week and treat: sig
 #results: no sig diff btw cards (p=0.12)
 AIC(glm) #378
@@ -1868,6 +1935,7 @@ X20SPOT<-new21_new22[c(1:5,24,25)]
 glm<-glm(X20SPOT ~ CARDYEAR + week + TREAT + offset(log(TRAPS)), data=X20SPOT, family=poisson)
 summary(glm)
 Anova (glm)
+anova (glm)
 #cardyear and week: not sig, treat: sig
 #results: no sig diff btw cards (p=0.14)
 AIC(glm) #114
