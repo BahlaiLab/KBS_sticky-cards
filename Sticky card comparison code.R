@@ -1,7 +1,7 @@
 ##2021 - comparing Old and New cards within year
 
 #bring in data
-insects21 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/2021_LTER_for_analyses.csv", na.strings = NULL)
+insects21 <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Data/2021_LTER_for_analyses.csv", na.strings = NULL)
 
 #change week, CARD, TREAT, and STATION to factor
 insects21$week <- as.factor(insects21$week)
@@ -28,15 +28,16 @@ NMDS21
 
 #NMDS visualization
 #8x9
+
 plot(NMDS21, disp='sites', type="n")
-title(main="", adj = 0.01, line = -2, cex.main=2.5)
+title(main="B", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
 ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
 ordiellipse(NMDS21, env.matrix$CARD, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21") 
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="Old21"),pch=19, col="#E69F00")
 points(NMDS21, display="sites", select=which(env.matrix$CARD=="New21"), pch=17, col="#009E73")
 #add legend
-legend(0.933,1.399, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.2, legend=c("2021 Old cards", "2021 New cards"))
+legend(0.55,1.395, title=NULL, pch=c(19,17), col=c("#E69F00","#009E73"), cex=1.7, legend=c("2021 Old cards", "2021 New cards"))
 
 #bootstrapping and testing for differences between the groups (cards)
 fit<-adonis2(com.matrix ~ CARD, data = env.matrix, permutations = 999, method="bray")
@@ -952,7 +953,7 @@ dev.off()
 #2020-2022 - to look at same card types between years
 
 #bring in data from all years
-insects_all <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/all%20years_LTER_for_analyses.csv", na.strings = NULL)
+insects_all <- read.csv("https://raw.githubusercontent.com/BahlaiLab/KBS_sticky-cards/main/Data/all%20years_LTER_for_analyses.csv", na.strings = NULL)
 
 #change week, CARD, TREAT, and STATION to factor
 insects_all$week <- as.factor(insects_all$week)
@@ -1008,14 +1009,14 @@ NMDSold
 #NMDS visualization with trap types by year
 #8x9
 plot(NMDSold, disp='sites', type="n")
-title(main="", adj = 0.01, line = -2, cex.main=2.5)
+title(main="A", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
 ordiellipse(NMDSold, env.matrix$CARDYEAR, draw="polygon", col="#ffba21",kind="sd", conf=0.95, label=FALSE, show.groups = "Old20")
 ordiellipse(NMDSold, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
 points(NMDSold, display="sites", select=which(env.matrix$CARDYEAR=="Old20"),pch=15, col="#ffba21")
 points(NMDSold, display="sites", select=which(env.matrix$CARDYEAR=="Old21"),pch=19, col="#E69F00")
 #add legend
-legend(0.88,1.817, title=NULL, pch=c(15,19), col=c("#ffba21", "#E69F00"), cex=1.2, legend=c("2020 Old cards", "2021 Old cards"))
+legend(0.32,1.815, title=NULL, pch=c(15,19), col=c("#ffba21", "#E69F00"), cex=1.7, legend=c("2020 Old cards", "2021 Old cards"))
 
 #bootstrapping and testing for differences between the groups (cardyear)
 fit<-adonis2(com.matrix ~ CARDYEAR, data = env.matrix, permutations = 999, method="bray")
@@ -1616,14 +1617,14 @@ NMDSnew
 #NMDS visualization with trap types by year
 #8x9
 plot(NMDSnew, disp='sites', type="n")
-title(main="", adj = 0.01, line = -2, cex.main=2.5)
+title(main="C", adj = 0.01, line = -2, cex.main=2.5)
 #add ellipsoids with ordiellipse
 ordiellipse(NMDSnew, env.matrix$CARDYEAR, draw="polygon", col="#00c690",kind="sd", conf=0.95, label=FALSE, show.groups = "New22")
 ordiellipse(NMDSnew, env.matrix$CARDYEAR, draw="polygon", col="#009E73",kind="sd", conf=0.95, label=FALSE, show.groups = "New21")
 points(NMDSnew, display="sites", select=which(env.matrix$CARDYEAR=="New21"),pch=17, col="#009E73")
 points(NMDSnew, display="sites", select=which(env.matrix$CARDYEAR=="New22"),pch=18, col="#00c690")
 #add legend
-legend(0.895,1.375, title=NULL, pch=c(17,18), col=c("#009E73", "#00c690"), cex=1.2, legend=c("2021 New cards", "2022 New cards"))
+legend(0.55,1.34, title=NULL, pch=c(17,18), col=c("#009E73", "#00c690"), cex=1.7, legend=c("2021 New cards", "2022 New cards"))
 
 #bootstrapping and testing for differences between the groups (cardyear)
 fit<-adonis2(com.matrix ~ CARDYEAR, data = env.matrix, permutations = 999, method="bray")
@@ -2190,7 +2191,7 @@ dev.off()
 #Doesn't work ...
 #merge all 3 NMDSs
 pdf("combined NMDSs.pdf", height=12, width=12)
-par(mfrow=c(1,3), mar=c(5.1, 4.1, 4.1, 2.1),xpd=TRUE) 
+par(mfrow=c(3,1), mar=c(5.1, 4.1, 4.1, 2.1),xpd=TRUE) 
 
 plot(NMDSold, disp='sites', type="n")
 title(main="B", adj = 0.01, line = -2, cex.main=2.5)
@@ -2198,7 +2199,7 @@ ordiellipse(NMDSold, env.matrix$CARDYEAR, draw="polygon", col="#ffba21",kind="sd
 ordiellipse(NMDSold, env.matrix$CARDYEAR, draw="polygon", col="#E69F00",kind="sd", conf=0.95, label=FALSE, show.groups = "Old21")
 points(NMDSold, display="sites", select=which(env.matrix$CARDYEAR=="Old21"),pch=19, col="#E69F00")
 points(NMDSold, display="sites", select=which(env.matrix$CARDYEAR=="Old20"),pch=15, col="#ffba21")
-legend(0.97,1.78, title=NULL, pch=c(15,19), col=c("#ffba21", "#E69F00"), cex=1.2, legend=c("2020 Old cards", "2021 Old cards"))
+legend(0.97,1.78, title=NULL, pch=c(15,19), col=c("#ffba21", "#E69F00"), cex=1.5, legend=c("2020 Old cards", "2021 Old cards"))
 
 plot(NMDS21, disp='sites', type="n")
 title(main="A", adj = 0.01, line = -2, cex.main=2.5)
